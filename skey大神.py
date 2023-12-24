@@ -49,7 +49,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         font.setFamily("微软雅黑")
         MainWindow.setFont(font)
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(898, 567)
+        MainWindow.resize(831,567)
         MainWindow.setWindowIcon(QIcon("./icon.ico"))
         QtWidgets.QMessageBox.information(self,"警告","本软件纯免费 如果你是花钱买的火速投诉!\n本软件仅供学习用途 请勿用作违法行为 后果自负!")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -62,10 +62,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(90, 270, 181, 131))
+        self.label_2.setGeometry(QtCore.QRect(90, 240, 181, 131))
         self.label_2.setObjectName("label_2")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(100, 410, 181, 51))
+        self.pushButton.setGeometry(QtCore.QRect(100, 360, 181, 51))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.get_qq)
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
@@ -147,7 +147,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     if self.lineEdit else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
                     )
         self.pushButton_8 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_8.setGeometry(QtCore.QRect(770, 490, 111, 41))
+        self.pushButton_8.setGeometry(QtCore.QRect(700, 490, 111, 41))
         self.pushButton_8.setObjectName("pushButton_8")
         self.pushButton_8.clicked.connect(lambda: webopen("https://github.com/sun589/QQ_Skey-"))
         MainWindow.setCentralWidget(self.centralwidget)
@@ -175,7 +175,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Skey大神"))
-        self.label_2.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:</span></p><p><span style=\" font-size:11pt;\">QQ号码:</span></p><p><span style=\" font-size:11pt;\">Skey:</span></p><p><span style=\" font-size:11pt;\">P_skey:</span></p></body></html>"))
+        self.label_2.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:</span></p><p><span style=\" font-size:11pt;\">QQ号码:</span></p><p><span style=\" font-size:11pt;\">Skey:</span></p></body></html>"))
         self.pushButton.setText(_translate("MainWindow", "获取二维码"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/></p></body></html>"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; color:#ff0000;\">Skey获取区:</span></p></body></html>"))
@@ -312,12 +312,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 f"https://ssl.ptlogin2.qq.com/ptqrlogin?u1=https%3A%2F%2Fqun.qq.com%2F&ptqrtoken={ptqtoken}&ptredirect=1&h=1&t=1&g=1&from_ui=1&ptlang=2052&action={time.time()}&js_ver=23111510&js_type=1&login_sig=&pt_uistyle=40&aid=715030901&daid=73&&o1vId=2c2a6e92400bf8bd544ea329f5c8b5a0&pt_js_version=v1.48.1",
                 cookies={"qrsig": qrsig})
             if '二维码未失效' in l.text:
-                self.label_2.setText(_translate("MainWindow","<html><head/><body><p><span style=\" font-size:14pt;\">当前状态:未失效</span></p><p><span style=\" font-size:14pt;\">QQ号码:</span></p><p><span style=\" font-size:14pt;\">Skey:</span></p><p><span style=\" font-size:14pt;\">P_skey:</span></p></body></html>"))
+                self.label_2.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:未失效</span></p><p><span style=\" font-size:11pt;\">QQ号码:</span></p><p><span style=\" font-size:11pt;\">Skey:</span></p></body></html>"))
             elif '二维码已失效' in l.text:
-                self.label_2.setText(_translate("MainWindow","<html><head/><body><p><span style=\" font-size:14pt;\">当前状态:已失效</span></p><p><span style=\" font-size:14pt;\">QQ号码:</span></p><p><span style=\" font-size:14pt;\">Skey:</span></p><p><span style=\" font-size:14pt;\">P_skey:</span></p></body></html>"))
+                self.label_2.setText(_translate("MainWindow","<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:已失效</span></p><p><span style=\" font-size:11pt;\">QQ号码:</span></p><p><span style=\" font-size:11pt;\">Skey:</span></p></body></html>"))
                 break
             elif '二维码认证中' in l.text:
-                self.label_2.setText(_translate("MainWindow","<html><head/><body><p><span style=\" font-size:14pt;\">当前状态:认证中</span></p><p><span style=\" font-size:14pt;\">QQ号码:</span></p><p><span style=\" font-size:14pt;\">Skey:</span></p><p><span style=\" font-size:14pt;\">P_skey:</span></p></body></html>"))
+                self.label_2.setText(_translate("MainWindow","<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:认证中</span></p><p><span style=\" font-size:11pt;\">QQ号码:</span></p><p><span style=\" font-size:11pt;\">Skey:</span></p></body></html>"))
             else:
                 cookies = requests.utils.dict_from_cookiejar(l.cookies)
                 uin = requests.utils.dict_from_cookiejar(l.cookies).get('uin')
@@ -330,9 +330,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 pskey = requests.utils.dict_from_cookiejar(r2.cookies).get('p_skey')
                 self.skey, self.uin, self.pskey = skey, uin, pskey
                 self.cookie = targetCookies
+                self.label_2.setText(_translate("MainWindow",f"<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:登录成功!</span></p><p><span style=\" font-size:11pt;\">QQ号码:{self.uin}</span></p><p><span style=\" font-size:11pt;\">Skey:{self.skey}</span></p></body></html>"))
                 break
             time.sleep(0.5)
-        self.label_2.setText(_translate("MainWindow",f"<html><head/><body><p><span style=\" font-size:14pt;\">当前状态:登录成功!</span></p><p><span style=\" font-size:14pt;\">QQ号码:{self.uin}</span></p><p><span style=\" font-size:14pt;\">Skey:{self.skey}</span></p><p><span style=\" font-size:14pt;\">P_skey:{self.pskey}</span></p></body></html>"))
 
     def notice_list(self, q_bkn, qid, skey, pskey, uin):
         data = {
