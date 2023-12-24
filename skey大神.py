@@ -202,7 +202,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
 作用:发布公告              
 
 群列表:                   
-参数:输入框1               
+参数:无        
 作用:获取所有加入的群      
 
 群公告列表:
@@ -275,7 +275,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         data = {'bkn':bkn}
         qun_lis = requests.post(url,data = data,cookies = cookies).json()
         try:
-            with open("qun_list.csv",'w',newline='',encoding='utf-8') as f:
+            with open("qun_list.csv",'w',newline='',encoding='utf-8-sig') as f:
                 csv_f = csv.writer(f)
                 csv_f.writerow(["群名","群号","群主","权限"])
                 l = []
@@ -378,7 +378,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             else:
                 break
         try:
-            with open("notice_list.csv",'w',newline='',encoding='utf-8') as f:
+            with open("notice_list.csv",'w',newline='',encoding='utf-8-sig') as f:
                 csv_f = csv.writer(f)
                 csv_f.writerow(['发布者','fid','内容'])
                 csv_f.writerows(notices)
@@ -414,24 +414,28 @@ class Ui_MainWindow(QtWidgets.QWidget):
         end = 9
         while True:
             res = requests.post(f"https://qun.qq.com/cgi-bin/qun_mgr/search_group_members?bkn={bkn}&ts=1702901784527",cookies=Cookies,data=data,headers=headers).json()
-            for i in res['mems']:
-                if i['uin'] in l:
-                    break
-                l.append([str(i['nick'])+'\t',str(i['uin'])+'\t'])
-            start += 10
-            end += 10
-            data['start'],data['end'] = str(start),str(end)
             try:
-                with open("mem_list.csv",'w',encoding='utf-8',newline='') as f:
-                    csv_f = csv.writer(f)
-                    csv_f.writerow([f'群号:{self.lineEdit.text()}\t'])
-                    csv_f.writerow(['名称','QQ号'])
-                    csv_f.writerows(l)
-                QtWidgets.QMessageBox.about(self, "提示", "已保存至mem_list.csv!")
-            except PermissionError:
-                QtWidgets.QMessageBox.critical(self, "错误", "请关闭正在打开mem_list.csv的文件!")
-            except Exception as e:
-                QtWidgets.QMessageBox.about(self, "错误", "未知错误!")
+                for i in res['mems']:
+                    print(l,[str(i['nick'])+'\t',str(i['uin'])+'\t'])
+                    if [str(i['nick'])+'\t',str(i['uin'])+'\t'] in l:
+                        break
+                    l.append([str(i['nick'])+'\t',str(i['uin'])+'\t'])
+                start += 10
+                end += 10
+                data['start'],data['end'] = str(start),str(end)
+            except:
+                break
+        try:
+            with open("mem_list.csv",'w',encoding='utf-8-sig',newline='') as f:
+                csv_f = csv.writer(f)
+                csv_f.writerow([f'群号:{self.lineEdit.text()}\t'])
+                csv_f.writerow(['名称','QQ号'])
+                csv_f.writerows(l)
+            QtWidgets.QMessageBox.about(self, "提示", "已保存至mem_list.csv!")
+        except PermissionError:
+            QtWidgets.QMessageBox.critical(self, "错误", "请关闭正在打开mem_list.csv的文件!")
+        except Exception as e:
+            QtWidgets.QMessageBox.about(self, "错误", "未知错误!")
 
     def del_notice(self,fid, bkn, qid, skey, pskey,uin):
         data = {
