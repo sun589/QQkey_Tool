@@ -1,11 +1,11 @@
 ****
-# QQ_Skey大神  
+# QQkey_Tool  
 ***声明:本软件仅用于学习用途,请勿用于违法行为 后果自负!***  
 ****
 ##  使用说明
-  下载[Release](https://github.com/sun589/QQ_Skey-/releases)里最新的版本打开食用  
+  下载[Release](https://github.com/sun589/QQkey_Tool/releases)里最新的版本打开食用  
   or  
-  下载[源代码](https://github.com/sun589/QQ_Skey-/)运行
+  下载[源代码](https://github.com/sun589/QQkey_Tool/)运行
 ****
 ##  他是如何工作的?  
   这个其实做网页的应该都知道  
