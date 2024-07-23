@@ -13,6 +13,6 @@
 
 ## Q:为什么我打不开?  
 ### A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32位的话建议直接换一个64位系统(毕竟目前大部分软件也仅支持64位)
-
-
 ****
+## 如果喜欢,请给作者打个Star,谢谢:)))))))))))
+[![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)
