@@ -716,7 +716,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
 }
         res = requests.get("https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_ship_manager.cgi",params=data,cookies=Cookies,headers=headers,json=data,data=data).text[10:-2]
         friend_list = json.loads(res).get("data").get("items_list")
-        #eyJ1aW4iOiAibzI3Mzc5MTcyODgiLCAic2tleSI6ICJAaWFBYTRINzFsIiwgInBza2V5IjogIkNkdnM4b2xIcGRraXRBcGRGa2x5RC1tSnpOYUpjWWVZYWlteXBLN1hnZHdfIiwgImNvb2tpZSI6IHsic2tleSI6ICJAaWFBYTRINzFsIiwgInVpbiI6ICJvMjczNzkxNzI4OCIsICJwX3NrZXkiOiAiQ2R2czhvbEhwZGtpdEFwZEZrbHlELW1Kek5hSmNZZVlhaW15cEs3WGdkd18iLCAicF91aW4iOiAibzI3Mzc5MTcyODgiLCAicHQ0X3Rva2VuIjogIkg3NHZCTEh0MERMKm5qaDMxdUJLTG5GZDBxeDdzVzRxTUw1VWVCbmotQWdfIn0sICJnX3RrIjogMTgyNTUxMzQxNSwgInF6b25lX3VybCI6ICJodHRwczovL3B0bG9naW4yLnF6b25lLnFxLmNvbS9jaGVja19zaWc/cHR0eXBlPTEmdWluPTI3Mzc5MTcyODgmc2VydmljZT1wdHFybG9naW4mbm9kaXJlY3Q9MCZwdHNpZ3g9MTczZjJhNDI3MmE5ZmU2NWUyMmY1ZmFkYzE1NTIzZDk1OWJhNjc4NGM4YTQ5NmQ1NzJiOTJlNDY1YzhiYWI2NDI3YjY1ZDgxY2IzZDA2NWRiOWU1ZGYyZDNkMDFkNjExZDM1ZmY5ZDE5NmM5YmNkNjY1YTQ1Y2VjODM5ZmE5NThlM2MyNjM5YTdjYWYyMjg0JnNfdXJsPWh0dHBzJTNBJTJGJTJGcXpzLnFxLmNvbSUyRnF6b25lJTJGdjUlMkZsb2dpbnN1Y2MuaHRtbCUzRnBhcmElM0Rpem9uZSZmX3VybD0mcHRsYW5nPTIwNTImcHRyZWRpcmVjdD0xMDAmYWlkPTU0OTAwMDkxMiZkYWlkPTUmal9sYXRlcj0wJmxvd19sb2dpbl9ob3VyPTAmcmVnbWFzdGVyPTAmcHRfbG9naW5fdHlwZT0zJnB0X2FpZD0wJnB0X2FhaWQ9MTYmcHRfbGlnaHQ9MCZwdF8zcmRfYWlkPTAifQ==
         try:
             with open("friend_list.csv",'w',encoding='utf-8-sig',newline='') as f:
                 csv_f = csv.writer(f)
