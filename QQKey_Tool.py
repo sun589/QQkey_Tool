@@ -4,7 +4,6 @@
 本软件仅供学习用途 请勿用作违法行为 后果自负!
 """
 import os
-
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog
 import sys
