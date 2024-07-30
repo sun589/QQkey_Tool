@@ -24,6 +24,10 @@ import json
 
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
 
+# 切换工作目录
+if os.path.basename(sys.executable) != 'python.exe':
+    os.chdir(os.path.dirname(sys.executable))
+
 def bkn(skey):
     #计算bkn
     t,n,o = 5381,0,len(skey)
