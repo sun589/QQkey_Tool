@@ -1,9 +1,10 @@
 ****
 # QQkey_Tool  
+可能是见过唯一还在持续更新的QQKey工具箱:)  
 ***声明:本软件仅用于学习用途,请勿用于违法行为 后果自负!***  
 ****
 #  使用说明
-  下载[Release](https://github.com/sun589/QQkey_Tool/releases)里最新的版本打开食用  
+  下载[Release](https://github.com/sun589/QQkey_Tool/releases)里最新的版本打开QQKey_Tool.exe食用  
   or  
   下载[源代码](https://github.com/sun589/QQkey_Tool/)运行
 ****
@@ -14,6 +15,6 @@
 ## Q:为什么我打不开?  
 ### A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32位的话建议直接换一个64位系统(毕竟目前大部分软件也仅支持64位)
 ****
-## 如果喜欢,请给作者打个Star,谢谢:)))))))))))  
+# 制作不易,如果喜欢,请给作者打个Star,谢谢:)))))))))))  
 [![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)  
 ****
