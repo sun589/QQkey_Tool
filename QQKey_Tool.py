@@ -21,7 +21,10 @@ from urlextract import URLExtract
 import base64
 import pyperclip
 import json
+import get_qq_info_ui
+import hashlib
 
+os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
 
 # 切换工作目录
@@ -54,6 +57,7 @@ def get_g_tk(p_skey):
         t += (t << 5) + ord(i)
     return t & 2147483647
 
+# Key配置区
 class Ui_Dialog(object):
     def __init__(self, data):
         self.data = data
@@ -63,6 +67,9 @@ class Ui_Dialog(object):
         font = QFont()
         font.setFamily("微软雅黑")
         Dialog.setFont(font)
+        Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
+        Dialog.setFixedSize(Dialog.width(), Dialog.height())
+        Dialog.setWindowIcon(QIcon("./icon.ico"))
         self.pushButton_2 = QtWidgets.QPushButton(Dialog)
         self.pushButton_2.setGeometry(QtCore.QRect(440, 50, 75, 23))
         self.pushButton_2.setObjectName("pushButton_2")
@@ -102,6 +109,7 @@ class Ui_Dialog(object):
         self.lineEdit_2.setText(text)
         pyperclip.copy(text)
 
+# 主窗口
 class Ui_MainWindow(QtWidgets.QWidget):
     def setupUi(self, MainWindow):
         self.uin = ''
@@ -241,7 +249,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_11 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_11.setGeometry(QtCore.QRect(680, 490, 111, 41))
         self.pushButton_11.setObjectName("pushButton_11")
-        self.pushButton_11.clicked.connect(lambda: os.system('start .\\Clientkey_thief.exe'))
+        self.pushButton_11.clicked.connect(self.open_qq_info_tool)
         self.pushButton_12 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_12.setGeometry(QtCore.QRect(440, 410, 111, 41))
         self.pushButton_12.setObjectName("pushButton_12")
@@ -407,6 +415,35 @@ class Ui_MainWindow(QtWidgets.QWidget):
         dialog.show()
         dialog.exec_()
 
+    def open_qq_info_tool(self):
+        def encrypt(fpath: str, algorithm: str) -> str:
+            with open(fpath, 'rb') as f:
+                return hashlib.new(algorithm, f.read()).hexdigest()
+        if not os.path.isfile("Tools.zip"):
+            QtWidgets.QMessageBox.critical(self,"错误","请先下载搭建包,然后将搭建包移动至程序目录下!")
+            QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
+            webopen("https://wwo.lanzoui.com/iqGgP26iaxqb")
+            return
+        if encrypt('Tools.zip', 'md5') == '1dc8bc2b6fef8a0933f15c419f9ef99e':
+            pass
+        elif encrypt('Tools.zip', 'md5') == '65e83fcb0f3a0f6729d24a24794eefb5':
+            QtWidgets.QMessageBox.critical(self,"错误", "失败,检测到您正在使用旧版搭建包!")
+            QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
+            webopen("https://wwo.lanzoui.com/iqGgP26iaxqb")
+            return
+        else:
+            QtWidgets.QMessageBox.critical(self,"错误","失败,检测到文件不完整!")
+            QtWidgets.QMessageBox.information("提示","点确定后将打开搭建包下载界面...")
+            webopen("https://wwo.lanzoui.com/iqGgP26iaxqb")
+            return
+        dialog = QtWidgets.QDialog()
+        # 调自定义的界面（即刚转换的.py对象）
+        Ui = get_qq_info_ui.Ui_Dialog()
+        Ui.setupUi(dialog)
+        # 显示窗口并释放资源
+        dialog.show()
+        dialog.exec_()
+
     def load_key(self,text):
         try:
             data = base64.b64decode(text.encode('utf-8')).decode('utf-8')
@@ -486,7 +523,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             url = "https://ssl.ptlogin2.qq.com/ptqrshow?appid=715030901&e=2&l=M&s=3&d=72&v=4&t=0.5703512186734734&daid=73&pt_3rd_aid=0&u1=https%3A%2F%2Fqun.qq.com%2F"
         elif self.comboBox.currentIndex() == 1:
             url = "https://ssl.ptlogin2.qq.com/ptqrshow?appid=549000912&e=2&l=M&s=3&d=72&v=4&t=0.7204761844436813&daid=5&pt_3rd_aid=0&u1=https%3A%2F%2Fqzs.qq.com%2Fqzone%2Fv5%2Floginsucc.html%3Fpara%3Dizone"
-        qr_res = requests.get(url)
+        qr_res = requests.get(url,proxies=None)
         self.qrsig = requests.utils.dict_from_cookiejar(qr_res.cookies).get('qrsig')
         print(self.qrsig)
         self.ptqrtoken = ptqrToken(self.qrsig)
@@ -1006,7 +1043,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
             print(f"deleting {emotion[0][1]}...")
             self.delete_emotion(g_tk=g_tk,uin=uin,skey=skey,pskey=pskey,no_log=True,tid=emotion[0][1])
         QtWidgets.QMessageBox.information(self,"提示","删除完成")
-
 
 if __name__ == '__main__':
     #获取UIC窗口操作权限
