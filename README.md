@@ -15,6 +15,17 @@
 ## Q:为什么我打不开?  
 ### A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32位的话建议直接换一个64位系统(毕竟目前大部分软件也仅支持64位)
 ****
+# 预防方法
+## 关于shellcode注入获取的clientkey
+这种的请自行到网上搜索qqkey预防获取工具,本工具通过网页快捷登录协议获取clientkey  
+## 关于使用网页快捷登录获取的clientkey(本工具的原理)
+找到`C:\Windows\System32\drivers\etc\hosts`文件,打开它,换行后添加以下内容:  
+```
+0.0.0.0 localhost.ptlogin2.qq.com
+```
+注意:添加改行代码后请到cmd里执行`ipconfig /flushdns`以立即生效,  
+在生效后虽然防住了盗号病毒但也不能使用登录页面的快捷登录了  
+****
 # 制作不易,如果喜欢,请给作者打个Star,谢谢:)))))))))))  
 [![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)  
 ****
