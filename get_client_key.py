@@ -110,6 +110,26 @@ try:
     mail_url = f"https://ssl.ptlogin2.qq.com/jump?ptlang=1033&clientuin={uin}&clientkey={clientkey}&u1=https://wx.mail.qq.com/list/readtemplate?name=login_page.html&keyindex=19"
     print(f"[+] mail_pskey={mail_pskey}")
     print(f"[+] mail_url={mail_url}")
+    qun_params = {
+    "clientuin":str(uin),
+    "keyindex":"19",
+    "pt_aid":"715030901",
+    "daid":"73",
+    "u1":"https://qun.qq.com/",
+    "pt_local_tk":str(pt_local_token),
+    "pt_3rd_aid":"0",
+    "ptopt":"1",
+    "style":"40"
+}
+    qun_cookies = {
+        "clientkey":str(clientkey),
+        "clientuin":str(uin),
+        "pt_local_token":str(pt_local_token),
+        "pt_login_sig":str(pt_login_sig)
+    }
+    qun_res = session.get("https://ssl.ptlogin2.qq.com/jump",params=qun_params,cookies=qun_cookies,headers=headers)
+    qun_url = extractor.find_urls(qun_res.text)[0]
+    print(f"[+] qun_url={qun_url}")
 except Exception as e:
     print(f"[ERROR] 获取QQ空间&QQ邮箱地址时出现错误,原因:{e}")
     input()
@@ -123,6 +143,7 @@ print(f"qzone_pskey={qzone_pskey}")
 print(f"mail_pskey={mail_pskey}")
 print(f"qzone_url={qzone_url}")
 print(f"mail_url={mail_url}")
+print(f"qun_url={qun_url}")
 print("******************感谢使用******************")
 while True:
     pass
