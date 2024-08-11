@@ -32,8 +32,17 @@ try:
     print("[Info] 正在获取本机登录QQ号..")
     get_uin = session.get("https://localhost.ptlogin2.qq.com:4301/pt_get_uins",params=params,cookies=cookies,headers=headers).text
     uin_list = re.findall(r'\[([^\[\]]*)\]', get_uin)[0]
-    uin = json.loads(uin_list).get('uin')
-    nickname = json.loads(uin_list).get('nickname')
+    split_list = list(map(lambda i:i if i[0] == '{' else '{'+i,uin_list.split(',{')))
+    uin = None
+    nickname = None
+    if len(split_list) > 1:
+        print("[Info] 检测到您正在多开QQ,将使用第一个QQ号获取")
+        uin_list = json.loads(json.loads(json.dumps(split_list[0]))) # Json库我爱你loads后返回str还要再loads一次 凸(艹皿艹 )
+        uin = uin_list.get("uin")
+        nickname = uin_list.get("nickname")
+    else:
+        uin = json.loads(uin_list).get('uin')
+        nickname = json.loads(uin_list).get('nickname')
     print(f"[+] uin={uin}\n[+] nickname={nickname}")
     clientkey_params = {"clientuin":uin,
                         "r":"0.14246048393632815",
@@ -129,6 +138,10 @@ try:
     }
     qun_res = session.get("https://ssl.ptlogin2.qq.com/jump",params=qun_params,cookies=qun_cookies,headers=headers)
     qun_url = extractor.find_urls(qun_res.text)[0]
+    qun_cookie = requests.utils.dict_from_cookiejar(qun_res.cookies)
+    qun_info_cookies = session.get(qun_url,allow_redirects=False).cookies
+    qun_skey = qun_info_cookies.get("skey")
+    qun_pskey = qun_info_cookies.get("p_skey")
     print(f"[+] qun_url={qun_url}")
 except Exception as e:
     print(f"[ERROR] 获取QQ空间&QQ邮箱地址时出现错误,原因:{e}")
@@ -141,6 +154,8 @@ print(f"clientkey={clientkey}")
 print(f"qzone_skey={qzone_skey}")
 print(f"qzone_pskey={qzone_pskey}")
 print(f"mail_pskey={mail_pskey}")
+print(f"qun_skey={qun_skey}")
+print(f"qun_pskey={qun_pskey}")
 print(f"qzone_url={qzone_url}")
 print(f"mail_url={mail_url}")
 print(f"qun_url={qun_url}")
