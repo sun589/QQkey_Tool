@@ -20,9 +20,13 @@ if not os.path.isfile("Tools.zip"):
         pass
 sleep(1)
 print("正在验证文件完整性...")
-print(encrypt('Tools.zip', 'md5'))
-if encrypt('Tools.zip', 'md5') == '65e83fcb0f3a0f6729d24a24794eefb5':
-    print('成功')
+# print(encrypt('Tools.zip', 'md5'))
+if encrypt('Tools.zip', 'md5') == '1dc8bc2b6fef8a0933f15c419f9ef99e':
+    pass
+elif encrypt('Tools.zip', 'md5') == '65e83fcb0f3a0f6729d24a24794eefb5':
+    print("失败,检测到您正在使用旧版搭建包,请删除现有搭建包重新打开工具下载新版搭建包!")
+    input()
+    sys.exit(0)
 else:
     print("失败,请删除文件打开工具下载搭建文件!")
     input()
