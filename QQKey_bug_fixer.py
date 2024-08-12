@@ -14,6 +14,8 @@ class Ui_Dialog(object):
         Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
         Dialog.setWindowIcon(QtGui.QIcon("./icon.ico"))
+        self.centralwidget = QtWidgets.QWidget(Dialog)
+        self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(20, 30, 91, 31))
         self.pushButton.setObjectName("pushButton")
@@ -64,7 +66,7 @@ class Ui_Dialog(object):
             content = f.read()
         self.label.setText(_translate("Dialog",
                                       f"当前状态:{'已修复' if '0.0.0.0 localhost.ptlogin2.qq.com' in content else '未修复'}"))
-        QtWidgets.QMessageBox.information(Dialog,"提示","操作完成!")
+        QtWidgets.QMessageBox.information(self.centralwidget,"提示","操作完成!")
 
 
 if __name__ == '__main__':
