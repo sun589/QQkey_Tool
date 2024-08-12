@@ -22,6 +22,7 @@ import base64
 import pyperclip
 import json
 import get_qq_info_ui
+import QQKey_bug_fixer
 import hashlib
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
@@ -300,6 +301,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_17 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_17.setGeometry(QtCore.QRect(780, 290, 111, 41))
         self.pushButton_17.setObjectName("pushButton_17")
+        self.pushButton_17.clicked.connect(self.open_qqkey_bug_fixer)
         self.pushButton_18 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_18.setGeometry(QtCore.QRect(780, 350, 111, 41))
         self.pushButton_18.setObjectName("pushButton_18")
@@ -386,7 +388,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_14.setText(_translate("MainWindow", "删除说说(qzone)"))
         self.pushButton_15.setText(_translate("MainWindow", "空白昵称(qzone)"))
         self.pushButton_16.setText(_translate("MainWindow", "删除全部说说(qzone)"))
-        self.pushButton_17.setText(_translate("MainWindow", "正在开发..."))
+        self.pushButton_17.setText(_translate("MainWindow", "防QQKey木马器"))
         self.pushButton_18.setText(_translate("MainWindow", "正在开发..."))
         self.pushButton_19.setText(_translate("MainWindow", "正在开发..."))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
@@ -422,23 +424,32 @@ class Ui_MainWindow(QtWidgets.QWidget):
         if not os.path.isfile("Tools.zip"):
             QtWidgets.QMessageBox.critical(self,"错误","请先下载搭建包,然后将搭建包移动至程序目录下!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwo.lanzoui.com/iqGgP26iaxqb")
+            webopen("https://wwap.lanzouv.com/iwgzb278m90j")
             return
-        if encrypt('Tools.zip', 'md5') == '1dc8bc2b6fef8a0933f15c419f9ef99e':
+        if encrypt('Tools.zip', 'md5') == 'ba44b872e7d53f5c7dfb1da1c0d114a2':
             pass
-        elif encrypt('Tools.zip', 'md5') == '65e83fcb0f3a0f6729d24a24794eefb5':
+        elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e']:
             QtWidgets.QMessageBox.critical(self,"错误", "失败,检测到您正在使用旧版搭建包!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwo.lanzoui.com/iqGgP26iaxqb")
+            webopen("https://wwap.lanzouv.com/iwgzb278m90j")
             return
         else:
             QtWidgets.QMessageBox.critical(self,"错误","失败,检测到文件不完整!")
-            QtWidgets.QMessageBox.information("提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwo.lanzoui.com/iqGgP26iaxqb")
+            QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
+            webopen("https://wwap.lanzouv.com/iwgzb278m90j")
             return
         dialog = QtWidgets.QDialog()
         # 调自定义的界面（即刚转换的.py对象）
         Ui = get_qq_info_ui.Ui_Dialog()
+        Ui.setupUi(dialog)
+        # 显示窗口并释放资源
+        dialog.show()
+        dialog.exec_()
+
+    def open_qqkey_bug_fixer(self):
+        dialog = QtWidgets.QDialog()
+        # 调自定义的界面（即刚转换的.py对象）
+        Ui = QQKey_bug_fixer.Ui_Dialog()
         Ui.setupUi(dialog)
         # 显示窗口并释放资源
         dialog.show()
