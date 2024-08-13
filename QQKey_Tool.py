@@ -954,7 +954,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
     "uin":uin[1:],
     "inCharset":"utf-8",
     "outCharset":"utf-8",
-    "hostUin":"2737917288",
+    "hostUin":uin[1:],
     "notice":"0",
     "sort":"0",
     "pos":str(pos),
