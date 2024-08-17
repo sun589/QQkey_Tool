@@ -22,7 +22,7 @@
 ## 关于shellcode注入获取的clientkey
 这种的请自行到网上搜索qqkey预防获取工具,本工具通过网页快捷登录协议获取clientkey  
 ## 关于使用网页快捷登录获取的clientkey(本工具的原理)
-***若觉得麻烦/不会操作可使用QQKey_Tool的3.2版本的防QQKey木马器进行一键修复/恢复**  
+***若觉得麻烦/不会操作可使用QQKey_Tool的3.2或者以上版本的防QQKey木马器进行一键修复/恢复**  
 找到`C:\Windows\System32\drivers\etc\hosts`文件,打开它,换行后添加以下内容:  
 ```
 0.0.0.0 localhost.ptlogin2.qq.com
