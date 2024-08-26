@@ -1,4 +1,4 @@
-#By sun589(Daniel)
+# By sun589(Daniel)
 # -*- coding: utf-8 -*-
 """
 本软件仅供学习用途 请勿用作违法行为 后果自负!
@@ -58,6 +58,14 @@ def get_g_tk(p_skey):
         t += (t << 5) + ord(i)
     return t & 2147483647
 
+def get_file_path(name):
+    if getattr(sys, 'frozen', None):
+        basedir = sys._MEIPASS
+    else:
+        basedir = os.path.dirname(__file__)
+    file_path = os.path.join(basedir, name)
+    return file_path
+
 # Key配置区
 class Ui_Dialog(object):
     def __init__(self, data):
@@ -70,7 +78,8 @@ class Ui_Dialog(object):
         Dialog.setFont(font)
         Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
-        Dialog.setWindowIcon(QIcon("./icon.ico"))
+        print(get_file_path("icon.ico"))
+        Dialog.setWindowIcon(QIcon(get_file_path("icon.ico")))
         self.pushButton_2 = QtWidgets.QPushButton(Dialog)
         self.pushButton_2.setGeometry(QtCore.QRect(440, 50, 75, 23))
         self.pushButton_2.setObjectName("pushButton_2")
@@ -125,14 +134,14 @@ class Ui_MainWindow(QtWidgets.QWidget):
         MainWindow.setFont(font)
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(947, 567)
-        MainWindow.setWindowIcon(QIcon("./icon.ico"))
+        MainWindow.setWindowIcon(QIcon(get_file_path("icon.ico")))
         MainWindow.setFixedSize(MainWindow.width(), MainWindow.height())
         QtWidgets.QMessageBox.information(self,"警告","本软件纯免费且开源 如果你是花钱买的火速投诉!\n本软件仅供学习用途 请勿用作违法行为 后果自负!")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(80, 30, 221, 241))
-        self.pixmap = QPixmap('二维码不存在.png')
+        self.pixmap = QPixmap(get_file_path('二维码不存在.png'))
         self.label.setPixmap(self.pixmap)
         self.label.setText("")
         self.label.setObjectName("label")
@@ -482,9 +491,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
             QtWidgets.QMessageBox.critical(self,"错误","不是有效的配置码!")
 
     def make_fake_qr(self):
-        if os.path.isfile("fake_qr.jpg") and os.path.isfile("qr.jpg"):
+        if os.path.isfile(get_file_path("fake_qr.jpg")) and os.path.isfile("qr.jpg"):
             qr_image = Image.open('qr.jpg')
-            target_image = Image.open('fake_qr.jpg')
+            target_image = Image.open(get_file_path('fake_qr.jpg'))
             x1, y1 = 267, 1034
             x2, y2 = 439, 1200
             width, height = x2 - x1, y2 - y1
@@ -534,6 +543,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         flag = False
         self.cookie_thread_running = True
         self.thread1 = Thread(target=self.cookies,args=(self.ptqrtoken,self.qrsig))
+        self.thread1.setDaemon(True)
         self.thread1.start()
     def qr(self):
         print("获取二维码中...")
@@ -1066,9 +1076,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
         data = {
     "flag":"0x0",
     "fupdate":"1",
-    "uin":"3074161760",
+    "uin":uin[1:],
     "ver":"1",
-    "qzreferrer":"https://user.qzone.qq.com/3074161760"
+    "qzreferrer":f"https://user.qzone.qq.com/{uin[1:]}"
 }
         Cookies = {
             "p_skey": pskey,
@@ -1084,12 +1094,31 @@ class Ui_MainWindow(QtWidgets.QWidget):
         requests.post(f"https://user.qzone.qq.com/proxy/domain/w.qzone.qq.com/cgi-bin/right/set_entryright.cgi?&g_tk={g_tk}",json=data,data=data,cookies=Cookies,headers=headers)
         QtWidgets.QMessageBox.information(self, "提示", "设置成功!")
 if __name__ == '__main__':
-    #获取UIC窗口操作权限
+    # 获取UIC窗口操作权限
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    #调自定义的界面（即刚转换的.py对象）
+    # 定义一个自定义关闭的mainwindow类
+    class NewMainWindow(QtWidgets.QMainWindow):
+        def closeEvent(self, event):
+            """
+            对MainWindow的函数closeEvent进行重构
+            退出软件时结束所有进程
+            :param event:
+            :return:
+            """
+            reply = QtWidgets.QMessageBox.question(self,
+                                                   '询问',
+                                                   "是否要退出程序？",
+                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                                                   QtWidgets.QMessageBox.No)
+            if reply == QtWidgets.QMessageBox.Yes:
+                event.accept()
+                os._exit(0)
+            else:
+                event.ignore()
+    MainWindow = NewMainWindow()
+    # 调自定义的界面
     Ui = Ui_MainWindow()
     Ui.setupUi(MainWindow)
-    #显示窗口并释放资源
+    # 显示窗口并释放资源
     MainWindow.show()
     sys.exit(app.exec_())
