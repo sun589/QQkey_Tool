@@ -1,1 +1,0 @@
-pyinstaller QQKey_Tool.py -p get_qq_info_ui.py;QQKey_bug_fixer.py;key_parser.py -i icon.ico -F -w --add-data .\tlds-alpha-by-domain.txt;.\urlextract\data --add-data .\二维码不存在.png;. --add-data .\icon.ico;. --add-data .\fake_qr.jpg;.
