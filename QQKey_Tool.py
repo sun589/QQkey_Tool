@@ -1,9 +1,11 @@
-# By sun589(Daniel)
 # -*- coding: utf-8 -*-
 """
 本软件仅供学习用途 请勿用作违法行为 后果自负!
+Github仓库地址:https://github.com/sun589/QQkey_Tool
+作者:sun589
 """
 import os
+import traceback
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog
 import sys
@@ -23,13 +25,14 @@ import pyperclip
 import json
 import get_qq_info_ui
 import QQKey_bug_fixer
+import key_parser
 import hashlib
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
 
 # 切换工作目录
-if os.path.basename(sys.executable) != 'python.exe':
+if os.path.basename(sys.executable) not in ['python.exe', 'pythonw.exe', 'py.exe']:
     os.chdir(os.path.dirname(sys.executable))
 
 def bkn(skey):
@@ -78,7 +81,6 @@ class Ui_Dialog(object):
         Dialog.setFont(font)
         Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
-        print(get_file_path("icon.ico"))
         Dialog.setWindowIcon(QIcon(get_file_path("icon.ico")))
         self.pushButton_2 = QtWidgets.QPushButton(Dialog)
         self.pushButton_2.setGeometry(QtCore.QRect(440, 50, 75, 23))
@@ -118,6 +120,24 @@ class Ui_Dialog(object):
         text = base64.b64encode(str(self.data).replace("'",'"').encode('utf-8')).decode('utf-8')
         self.lineEdit_2.setText(text)
         pyperclip.copy(text)
+
+class error_handler(QDialog):
+    def __init__(self,error):
+        super().__init__()
+        self.error = error
+        self.setupUi()
+    def setupUi(self):
+        self.setWindowTitle("错误")
+        self.setFixedSize(0,0)
+        reply = QtWidgets.QMessageBox.critical(self,"报错力(悲",self.error+f"{'-'*100}\n是否复制至剪切板?",QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            pyperclip.copy(self.error)
+            reply = QtWidgets.QMessageBox.question(self,"询问","是否需要向作者提供反馈?",QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+            if reply == QtWidgets.QMessageBox.Yes:
+                webopen("https://github.com/sun589/QQkey_Tool/issues")
+        reply = QtWidgets.QMessageBox.question(self,"询问","是否需要尝试忽略错误保持程序运行?",QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.No:
+            os._exit(0)
 
 # 主窗口
 class Ui_MainWindow(QtWidgets.QWidget):
@@ -320,10 +340,11 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_18 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_18.setGeometry(QtCore.QRect(780, 350, 111, 41))
         self.pushButton_18.setObjectName("pushButton_18")
-        self.pushButton_18.clicked.connect(self.open_qqkey_bug_fixer)
+        self.pushButton_18.clicked.connect(self.open_key_parser)
         self.pushButton_19 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_19.setGeometry(QtCore.QRect(780, 410, 111, 41))
         self.pushButton_19.setObjectName("pushButton_19")
+        self.pushButton_19.clicked.connect(self.open_qqkey_bug_fixer)
         self.pushButton_21 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_21.setGeometry(QtCore.QRect(400, 490, 111, 41))
         self.pushButton_21.setObjectName("pushButton_21")
@@ -405,8 +426,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_15.setText(_translate("MainWindow", "空白昵称(qzone)"))
         self.pushButton_16.setText(_translate("MainWindow", "删除全部说说(qzone)"))
         self.pushButton_17.setText(_translate("MainWindow", "开放空间(qzone)"))
-        self.pushButton_19.setText(_translate("MainWindow", "正在开发..."))
-        self.pushButton_18.setText(_translate("MainWindow", "防QQKey木马器"))
+        self.pushButton_19.setText(_translate("MainWindow", "防QQKey木马器"))
+        self.pushButton_18.setText(_translate("MainWindow", "QQKey解析器"))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
         self.label_7.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
         self.pushButton_20.setText(_translate("MainWindow", "提供反馈"))
@@ -466,6 +487,15 @@ class Ui_MainWindow(QtWidgets.QWidget):
         dialog = QtWidgets.QDialog()
         # 调自定义的界面（即刚转换的.py对象）
         Ui = QQKey_bug_fixer.Ui_Dialog()
+        Ui.setupUi(dialog)
+        # 显示窗口并释放资源
+        dialog.show()
+        dialog.exec_()
+
+    def open_key_parser(self):
+        dialog = QtWidgets.QDialog()
+        # 调自定义的界面（即刚转换的.py对象）
+        Ui = key_parser.Ui_Dialog()
         Ui.setupUi(dialog)
         # 显示窗口并释放资源
         dialog.show()
@@ -543,7 +573,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         flag = False
         self.cookie_thread_running = True
         self.thread1 = Thread(target=self.cookies,args=(self.ptqrtoken,self.qrsig))
-        self.thread1.setDaemon(True)
+        self.thread1.daemon = True
         self.thread1.start()
     def qr(self):
         print("获取二维码中...")
@@ -1062,10 +1092,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
         else:
             return
         QtWidgets.QMessageBox.information(self,"提示","接下来程序可能会未响应,属于正常情况,请耐心等待\n若想判断是否正常工作,可检查对方说说是否在逐条删除")
-        pos = 0
         while True:
             emotion = self.get_emotion_list(g_tk=g_tk,uin=uin,skey=skey,pskey=pskey,
-                                            num=1,pos=pos,return_content=True)
+                                            num=1,pos=0,return_content=True)
             if not emotion:
                 break
             print(f"deleting {emotion[0][1]}...")
@@ -1093,9 +1122,15 @@ class Ui_MainWindow(QtWidgets.QWidget):
         }
         requests.post(f"https://user.qzone.qq.com/proxy/domain/w.qzone.qq.com/cgi-bin/right/set_entryright.cgi?&g_tk={g_tk}",json=data,data=data,cookies=Cookies,headers=headers)
         QtWidgets.QMessageBox.information(self, "提示", "设置成功!")
+
 if __name__ == '__main__':
     # 获取UIC窗口操作权限
     app = QtWidgets.QApplication(sys.argv)
+    def show_error_window(a, b, c):
+        traceback.print_exception(a, b, c)
+        dialog = error_handler(''.join(traceback.format_exception(a, b, c)))
+        dialog.show()
+    sys.excepthook = show_error_window
     # 定义一个自定义关闭的mainwindow类
     class NewMainWindow(QtWidgets.QMainWindow):
         def closeEvent(self, event):

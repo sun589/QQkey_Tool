@@ -3,6 +3,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import subprocess
+import os
+
+def get_file_path(name):
+    if getattr(sys, 'frozen', None):
+        basedir = sys._MEIPASS
+    else:
+        basedir = os.path.dirname(__file__)
+    file_path = os.path.join(basedir, name)
+    return file_path
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -13,7 +22,7 @@ class Ui_Dialog(object):
         Dialog.setFont(font)
         Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
-        Dialog.setWindowIcon(QtGui.QIcon("./icon.ico"))
+        Dialog.setWindowIcon(QtGui.QIcon(get_file_path("./icon.ico")))
         self.centralwidget = QtWidgets.QWidget(Dialog)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(Dialog)
@@ -41,32 +50,34 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", f"当前状态:{'已修复' if '0.0.0.0 localhost.ptlogin2.qq.com' in content else '未修复'}"))
 
     def write_host(self,choose):
-        _translate = QtCore.QCoreApplication.translate
-        if choose == 0:
-            with open('C:\Windows\System32\drivers\etc\hosts',encoding='utf-8') as f:
-                content = f.read()
-            with open('C:\Windows\System32\drivers\etc\hosts','w+',encoding='utf-8') as f:
-                if '0.0.0.0 localhost.ptlogin2.qq.com' not in content:
-                    f.write(content+'\n0.0.0.0 localhost.ptlogin2.qq.com')
-                else:
-                    f.write(content)
-        else:
-            with open('C:\Windows\System32\drivers\etc\hosts',encoding='utf-8') as f:
-                content = f.readlines()
-            try:
+        try:
+            _translate = QtCore.QCoreApplication.translate
+            if choose == 0:
+                with open('C:\Windows\System32\drivers\etc\hosts',encoding='utf-8') as f:
+                    content = f.read()
+                with open('C:\Windows\System32\drivers\etc\hosts','w+',encoding='utf-8') as f:
+                    if '0.0.0.0 localhost.ptlogin2.qq.com' not in content:
+                        f.write(content+'\n0.0.0.0 localhost.ptlogin2.qq.com')
+                    else:
+                        f.write(content)
+            else:
+                with open('C:\Windows\System32\drivers\etc\hosts',encoding='utf-8') as f:
+                    content = f.readlines()
                 with open('C:\Windows\System32\drivers\etc\hosts','w+',encoding='utf-8') as f:
                     for i in range(0,len(content)):
                         if '0.0.0.0 localhost.ptlogin2.qq.com' in content[i]:
                             del content[i]
                     f.write(''.join(content))
-            except Exception as e:
-                print(repr(e))
-        subprocess.call("ipconfig /flushdns",creationflags=subprocess.CREATE_NO_WINDOW)
-        with open('C:\Windows\System32\drivers\etc\hosts') as f:
-            content = f.read()
-        self.label.setText(_translate("Dialog",
-                                      f"当前状态:{'已修复' if '0.0.0.0 localhost.ptlogin2.qq.com' in content else '未修复'}"))
-        QtWidgets.QMessageBox.information(self.centralwidget,"提示","操作完成!")
+            subprocess.call("ipconfig /flushdns",creationflags=subprocess.CREATE_NO_WINDOW)
+            with open('C:\Windows\System32\drivers\etc\hosts') as f:
+                content = f.read()
+            self.label.setText(_translate("Dialog",
+                                          f"当前状态:{'已修复' if '0.0.0.0 localhost.ptlogin2.qq.com' in content else '未修复'}"))
+            QtWidgets.QMessageBox.information(self.centralwidget,"提示","操作完成!")
+        except PermissionError:
+            QtWidgets.QMessageBox.critical(self.centralwidget,"错误","检测到权限不足,请尝试以管理员身份运行程序并检查是否有程序占用hosts文件!")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self.centralwidget,"错误","出现未知错误,请尝试以管理员身份运行程序!")
 
 
 if __name__ == '__main__':
