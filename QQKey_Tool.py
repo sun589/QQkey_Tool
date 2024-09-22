@@ -69,6 +69,9 @@ def get_file_path(name):
     file_path = os.path.join(basedir, name)
     return file_path
 
+class EmittingSignal(QtCore.QObject):
+    signal = QtCore.pyqtSignal(tuple)
+
 # Key配置区
 class Ui_Dialog(object):
     def __init__(self, data):
@@ -393,6 +396,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menu.addAction(self.action_2)
         self.menuBar.addAction(self.menu.menuAction())
         self.retranslateUi(MainWindow)
+        self.signal = EmittingSignal() # 用来让key_parser发送解析导入skey的信号
+        self.signal.signal.connect(self.load_skey_by_clientkey)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -475,7 +480,11 @@ class Ui_MainWindow(QtWidgets.QWidget):
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
             webopen("https://wwap.lanzouv.com/iwgzb278m90j")
             return
-        dialog = QtWidgets.QDialog()
+        class Dialog(QDialog):
+            def closeEvent(self, a0) -> None:
+                sys.stdout = sys.__stdout__
+                a0.accept()
+        dialog = Dialog()
         # 调自定义的界面（即刚转换的.py对象）
         Ui = get_qq_info_ui.Ui_Dialog()
         Ui.setupUi(dialog)
@@ -495,7 +504,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
     def open_key_parser(self):
         dialog = QtWidgets.QDialog()
         # 调自定义的界面（即刚转换的.py对象）
-        Ui = key_parser.Ui_Dialog()
+        Ui = key_parser.Ui_Dialog(self.signal.signal)
         Ui.setupUi(dialog)
         # 显示窗口并释放资源
         dialog.show()
@@ -519,6 +528,60 @@ class Ui_MainWindow(QtWidgets.QWidget):
         except Exception as e:
             print(repr(e))
             QtWidgets.QMessageBox.critical(self,"错误","不是有效的配置码!")
+
+    def load_skey_by_clientkey(self,data):
+        login_data,uin,clientkey = data
+        if "qun" not in login_data.get("s_url"):
+            QtWidgets.QMessageBox.critical(self,"错误","当前配置仅支持qun.qq.com(QQ群)!")
+            return
+        try:
+            session = requests.session()
+            if login_data['s_url']:
+                login_htm = session.get(
+                    "https://xui.ptlogin2.qq.com/cgi-bin/xlogin",params=login_data)
+                q_cookies = requests.utils.dict_from_cookiejar(login_htm.cookies)
+                pt_local_token = q_cookies.get("pt_local_token")
+                headers = {"Referer": "https://xui.ptlogin2.qq.com/",
+                           "Host": "ssl.ptlogin2.qq.com",
+                           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0"}
+                params = {
+                    "u1": login_data['s_url'],
+                    "clientuin": uin,
+                    "pt_aid": login_data['appid'],
+                    "keyindex": "19",
+                    "pt_local_tk": pt_local_token,
+                    "pt_3rd_aid": "0",
+                    "ptopt": "1",
+                    "style": "40"
+                }
+                if login_data.get("daid"): params['daid'] = login_data.get("daid")
+                cookies = {
+                    "clientkey": clientkey,
+                    "clientuin": str(uin),
+                    "pt_local_token": pt_local_token
+                }
+                login_res = session.get("https://ssl.ptlogin2.qq.com/jump",params=params,cookies=cookies,headers=headers)
+            else:
+                login_res = session.get(f"https://ssl.ptlogin2.qq.com/jump?ptlang=1033&clientuin={uin}&clientkey={clientkey}&u1={login_data['u1']}&keyindex=19",allow_redirects=False)
+            if login_data['s_url']:
+                extracter = URLExtract()
+                url = extracter.find_urls(login_res.text)[0]
+
+            else:
+                url = login_res.headers['Location']
+            cookies = requests.utils.dict_from_cookiejar(login_res.cookies)
+            r2 = requests.get(url, cookies=cookies, allow_redirects=False)
+            targetCookies = requests.utils.dict_from_cookiejar(r2.cookies)
+            skey = requests.utils.dict_from_cookiejar(r2.cookies).get('skey')
+            pskey = requests.utils.dict_from_cookiejar(r2.cookies).get('p_skey')
+            self.skey, self.uin, self.pskey = skey, uin, pskey
+            self.cookie = targetCookies
+            self.label_2.setText(QtCore.QCoreApplication.translate("MainWindow",
+                                            f"<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:登录成功!</span></p><p><span style=\" font-size:11pt;\">QQ号码:{self.uin}</span></p><p><span style=\" font-size:11pt;\">Skey:{self.skey}</span></p></body></html>"))
+            self.g_tk = ''
+            QtWidgets.QMessageBox.information(self, "提示", "登录成功!")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self.centralwidget, "提示", f"登录失败!")
 
     def make_fake_qr(self):
         if os.path.isfile(get_file_path("fake_qr.jpg")) and os.path.isfile("qr.jpg"):

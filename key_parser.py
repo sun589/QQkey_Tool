@@ -19,6 +19,8 @@ def get_file_path(name):
     return file_path
 
 class Ui_Dialog(object):
+    def __init__(self,signal):
+        self.signal = signal
     def setupUi(self, Dialog):
         self.login_data = [
             {
@@ -100,6 +102,7 @@ class Ui_Dialog(object):
         Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
         Dialog.setWindowIcon(QtGui.QIcon(get_file_path("./icon.ico")))
+        self.centralwidget = QtWidgets.QWidget(Dialog)
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(41, 10, 91, 21))
         font = QtGui.QFont()
@@ -133,9 +136,13 @@ class Ui_Dialog(object):
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.pushButton = QtWidgets.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(230, 40, 191, 23))
+        self.pushButton.setGeometry(QtCore.QRect(230, 40, 91, 23))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.login)
+        self.pushButton_2 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_2.setGeometry(QtCore.QRect(330, 40, 91, 23))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(lambda: self.signal.emit((self.login_data[self.comboBox.currentIndex()],self.lineEdit.text(),self.lineEdit_2.text())))
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -157,46 +164,50 @@ class Ui_Dialog(object):
         self.comboBox.setItemText(10, _translate("Dialog", "QQ官网"))
         self.label_3.setText(_translate("Dialog", "登录网站:"))
         self.pushButton.setText(_translate("Dialog", "登录"))
+        self.pushButton_2.setText(_translate("Dialog", "导入Skey"))
 
     def login(self):
-        global hint_flag
-        session = requests.session()
-        uin = self.lineEdit.text()
-        clientkey = self.lineEdit_2.text()
-        login_data = self.login_data[self.comboBox.currentIndex()]
-        if not hint_flag:
-            QtWidgets.QMessageBox.information(Dialog, "提示", "部分网站在打开后可能出现白屏的情况,这时请手动打开对应官网才可正常使用")
-            hint_flag = True
-        if login_data['s_url']:
-            login_htm = session.get(
-                "https://xui.ptlogin2.qq.com/cgi-bin/xlogin",params=login_data)
-            q_cookies = requests.utils.dict_from_cookiejar(login_htm.cookies)
-            pt_local_token = q_cookies.get("pt_local_token")
-            headers = {"Referer": "https://xui.ptlogin2.qq.com/",
-                       "Host": "ssl.ptlogin2.qq.com",
-                       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0"}
-            params = {
-                "u1": login_data['s_url'],
-                "clientuin": uin,
-                "pt_aid": login_data['appid'],
-                "keyindex": "19",
-                "pt_local_tk": pt_local_token,
-                "pt_3rd_aid": "0",
-                "ptopt": "1",
-                "style": "40"
-            }
-            if login_data.get("daid"): params['daid'] = login_data.get("daid")
-            cookies = {
-                "clientkey": clientkey,
-                "clientuin": str(uin),
-                "pt_local_token": pt_local_token
-            }
-            login_res = session.get("https://ssl.ptlogin2.qq.com/jump",params=params,cookies=cookies,headers=headers)
-            extractor = URLExtract()
-            login_url = extractor.find_urls(login_res.text)[0]
-            web_open(login_url)
-        else:
-            web_open(f"https://ssl.ptlogin2.qq.com/jump?ptlang=1033&clientuin={uin}&clientkey={clientkey}&u1={login_data['u1']}&keyindex=19")
+        try:
+            global hint_flag
+            session = requests.session()
+            uin = self.lineEdit.text()
+            clientkey = self.lineEdit_2.text()
+            login_data = self.login_data[self.comboBox.currentIndex()]
+            if not hint_flag:
+                QtWidgets.QMessageBox.information(self.centralwidget, "提示", "部分网站在打开后可能出现白屏的情况,这时请手动打开对应官网才可正常使用")
+                hint_flag = True
+            if login_data['s_url']:
+                login_htm = session.get(
+                    "https://xui.ptlogin2.qq.com/cgi-bin/xlogin",params=login_data)
+                q_cookies = requests.utils.dict_from_cookiejar(login_htm.cookies)
+                pt_local_token = q_cookies.get("pt_local_token")
+                headers = {"Referer": "https://xui.ptlogin2.qq.com/",
+                           "Host": "ssl.ptlogin2.qq.com",
+                           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0"}
+                params = {
+                    "u1": login_data['s_url'],
+                    "clientuin": uin,
+                    "pt_aid": login_data['appid'],
+                    "keyindex": "19",
+                    "pt_local_tk": pt_local_token,
+                    "pt_3rd_aid": "0",
+                    "ptopt": "1",
+                    "style": "40"
+                }
+                if login_data.get("daid"): params['daid'] = login_data.get("daid")
+                cookies = {
+                    "clientkey": clientkey,
+                    "clientuin": str(uin),
+                    "pt_local_token": pt_local_token
+                }
+                login_res = session.get("https://ssl.ptlogin2.qq.com/jump",params=params,cookies=cookies,headers=headers)
+                extractor = URLExtract()
+                login_url = extractor.find_urls(login_res.text)[0]
+                web_open(login_url)
+            else:
+                web_open(f"https://ssl.ptlogin2.qq.com/jump?ptlang=1033&clientuin={uin}&clientkey={clientkey}&u1={login_data['u1']}&keyindex=19")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self.centralwidget, "提示", f"登录失败!")
 if __name__ == '__main__':
     # 获取UIC窗口操作权限
     app = QtWidgets.QApplication(sys.argv)
