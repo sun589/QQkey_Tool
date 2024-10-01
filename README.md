@@ -34,7 +34,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 在生效后虽然防住了盗号病毒但也不能使用登录页面的快捷登录了  
 ****
 # 程序截图
-![程序截图]https://github.com/user-attachments/assets/61bf4c50-a5b9-4ffd-bff1-7f13af45173a)
+![程序截图](https://github.com/user-attachments/assets/61bf4c50-a5b9-4ffd-bff1-7f13af45173a)
 ****
 # 制作不易,如果喜欢,请给作者打个Star,谢谢:)))))))))))  
 [![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)  
