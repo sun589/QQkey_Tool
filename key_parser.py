@@ -7,6 +7,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 from urlextract import URLExtract
 from webbrowser import open as web_open
+from PyQt5.QtCore import pyqtSignal
 
 hint_flag = False
 
@@ -17,6 +18,9 @@ def get_file_path(name):
         basedir = os.path.dirname(__file__)
     file_path = os.path.join(basedir, name)
     return file_path
+
+class none_siganl(QtCore.QObject):
+    signal = pyqtSignal(tuple)
 
 class Ui_Dialog(object):
     def __init__(self,signal):
@@ -49,7 +53,24 @@ class Ui_Dialog(object):
                 "pt_no_auth": "1",
                 "s_url": "https://qun.qq.com/"
             },
-            {"u1":"https://wx.mail.qq.com/list/readtemplate?name=login_page.html","s_url":None},
+            # {"u1":"https://wx.mail.qq.com/list/readtemplate?name=login_page.html","s_url":None},
+            {
+                "target": "self",
+                "appid": "522005705",
+                "daid": "4",
+                "s_url": "https://wx.mail.qq.com/list/readtemplate?name=login_jump.html",
+                "style": "25",
+                "low_login": "1",
+                "proxy_url": "https://mail.qq.com/proxy.html",
+                "need_qr": "0",
+                "hide_border": "1",
+                "border_radius": "0",
+                "self_regurl": "https://reg.mail.qq.com",
+                "app_id": "11005?t=regist",
+                "pt_feedback_link": "http://support.qq.com/discuss/350_1.shtml",
+                "css": "https://res.mail.qq.com/zh_CN/htmledition/style/ptlogin_input_for_xmail.css",
+                "enable_qlogin": "0"
+            },
             {
                 "appid": "8000201",
                 "style": "20",
@@ -58,7 +79,20 @@ class Ui_Dialog(object):
                 "daid": "18",
                 "target": "self"
             },
-            {"u1":"https://www.weiyun.com/?adtag=ntqqmainpanel","s_url":None},
+            # {"u1":"https://www.weiyun.com/?adtag=ntqqmainpanel","s_url":None},
+            {
+                "appid": "527020901",
+                "daid": "372",
+                "low_login": "0",
+                "qlogin_auto_login": "1",
+                "s_url": "https://www.weiyun.com/web/callback/common_qq_login_ok.html?login_succ",
+                "style": "20",
+                "hide_title": "1",
+                "target": "self",
+                "link_target": "blank",
+                "hide_close_icon": "1",
+                "pt_no_auth": "1"
+            },
             {
                 "style": "40",
                 "appid": "1600001573",
@@ -213,7 +247,8 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
     # 调自定义的界面（即刚转换的.py对象）
-    Ui = Ui_Dialog()
+    signal = none_siganl()
+    Ui = Ui_Dialog(signal.signal)
     Ui.setupUi(Dialog)
     # 显示窗口并释放资源
     Dialog.show()

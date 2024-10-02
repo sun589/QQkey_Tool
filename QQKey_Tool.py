@@ -26,13 +26,14 @@ import json
 import get_qq_info_ui
 import QQKey_bug_fixer
 import key_parser
+import get_cookies_by_weblogin
 import hashlib
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
 
 # 切换工作目录
-if os.path.basename(sys.executable) not in ['python.exe', 'pythonw.exe', 'py.exe']:
+if getattr(sys, 'frozen', None):
     os.chdir(os.path.dirname(sys.executable))
 
 def bkn(skey):
@@ -151,6 +152,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.cookie = ''
         self.g_tk = ''
         self.qzone_url = ''
+        self.login_url = ''
         self.cookie_thread_running = False
         font = QFont()
         font.setFamily("微软雅黑")
@@ -176,6 +178,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton.setGeometry(QtCore.QRect(80, 390, 200, 51))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.get_qq)
+        self.pushButton.setFocus()
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(340, -30, 16, 631))
         self.label_3.setObjectName("label_3")
@@ -295,7 +298,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误","此功能仅qzone可用!")
                     )
         self.pushButton_13 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_13.setGeometry(QtCore.QRect(80, 450, 201, 41))
+        self.pushButton_13.setGeometry(QtCore.QRect(80, 445, 101, 41))
         self.pushButton_13.setObjectName("pushButton_13")
         self.pushButton_13.clicked.connect(self.make_fake_qr)
         self.pushButton_14 = QtWidgets.QPushButton(self.centralwidget)
@@ -333,13 +336,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_17 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_17.setGeometry(QtCore.QRect(780, 290, 111, 41))
         self.pushButton_17.setObjectName("pushButton_17")
-        self.pushButton_17.clicked.connect(lambda: self.set_entryright(
-                    g_tk=self.g_tk,skey=self.skey,
-                    pskey=self.pskey,uin=self.uin)
-                    if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
-                    if self.lineEdit.text() else QtWidgets.QMessageBox.critical(self, "错误","请先填入内容!")
-                    if self.g_tk else QtWidgets.QMessageBox.critical(self, "错误","此功能仅qzone可用!")
-                    )
+        self.pushButton_17.clicked.connect(lambda: self.open_weblogin())
         self.pushButton_18 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_18.setGeometry(QtCore.QRect(780, 350, 111, 41))
         self.pushButton_18.setObjectName("pushButton_18")
@@ -366,6 +363,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_20.setGeometry(QtCore.QRect(540, 490, 111, 41))
         self.pushButton_20.setObjectName("pushButton_20")
         self.pushButton_20.clicked.connect(lambda:webopen("https://github.com/sun589/QQkey_Tool/issues"))
+        self.pushButton_23 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_23.setGeometry(QtCore.QRect(180, 445, 101, 41))
+        self.pushButton_23.setObjectName("pushButton_23")
+        self.pushButton_23.clicked.connect(lambda: webopen(self.login_url) if self.login_url else QtWidgets.QMessageBox.critical(self.centralwidget,"错误","请先扫码登录!"))
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setGeometry(QtCore.QRect(80, 265, 200, 22))
         self.comboBox.setEditable(False)
@@ -430,13 +431,14 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_14.setText(_translate("MainWindow", "删除说说(qzone)"))
         self.pushButton_15.setText(_translate("MainWindow", "空白昵称(qzone)"))
         self.pushButton_16.setText(_translate("MainWindow", "删除全部说说(qzone)"))
-        self.pushButton_17.setText(_translate("MainWindow", "开放空间(qzone)"))
+        self.pushButton_17.setText(_translate("MainWindow", "Cookies获取器"))
         self.pushButton_19.setText(_translate("MainWindow", "防QQKey木马器"))
         self.pushButton_18.setText(_translate("MainWindow", "QQKey解析器"))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
         self.label_7.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
         self.pushButton_20.setText(_translate("MainWindow", "提供反馈"))
         self.pushButton_21.setText(_translate("MainWindow", "Key 有效性检测"))
+        self.pushButton_23.setText(_translate("MainWindow", "进入页面"))
         self.menu.setTitle(_translate("MainWindow", "菜单"))
         self.action_Key.setText(_translate("MainWindow", "设置Key"))
         self.action.setText(_translate("MainWindow", "使用帮助"))
@@ -450,12 +452,21 @@ class Ui_MainWindow(QtWidgets.QWidget):
             "pskey":self.pskey,
             "cookie":self.cookie,
             "g_tk":self.g_tk,
-            "qzone_url":self.qzone_url
+            "login_url":self.login_url
         }
         dialog = QDialog()
         self.Ui = Ui_Dialog(data)
         self.Ui.setupUi(dialog)
         self.Ui.pushButton_2.clicked.connect(lambda: self.load_key(self.Ui.lineEdit.text()))
+        dialog.show()
+        dialog.exec_()
+
+    def open_weblogin(self):
+        dialog = QtWidgets.QDialog()
+        # 调自定义的界面（即刚转换的.py对象）
+        Ui = get_cookies_by_weblogin.Ui_Dialog()
+        Ui.setupUi(dialog)
+        # 显示窗口并释放资源
         dialog.show()
         dialog.exec_()
 
@@ -516,7 +527,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             data = json.loads(data)
             self.skey = data['skey']
             self.pskey = data['pskey']
-            self.qzone_url = data['qzone_url']
+            self.login_url = data['login_url'] if data.get("login_url") != None else data['qzone_url']
             self.g_tk = data['g_tk']
             self.uin = data['uin']
             self.cookie = data['cookie']
@@ -531,9 +542,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
 
     def load_skey_by_clientkey(self,data):
         login_data,uin,clientkey = data
-        if "qun" not in login_data.get("s_url"):
-            QtWidgets.QMessageBox.critical(self,"错误","当前配置仅支持qun.qq.com(QQ群)!")
-            return
+        # if "qun" not in login_data.get("s_url"):
+        #     QtWidgets.QMessageBox.critical(self,"错误","当前配置仅支持qun.qq.com(QQ群)!")
+        #     return
         try:
             session = requests.session()
             if login_data['s_url']:
@@ -566,9 +577,11 @@ class Ui_MainWindow(QtWidgets.QWidget):
             if login_data['s_url']:
                 extracter = URLExtract()
                 url = extracter.find_urls(login_res.text)[0]
-
             else:
                 url = login_res.headers['Location']
+            self.login_url = url
+            uin = login_res.cookies.get_dict().get('uin')
+            print(uin)
             cookies = requests.utils.dict_from_cookiejar(login_res.cookies)
             r2 = requests.get(url, cookies=cookies, allow_redirects=False)
             targetCookies = requests.utils.dict_from_cookiejar(r2.cookies)
@@ -578,7 +591,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
             self.cookie = targetCookies
             self.label_2.setText(QtCore.QCoreApplication.translate("MainWindow",
                                             f"<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:登录成功!</span></p><p><span style=\" font-size:11pt;\">QQ号码:{self.uin}</span></p><p><span style=\" font-size:11pt;\">Skey:{self.skey}</span></p></body></html>"))
-            self.g_tk = ''
+            if 'qzone' in login_data.get("s_url"):
+                self.g_tk = get_g_tk(self.skey)
+            else:
+                self.g_tk = ''
             QtWidgets.QMessageBox.information(self, "提示", "登录成功!")
         except Exception as e:
             QtWidgets.QMessageBox.critical(self.centralwidget, "提示", f"登录失败!")
@@ -691,6 +707,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     extractor = URLExtract()
                     url = extractor.find_urls(l.text)[0]
                     self.qzone_url = url
+                self.login_url = url
                 cookies = requests.utils.dict_from_cookiejar(l.cookies)
                 r2 = requests.get(url, cookies=cookies, allow_redirects=False)
                 targetCookies = requests.utils.dict_from_cookiejar(r2.cookies)
@@ -1163,28 +1180,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
             print(f"deleting {emotion[0][1]}...")
             self.delete_emotion(g_tk=g_tk,uin=uin,skey=skey,pskey=pskey,no_log=True,tid=emotion[0][1])
         QtWidgets.QMessageBox.information(self,"提示","删除完成")
-
-    def set_entryright(self,pskey,skey,uin,g_tk):
-        data = {
-    "flag":"0x0",
-    "fupdate":"1",
-    "uin":uin[1:],
-    "ver":"1",
-    "qzreferrer":f"https://user.qzone.qq.com/{uin[1:]}"
-}
-        Cookies = {
-            "p_skey": pskey,
-            "uin": str(uin),
-            "skey": skey,
-            "p_uin": str(uin)
-        }
-        headers = {
-            "Referer": f"https://user.qzone.qq.com/",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
-            "Origin": "https://user.qzone.qq.com"
-        }
-        requests.post(f"https://user.qzone.qq.com/proxy/domain/w.qzone.qq.com/cgi-bin/right/set_entryright.cgi?&g_tk={g_tk}",json=data,data=data,cookies=Cookies,headers=headers)
-        QtWidgets.QMessageBox.information(self, "提示", "设置成功!")
 
 if __name__ == '__main__':
     # 获取UIC窗口操作权限
