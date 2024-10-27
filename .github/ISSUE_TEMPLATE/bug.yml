@@ -38,7 +38,7 @@ body:
     description: "描述除问题外的内容"
     value: |
       （示例）
-      这项优化让我可以更方便地xxxx。
-      如果没有这项优化，我每次都必须xxxx，让操作变得很麻烦。
+      我的版本号为xxx
+      此bug会带来xxx的后果
   validations:
     required: true
