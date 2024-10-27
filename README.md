@@ -4,6 +4,8 @@
 ![License-MIT](https://img.shields.io/badge/license-MIT-green)
 ![Language-python](https://img.shields.io/badge/Language-python-blue)
 ![Github stars](https://img.shields.io/github/stars/sun589/QQkey_Tool.svg)  
+> QQ远程控号&盗号/生成木马/突破空间&邮箱&QQ群/扫码控号/QQkey直取/Clientkey直取/发说说……
+
 可能是你见过唯一还在持续更新的QQKey工具箱:)  
 ***声明:本软件仅用于学习用途,请勿用于违法行为 后果自负!***  
 ****
