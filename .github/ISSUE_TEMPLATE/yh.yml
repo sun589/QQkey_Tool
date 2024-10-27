@@ -1,0 +1,21 @@
+name: "建议"
+description: "对软件的任何建议"
+labels: [建议]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项"
+    description: "请逐个检查下列项目，并选择是否勾选确认"
+    options:
+    - label: "我已在 [Issues](https://github.com/sun589/QQkey_Tool/issues) 中搜索，确认了这一建议从未被人提及过"
+      required: true
+    - label: "在 [Release](https://github.com/sun589/QQkey_Tool/releases) 升级至最新版本后, 发现我要说的仍然不存在"
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述
+    description: "详细描述你的建议"
+  validations:
+    required: true
