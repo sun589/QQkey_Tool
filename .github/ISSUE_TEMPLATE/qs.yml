@@ -1,0 +1,26 @@
+name: "我要提问"
+description: "对软件有疑问来这提"
+labels: [问题]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项"
+    description: "请逐个检查下列项目，并选择是否勾选确认"
+    options:
+    - label: "我已在 [Issues](https://github.com/sun589/QQkey_Tool/issues) 中搜索，确认了这一问题从未被人提及过"
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述
+    description: "详细描述你的问题"
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 其他补充
+    description: "描述除问题外的内容"
+  validations:
+    required: true
