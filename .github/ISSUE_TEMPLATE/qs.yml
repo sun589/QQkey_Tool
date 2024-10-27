@@ -23,4 +23,4 @@ body:
     label: 其他补充
     description: "描述除问题外的内容"
   validations:
-    required: true
+    required: false
