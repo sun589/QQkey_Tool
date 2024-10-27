@@ -10,8 +10,10 @@ body:
     options:
     - label: "我已在 [Issues](https://github.com/sun589/QQkey_Tool/issues) 中搜索，确认了这一bug从未被人提及过"
       required: true
-    - label: "在 [Release](https://github.com/sun589/QQkey_Tool/releases) 回退/升级版本后, 发现bug仍然存在"
+    - label: "在 [Release](https://github.com/sun589/QQkey_Tool/releases) 升级最新版本后, 发现bug仍然存在"
       required: true
+    - label: "在 [Release](https://github.com/sun589/QQkey_Tool/releases) 回退版本后, 发现bug不存在(勾上则无视上方复选框)(需在其它补充写上没有bug的版本号)"
+      required: false
 - type: textarea
   id: "yml-2"
   attributes:
@@ -20,6 +22,13 @@ body:
     value: |
       1.点击xxx
       2.勾上xxx/进入xxx，然后点击xxxx
+  validations:
+    required: true
+- type: input
+  id: "yml-4"
+  attributes:
+    label: 版本号
+    description: "Bug复现所使用的版本号"
   validations:
     required: true
 - type: textarea
