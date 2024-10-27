@@ -1,6 +1,6 @@
 name: "Bug修复"
 description: "期望对软件的修复"
-labels: [Bug]
+labels: Bug
 body:
 - type: checkboxes
   id: "yml-1"
