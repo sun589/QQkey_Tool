@@ -1,0 +1,35 @@
+name: "Bug修复"
+description: "期望对软件的修复"
+labels: [Bug]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项"
+    description: "请逐个检查下列项目，并选择是否勾选确认"
+    options:
+    - label: "我已在 [Issues](https://github.com/sun589/QQkey_Tool/issues) 中搜索，确认了这一bug从未被人提及过"
+      required: true
+    - label: "在 [Release](https://github.com/sun589/QQkey_Tool/releases) 回退/升级版本后, 发现bug仍然存在"
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 复现过程
+    description: "详细描述是如何复现bug的"
+    value: |
+      1.点击xxx
+      2.勾上xxx/进入xxx，然后点击xxxx
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 其他补充
+    description: "描述除问题外的内容"
+    value: |
+      （示例）
+      这项优化让我可以更方便地xxxx。
+      如果没有这项优化，我每次都必须xxxx，让操作变得很麻烦。
+  validations:
+    required: true
