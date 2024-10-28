@@ -32,7 +32,7 @@ body:
   validations:
     required: true
 - type: textarea
-  id: "yml-3"
+  id: "yml-5"
   attributes:
     label: 描述
     description: "触发bug后会怎么样"
