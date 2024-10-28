@@ -34,11 +34,14 @@ body:
 - type: textarea
   id: "yml-3"
   attributes:
+    label: 描述
+    description: "触发bug后会怎么样"
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
     label: 其他补充
     description: "描述除问题外的内容"
-    value: |
-      （示例）
-      我的版本号为xxx
-      此bug会带来xxx的后果
   validations:
     required: false
