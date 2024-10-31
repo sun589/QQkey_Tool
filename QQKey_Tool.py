@@ -6,7 +6,7 @@ Github仓库地址:https://github.com/sun589/QQkey_Tool
 """
 import os
 import traceback
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QDialog
 import sys
 from PyQt5.QtGui import QPixmap, QIcon, QFont
@@ -27,6 +27,8 @@ import get_qq_info_ui
 import QQKey_bug_fixer
 import key_parser
 import hashlib
+
+version = "4.5"
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
@@ -135,12 +137,12 @@ class error_handler(QDialog):
         reply = QtWidgets.QMessageBox.critical(self,"报错力(悲",self.error+f"{'-'*100}\n是否复制至剪切板?",QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
         if reply == QtWidgets.QMessageBox.Yes:
             pyperclip.copy(self.error)
-            reply = QtWidgets.QMessageBox.question(self,"询问","是否需要向作者提供反馈?",QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
-            if reply == QtWidgets.QMessageBox.Yes:
-                webopen("https://github.com/sun589/QQkey_Tool/issues")
+        reply = QtWidgets.QMessageBox.question(self,"询问","是否需要向作者提供反馈?",QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            webopen("https://github.com/sun589/QQkey_Tool/issues")
         reply = QtWidgets.QMessageBox.question(self,"询问","是否需要尝试忽略错误保持程序运行?",QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
         if reply == QtWidgets.QMessageBox.No:
-            os._exit(0)
+            os._exit(1)
 
 # 主窗口
 class Ui_MainWindow(QtWidgets.QWidget):
@@ -397,8 +399,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.action_Key = QtWidgets.QAction(MainWindow)
         self.action_Key.setObjectName("action_Key")
         self.action_Key.triggered.connect(self.open_key_settings)
+        self.action_3 = QtWidgets.QAction(MainWindow)
+        self.action_3.setObjectName("action_3")
+        self.action_3.triggered.connect(lambda: self.check_version(version))
         self.menu.addAction(self.action)
         self.menu.addAction(self.action_Key)
+        self.menu.addAction(self.action_3)
         self.menu.addAction(self.action_2)
         self.menuBar.addAction(self.menu.menuAction())
         self.retranslateUi(MainWindow)
@@ -448,6 +454,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.action_Key.setText(_translate("MainWindow", "设置Key"))
         self.action.setText(_translate("MainWindow", "使用帮助"))
         self.action_2.setText(_translate("MainWindow", "关于"))
+        self.action_3.setText(_translate("MainWindow", "检查更新"))
 
     def open_key_settings(self):
         global data
@@ -470,22 +477,23 @@ class Ui_MainWindow(QtWidgets.QWidget):
         def encrypt(fpath: str, algorithm: str) -> str:
             with open(fpath, 'rb') as f:
                 return hashlib.new(algorithm, f.read()).hexdigest()
+        QtWidgets.QMessageBox.warning(self,"注意!!!!!","有些人可能因为搭建包名字不一样导致程序判断有误,一定要将搭建包重命名为Tools(区分大小写)!!!!")
         if not os.path.isfile("Tools.zip"):
             QtWidgets.QMessageBox.critical(self,"错误","请先下载搭建包,然后将搭建包移动至程序目录下!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzouv.com/iwgzb278m90j")
+            webopen("https://wwap.lanzouv.com/i0Nz62dokgmd")
             return
-        if encrypt('Tools.zip', 'md5') == 'ba44b872e7d53f5c7dfb1da1c0d114a2':
+        if encrypt('Tools.zip', 'md5') == '6081a2b32ba7f94b8d1316dce70edf24':
             pass
-        elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e']:
-            QtWidgets.QMessageBox.critical(self,"错误", "失败,检测到您正在使用旧版搭建包!")
+        elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2']:
+            QtWidgets.QMessageBox.critical(self,"错误", "验证搭建包失败,检测到您正在使用旧版搭建包!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzouv.com/iwgzb278m90j")
+            webopen("https://wwap.lanzouv.com/i0Nz62dokgmd")
             return
         else:
-            QtWidgets.QMessageBox.critical(self,"错误","失败,检测到文件不完整!")
+            QtWidgets.QMessageBox.critical(self,"错误","验证搭建包失败,检测到文件不完整!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzouv.com/iwgzb278m90j")
+            webopen("https://wwap.lanzouv.com/i0Nz62dokgmd")
             return
         class Dialog(QDialog):
             def closeEvent(self, a0) -> None:
@@ -535,6 +543,21 @@ class Ui_MainWindow(QtWidgets.QWidget):
         except Exception as e:
             print(repr(e))
             QtWidgets.QMessageBox.critical(self,"错误","不是有效的配置码!")
+
+    def check_version(self, version):
+        try:
+            latest_release = requests.get(url="https://api.github.com/repos/sun589/QQkey_Tool/releases/latest", verify=False, timeout=10).json()
+        except requests.exceptions.Timeout:
+            QtWidgets.QMessageBox.critical(self,"错误","连接超时!")
+            return
+        tag = latest_release['tag_name']
+        new_version = re.findall(r'\d+\.\d+', tag)[0]
+        if new_version > version:
+            reply = QtWidgets.QMessageBox.question(self,"提示",f"检测到新版本{tag},请问是否需要前往Github更新?")
+            if reply == QtWidgets.QMessageBox.Yes:
+                webopen(latest_release['html_url'])
+        else:
+            QtWidgets.QMessageBox.information(self,"提示","当前已是最新版本!")
 
     def load_skey_by_clientkey(self,data):
         login_data,uin,clientkey = data
@@ -811,6 +834,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                         csv_f.writerow([str(i['gn']), str(i['gc'])+'\t', str(i['owner'])+'\t',"成员"])
                 except Exception as e:
                     print(e)
+                    return
                 print(l)
                 csv_f.writerows(l)
                 f.flush()
@@ -845,8 +869,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         notices = []
         res = requests.get("https://web.qun.qq.com/mannounce/index.html?_wv=1031&_bid=148",headers=headers,cookies=Cookies)
         Cookies['tgw_l7_route'] = requests.utils.dict_from_cookiejar(res.cookies).get("tgw_l7_route")
-        s_flag = True
-        while s_flag:
+        while True:
             res = requests.post(f"https://web.qun.qq.com/cgi-bin/announce/list_announce?bkn={q_bkn}", params=data,json=data,headers=headers, cookies=Cookies).json()
             if "feeds" in res or "inst" in res:
                 data['s'] = str(int(data['s'])-10)
@@ -854,7 +877,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 try:
                     for j in res['inst']:
                         if [str(j['u'])+'\t',str(j['fid']),unescape(j['msg']['text']).replace("\n","[换行]")+'\t'] in notices:
-                            s_flag = True
                             break
                         notices.append([str(j['u'])+'\t',str(j['fid']),unescape(j['msg']['text']).replace("\n","[换行]")+'\t'])
                 except Exception as e:
@@ -862,7 +884,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 try:
                     for j in res['feeds']:
                         if [str(j['u'])+'\t',str(j['fid']),unescape(j['msg']['text']).replace("\n","[换行]")+'\t'] in notices:
-                            s_flag = True
                             break
                         notices.append([str(j['u'])+'\t',unescape(j['fid']),str(j['msg']['text']).replace("\n","[换行]")+'\t'])
                 except Exception as e:
@@ -1062,7 +1083,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
             QtWidgets.QMessageBox.critical(self, "错误", "请关闭正在打开friend_list.csv的文件!")
         except Exception as e:
             QtWidgets.QMessageBox.about(self, "错误", "未知错误!")
-
     def get_emotion_list(self,g_tk,uin,skey,pskey,num,return_content=False,pos=0,get_num=10):
         Cookies = {
             "p_skey": pskey,
@@ -1202,6 +1222,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         QtWidgets.QMessageBox.information(self, "提示", "设置成功!")
 
 if __name__ == '__main__':
+    QtGui.QGuiApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QtGui.QGuiApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     # 获取UIC窗口操作权限
     app = QtWidgets.QApplication(sys.argv)
     def show_error_window(a, b, c):
