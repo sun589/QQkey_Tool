@@ -24,6 +24,13 @@ body:
       2.勾上xxx/进入xxx，然后点击xxxx
   validations:
     required: true
+- type: textarea
+  id: "yml-6"
+  attributes:
+    label: 日志(如果有)
+    description: "木马生成时的日志"
+  validations:
+    required: false
 - type: input
   id: "yml-4"
   attributes:
