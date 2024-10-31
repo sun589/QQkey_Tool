@@ -243,6 +243,8 @@ class Ui_Dialog(object):
         except Exception as e:
             QtWidgets.QMessageBox.critical(self.centralwidget, "提示", f"登录失败!")
 if __name__ == '__main__':
+    QtGui.QGuiApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QtGui.QGuiApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     # 获取UIC窗口操作权限
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
