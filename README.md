@@ -3,7 +3,10 @@
 ![Author-sun589](https://img.shields.io/badge/Author-sun589-yellow.svg)
 ![License-MIT](https://img.shields.io/badge/license-MIT-green)
 ![Language-python](https://img.shields.io/badge/Language-python-blue)
-![Github stars](https://img.shields.io/github/stars/sun589/QQkey_Tool.svg)  
+![Github stars](https://img.shields.io/github/stars/sun589/QQkey_Tool?style=flat&logo=github&color=46cdcf)  
+![GitHub Release](https://img.shields.io/github/v/release/sun589/QQkey_Tool?display_name=tag&style=flat&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&logo=github)
+![Github downloads](https://img.shields.io/github/downloads/sun589/QQkey_Tool/total?style=flat&color=red&label=%E6%80%BB%E4%B8%8B%E8%BD%BD%E9%87%8F&logo=github)
+![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/sun589/QQkey_Tool/latest/total?style=flat&label=%E6%9C%80%E6%96%B0%E4%B8%8B%E8%BD%BD%E9%87%8F&color=orange&logo=github)  
 > QQ远程控号&盗号/生成木马/突破空间&邮箱&QQ群/扫码控号/QQkey直取/Clientkey直取/发说说……
 
 可能是你见过唯一还在持续更新的QQKey工具箱:)  
