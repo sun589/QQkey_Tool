@@ -2,7 +2,7 @@
 # QQkey_Tool  
 ![Author-sun589](https://img.shields.io/badge/Author-sun589-yellow.svg)
 ![License-MIT](https://img.shields.io/badge/license-MIT-green)
-![Language-python](https://img.shields.io/badge/Language-python-blue)
+![Language-python](https://img.shields.io/badge/Language-python-blue?logo=python)
 ![Github stars](https://img.shields.io/github/stars/sun589/QQkey_Tool?style=flat&logo=github&color=46cdcf)  
 ![GitHub Release](https://img.shields.io/github/v/release/sun589/QQkey_Tool?display_name=tag&style=flat&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&logo=github)
 ![Github downloads](https://img.shields.io/github/downloads/sun589/QQkey_Tool/total?style=flat&color=red&label=%E6%80%BB%E4%B8%8B%E8%BD%BD%E9%87%8F&logo=github)
