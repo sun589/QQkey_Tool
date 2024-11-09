@@ -1,13 +1,13 @@
 ****
 # QQkey_Tool  
-![Author-sun589](https://img.shields.io/badge/Author-sun589-52616b.svg?logo=github)
-![GitHub License](https://img.shields.io/github/license/sun589/QQkey_Tool?logo=github)
-![Language-python](https://img.shields.io/badge/Language-python-yellow?logo=python)
-![Github stars](https://img.shields.io/github/stars/sun589/QQkey_Tool?style=flat&logo=github&color=7c7575)
-![GitHub forks](https://img.shields.io/github/forks/sun589/QQkey_Tool?style=flat&logo=github&color=455d7a)  
-![GitHub Release](https://img.shields.io/github/v/release/sun589/QQkey_Tool?display_name=tag&style=flat&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&logo=github)
-![Github downloads](https://img.shields.io/github/downloads/sun589/QQkey_Tool/total?style=flat&color=red&label=%E6%80%BB%E4%B8%8B%E8%BD%BD%E9%87%8F&logo=github)
-![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/sun589/QQkey_Tool/latest/total?style=flat&label=%E6%9C%80%E6%96%B0%E4%B8%8B%E8%BD%BD%E9%87%8F&color=orange&logo=github)  
+[![Author-sun589](https://img.shields.io/badge/Author-sun589-52616b.svg?logo=github)](mailto:goodluck1787@outlook.com)
+[![GitHub License](https://img.shields.io/github/license/sun589/QQkey_Tool?logo=github)](https://github.com/sun589/QQkey_Tool/blob/main/LICENSE)
+[![Language-python](https://img.shields.io/badge/Language-python-yellow?logo=python)](https://github.com/sun589/QQkey_Tool)
+[![Github stars](https://img.shields.io/github/stars/sun589/QQkey_Tool?style=flat&logo=github&color=7c7575)](https://github.com/sun589/QQkey_Tool/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/sun589/QQkey_Tool?style=flat&logo=github&color=455d7a)](https://github.com/sun589/QQkey_Tool/forks)  
+[![GitHub Release](https://img.shields.io/github/v/release/sun589/QQkey_Tool?display_name=tag&style=flat&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&logo=github)](https://github.com/sun589/QQkey_Tool/releases/latest)
+[![Github downloads](https://img.shields.io/github/downloads/sun589/QQkey_Tool/total?style=flat&color=red&label=%E6%80%BB%E4%B8%8B%E8%BD%BD%E9%87%8F&logo=github)](https://github.com/sun589/QQkey_Tool/releases)
+[![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/sun589/QQkey_Tool/latest/total?style=flat&label=%E6%9C%80%E6%96%B0%E4%B8%8B%E8%BD%BD%E9%87%8F&color=orange&logo=github)](https://github.com/sun589/QQkey_Tool/releases)  
 > QQ远程控号&盗号/生成木马/突破空间&邮箱&QQ群/扫码控号/QQkey直取/Clientkey直取/发说说……
 
 可能是你见过唯一还在持续更新的QQKey工具箱:)  
