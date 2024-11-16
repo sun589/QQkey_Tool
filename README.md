@@ -29,7 +29,7 @@
 ***再次声明:本软件仅用于学习用途,请勿用于违法行为 后果自负!***  
 ****
 #  使用说明
-  下载[Release](https://github.com/sun589/QQkey_Tool/releases)里最新的版本打开QQKey_Tool.exe食用  
+  下载[Release](https://github.com/sun589/QQkey_Tool/releases)/[蓝奏云(密码52yb)](https://wwap.lanzouv.com/b0xvu2ogh)里最新的版本打开QQKey_Tool.exe食用  
   or  
   下载[源代码](https://github.com/sun589/QQkey_Tool/)运行
 ****
