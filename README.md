@@ -28,10 +28,56 @@
 
 ***再次声明:本软件仅用于学习用途,请勿用于违法行为 后果自负!***  
 ****
+# 目录
+
+- [QQkey_Tool](#qqkey_tool)
+  - [使用说明](#使用说明)
+  - [项目结构](#项目结构)
+  - [常见问题 Q&A](#常见问题-qa)
+    - [Q:如何预防盗号病毒?](#q如何预防盗号病毒)
+    - [Q:已经被对方获取QQKey控号了怎么办?](#q已经被对方获取qqkey控号了怎么办)
+    - [Q:可以获取密码吗?](#q可以获取密码吗)
+    - [Q:为什么我打不开?](#q为什么我打不开)
+  - [预防盗号木马的方法](#预防盗号木马的方法)
+    - [关于shellcode注入获取的clientkey](#关于shellcode注入获取的clientkey)
+    - [关于使用网页快捷登录获取的clientkey(本工具的原理)](#关于使用网页快捷登录获取的clientkey本工具的原理)
+  - [程序截图](#程序截图)
+  - [仓库访问数量(从2024-10-14计起)](#仓库访问数量从2024-10-14计起)
+  - [制作不易,如果喜欢,请给作者打个Star,谢谢:)))))))))))](#制作不易如果喜欢请给作者打个star谢谢)
+****
 #  使用说明
   下载[Release](https://github.com/sun589/QQkey_Tool/releases)/[蓝奏云(密码52yb)](https://wwap.lanzouv.com/b0xvu2ogh)里最新的版本打开QQKey_Tool.exe食用  
   or  
   下载[源代码](https://github.com/sun589/QQkey_Tool/)运行
+****
+# 项目结构
+###### _~~原谅我代码写得很烂+各种奇奇怪怪的东西+代码写得有亿点不规范~~_
+
+    │  get_qq_info_ui.py // QQ盗号/木马专区源代码
+    │  key_parser.py // Key解析器源码
+    │  LICENSE // 项目开源协议
+    │  QQKey_bug_fixer.py // QQkey漏洞修复器源码
+    │  QQKey_Tool.py // 工具源代码
+    │  README.md // 项目介绍
+    │  requirements.txt // 源代码运行所需依赖
+    │  二维码不存在.png // :D
+    │  
+    ├─.github // 存着些七七八八关于github的东西
+    │  └─ISSUE_TEMPLATE
+    │          bug.yml
+    │          config.yml
+    │          yh.yml
+    │          
+    ├─functions_code // 存储程序功能核心代码,方便学习与采纳(部分是旧版代码)
+    │      Clientkey_thief.py // 木马生成器源码
+    │      get_client_key.py // QQ本地信息获取源码(旧版)
+    │      get_client_key_new.py // QQ本地信息获取源码(新版)
+    │      README.md
+    │      
+    └─program_pics // 程序截图(旧版)
+            all.png // 程序整体界面截图
+            主界面1.png
+            主界面2.png  
 ****
 #  常见问题 Q&A
 ## Q:如何预防盗号病毒?
