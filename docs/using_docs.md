@@ -10,7 +10,8 @@
 **注意：最后两个功能（QQKey解析器&防QQKey木马器）并非skey功能，可直接使用**
 
 ## 二、盗号/木马专区
-该界面用于获取clientkey/生成木马，详见如下：  
+该界面用于获取clientkey/生成木马，详见如下:  
+  
 ![界面2](https://github.com/user-attachments/assets/5e33aa22-5ea8-4559-9764-10fac61210c0)
 ### smtp服务器配置
 smtp服务器一般填完邮箱密码程序都会自动识别，但若识别失败，请手动查询对应smtp服务器输入
