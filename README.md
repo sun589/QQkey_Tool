@@ -31,6 +31,7 @@
 # 目录
 
 - [QQkey_Tool](#qqkey_tool)
+  - [使用文档](https://github.com/sun589/QQkey_Tool/blob/main/docs/using_docs.md)
   - [使用说明](#使用说明)
   - [项目结构](#项目结构)
   - [常见问题 Q&A](#常见问题-qa)
