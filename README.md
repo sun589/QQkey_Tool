@@ -85,7 +85,7 @@
 ****
 #  常见问题 Q&A
 ## Q：如何使用?
-见[使用文档](https://github.com/sun589/QQkey_Tool/blob/main/docs/using_docs.md)
+A:见[使用文档](https://github.com/sun589/QQkey_Tool/blob/main/docs/using_docs.md)
 ## Q:如何预防盗号病毒?
 ### A:详见 [预防盗号木马的方法](#预防盗号木马的方法)  
 
