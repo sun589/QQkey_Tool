@@ -28,7 +28,7 @@ smtp服务器一般填完邮箱密码程序都会自动识别，但若识别失�
 ### 邮箱授权码
 部分邮箱需要开启授权码才能使用smtp服务器发信，以下为常见邮箱开启授权码的方法：  
 #### 163/126邮箱:  
-![授权1](https://github.com/user-attachments/assets/34432b22-bce4-495c-9d35-59295c2f0613)
+![授权1](https://github.com/user-attachments/assets/d8551af5-c127-4e9b-bd6c-a6f9acafab15)
 
 > 版权声明：此文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。
 本文链接：https://blog.csdn.net/kissradish/article/details/108447972  
