@@ -12,8 +12,6 @@ body:
       required: true
     - label: "在 [Release](https://github.com/sun589/QQkey_Tool/releases) 升级最新版本后, 发现bug仍然存在"
       required: true
-    - label: "在 [Release](https://github.com/sun589/QQkey_Tool/releases) 回退版本后, 发现bug不存在(勾上则无视上方复选框2)(需在其它补充写上没有bug的版本号)"
-      required: false
 - type: textarea
   id: "yml-2"
   attributes:
@@ -28,16 +26,9 @@ body:
   id: "yml-6"
   attributes:
     label: 日志(如果有)
-    description: "木马生成时的日志"
+    description: "请点击该输入框后将日志文件拖进来"
   validations:
     required: false
-- type: input
-  id: "yml-4"
-  attributes:
-    label: 版本号
-    description: "Bug复现所使用的版本号"
-  validations:
-    required: true
 - type: textarea
   id: "yml-5"
   attributes:
