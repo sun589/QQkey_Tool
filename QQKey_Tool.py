@@ -28,7 +28,7 @@ import QQKey_bug_fixer
 import key_parser
 import hashlib
 
-version = "4.5"
+version = "4.6"
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
@@ -162,7 +162,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         MainWindow.resize(947, 567)
         MainWindow.setWindowIcon(QIcon(get_file_path("icon.ico")))
         MainWindow.setFixedSize(MainWindow.width(), MainWindow.height())
-        QtWidgets.QMessageBox.information(self,"警告","本软件纯免费且开源 如果你是花钱买的火速投诉!\n本软件仅供学习用途 请勿用作违法行为 后果自负!")
+        QtWidgets.QMessageBox.information(self,"警告","""本软件纯免费且开源 如果你是花钱买的火速投诉!""")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -390,9 +390,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menu = QtWidgets.QMenu(self.menuBar)
         self.menu.setObjectName("menu")
         MainWindow.setMenuBar(self.menuBar)
-        self.action = QtWidgets.QAction(MainWindow)
-        self.action.setObjectName("action")
-        self.action.triggered.connect(lambda: self.help(1))
         self.action_2 = QtWidgets.QAction(MainWindow)
         self.action_2.setObjectName("action_2")
         self.action_2.triggered.connect(lambda: self.help(2))
@@ -402,9 +399,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.action_3 = QtWidgets.QAction(MainWindow)
         self.action_3.setObjectName("action_3")
         self.action_3.triggered.connect(lambda: self.check_version(version))
-        self.menu.addAction(self.action)
+        self.action_4 = QtWidgets.QAction(MainWindow)
+        self.action_4.setObjectName("action_4")
+        self.action_4.triggered.connect(lambda: webopen("https://github.com/sun589/QQkey_Tool/blob/main/docs/using_docs.md"))
         self.menu.addAction(self.action_Key)
         self.menu.addAction(self.action_3)
+        self.menu.addAction(self.action_4)
         self.menu.addAction(self.action_2)
         self.menuBar.addAction(self.menu.menuAction())
         self.retranslateUi(MainWindow)
@@ -452,9 +452,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_23.setText(_translate("MainWindow", "进入页面"))
         self.menu.setTitle(_translate("MainWindow", "菜单"))
         self.action_Key.setText(_translate("MainWindow", "设置Key"))
-        self.action.setText(_translate("MainWindow", "使用帮助"))
         self.action_2.setText(_translate("MainWindow", "关于"))
         self.action_3.setText(_translate("MainWindow", "检查更新"))
+        self.action_4.setText(_translate("MainWindow", "使用文档"))
 
     def open_key_settings(self):
         global data

