@@ -30,7 +30,7 @@
 
 ***再次声明:本软件仅用于学习用途,请勿用于违法行为 后果自负!***  
 ****
-# 目录
+# 目录 [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)
 
 - [QQkey_Tool](#qqkey_tool)
   - [使用文档](https://github.com/sun589/QQkey_Tool/blob/main/docs/using_docs.md)
@@ -49,12 +49,12 @@
   - [仓库访问数量(从2024-10-14计起)](#仓库访问数量从2024-10-14计起)
   - [制作不易,如果喜欢,请给作者打个Star,谢谢:)))))))))))](#制作不易如果喜欢请给作者打个star谢谢)
 ****
-#  使用说明
-  下载[Release](https://github.com/sun589/QQkey_Tool/releases)/[蓝奏云(密码52yb)](https://wwap.lanzouv.com/b0xvu2ogh)(睁大眼睛看准版本号再下！！！！)里最新的版本打开QQKey_Tool.exe食用  
+#  使用说明 [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)
+  下载[Release](https://github.com/sun589/QQkey_Tool/releases)/[蓝奏云(密码52yb)](https://wwap.lanzouv.com/b0xvu2ogh)(睁大眼睛看准版本号再下！！！！)里最新的版本打开QQKey_Tool.exe食用[![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
   or  
   下载[源代码](https://github.com/sun589/QQkey_Tool/)运行
 ****
-# 项目结构
+# 项目结构 [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)
 ###### _~~原谅我代码写得很烂+各种奇奇怪怪的东西+代码写得有亿点不规范~~_
 
     │  get_qq_info_ui.py // QQ盗号/木马专区源代码
@@ -120,6 +120,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ![Visitor count](https://profile-counter.glitch.me/sun589-QQkey_Tool/count.svg)  
 如果路过了不放给个star:))))))))))))))))))))))))))))))))))))))))))
 ****
-# 制作不易,如果喜欢,请给作者打个Star,谢谢:)))))))))))  
+# 制作不易,如果喜欢,请给作者打个Star,谢谢:))))))))))) [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
 [![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)  
 ****
+[![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)
