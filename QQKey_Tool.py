@@ -28,7 +28,7 @@ import QQKey_bug_fixer
 import key_parser
 import hashlib
 
-version = "4.6"
+version = "4.7"
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
@@ -162,7 +162,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         MainWindow.resize(947, 567)
         MainWindow.setWindowIcon(QIcon(get_file_path("icon.ico")))
         MainWindow.setFixedSize(MainWindow.width(), MainWindow.height())
-        QtWidgets.QMessageBox.information(self,"警告","""本软件纯免费且开源 如果你是花钱买的火速投诉!""")
+        QtWidgets.QMessageBox.information(self,"警告","""本软件纯免费且开源 如果你是花钱买的火速投诉!\n本软件仅供学习用途 请勿用作违法行为 后果自负!""")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
