@@ -55,6 +55,14 @@
 ****
 # 项目结构 [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)
 ###### _~~原谅我代码写得很烂+各种奇奇怪怪的东西+代码写得有亿点不规范~~_
+<details>
+<summary>我的代码/我的内心belike:</summary>  
+
+![image](https://github.com/user-attachments/assets/2c84adfe-11de-428e-80ef-3d82da9f846f)
+![image](https://github.com/user-attachments/assets/0742b446-276e-4906-8af3-866625a53493)
+![image](https://github.com/user-attachments/assets/59de75e4-4553-4dea-94e7-37ee563901aa)
+
+</details>
 
     │  get_qq_info_ui.py // QQ盗号/木马专区源代码
     │  key_parser.py // Key解析器源码
