@@ -45,7 +45,7 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "QQKey漏洞修复器"))
         self.pushButton.setText(_translate("Dialog", "修复"))
         self.pushButton_2.setText(_translate("Dialog", "恢复"))
-        with open('C:\Windows\System32\drivers\etc\hosts') as f:
+        with open('C:\Windows\System32\drivers\etc\hosts',encoding='utf-8') as f:
             content = f.read()
         self.label.setText(_translate("Dialog", f"当前状态:{'已修复' if '0.0.0.0 localhost.ptlogin2.qq.com' in content else '未修复'}"))
 
@@ -69,7 +69,7 @@ class Ui_Dialog(object):
                             del content[i]
                     f.write(''.join(content))
             subprocess.call("ipconfig /flushdns",creationflags=subprocess.CREATE_NO_WINDOW)
-            with open('C:\Windows\System32\drivers\etc\hosts') as f:
+            with open('C:\Windows\System32\drivers\etc\hosts',encoding='utf-8') as f:
                 content = f.read()
             self.label.setText(_translate("Dialog",
                                           f"当前状态:{'已修复' if '0.0.0.0 localhost.ptlogin2.qq.com' in content else '未修复'}"))

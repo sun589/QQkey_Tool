@@ -26,9 +26,10 @@ import json
 import get_qq_info_ui
 import QQKey_bug_fixer
 import key_parser
+import skey_manager
 import hashlib
 
-version = "4.7"
+version = "4.8"
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
@@ -73,11 +74,16 @@ def get_file_path(name):
 
 class EmittingSignal(QtCore.QObject):
     signal = QtCore.pyqtSignal(tuple)
+    signal2 = QtCore.pyqtSignal(int)
+    signal3 = QtCore.pyqtSignal(dict)
+    signal4 = QtCore.pyqtSignal(dict)
 
 # Key配置区
 class Ui_Dialog(object):
-    def __init__(self, data):
-        self.data = data
+
+    def __init__(self, signal1, signal2):
+        self.signal1, self.signal2 = signal1, signal2
+
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(569, 130)
@@ -108,7 +114,8 @@ class Ui_Dialog(object):
         self.pushButton = QtWidgets.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(440, 80, 75, 23))
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(self.generate)
+        self.pushButton.clicked.connect(self.get_data)
+        self.signal2.connect(self.generate)
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -121,8 +128,11 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:11pt;\">待导入Key码:</span></p></body></html>"))
         self.pushButton.setText(_translate("Dialog", "生成+复制"))
 
-    def generate(self):
-        text = base64.b64encode(str(self.data).replace("'",'"').encode('utf-8')).decode('utf-8')
+    def get_data(self):
+        self.signal1.emit(1)
+
+    def generate(self, data):
+        text = base64.b64encode(str(data).replace("'",'"').encode('utf-8')).decode('utf-8')
         self.lineEdit_2.setText(text)
         pyperclip.copy(text)
 
@@ -355,11 +365,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton_21 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_21.setGeometry(QtCore.QRect(400, 490, 111, 41))
         self.pushButton_21.setObjectName("pushButton_21")
-        self.pushButton_21.clicked.connect(lambda: self.check_key(
-                    bkn=bkn(self.skey),skey=self.skey,
-                    pskey=self.pskey,uin=self.uin,g_tk=self.g_tk)
-                    if self.skey else QtWidgets.QMessageBox.critical(self, "错误", "请先获取skey!")
-                    )
+        self.pushButton_21.clicked.connect(lambda: self.open_skey_manager())
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(580, 170, 16, 281))
         self.label_6.setObjectName("label_6")
@@ -410,6 +416,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.retranslateUi(MainWindow)
         self.signal = EmittingSignal() # 用来让key_parser发送解析导入skey的信号
         self.signal.signal.connect(self.load_skey_by_clientkey)
+        self.signal.signal2.connect(self.return_info)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -448,7 +455,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
         self.label_7.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|</p></body></html>"))
         self.pushButton_20.setText(_translate("MainWindow", "提供反馈"))
-        self.pushButton_21.setText(_translate("MainWindow", "Key 有效性检测"))
+        self.pushButton_21.setText(_translate("MainWindow", "Skey管理器"))
         self.pushButton_23.setText(_translate("MainWindow", "进入页面"))
         self.menu.setTitle(_translate("MainWindow", "菜单"))
         self.action_Key.setText(_translate("MainWindow", "设置Key"))
@@ -458,18 +465,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
 
     def open_key_settings(self):
         global data
-        data = {
-            "uin":self.uin,
-            "skey":self.skey,
-            "pskey":self.pskey,
-            "cookie":self.cookie,
-            "g_tk":self.g_tk,
-            "login_url":self.login_url
-        }
         dialog = QDialog()
-        self.Ui = Ui_Dialog(data)
+        self.Ui = Ui_Dialog(self.signal.signal2, self.signal.signal4)
         self.Ui.setupUi(dialog)
-        self.Ui.pushButton_2.clicked.connect(lambda: self.load_key(self.Ui.lineEdit.text()))
+        self.Ui.pushButton_2.clicked.connect(lambda: self.load_key(json.loads(base64.b64decode(self.Ui.lineEdit.text().encode('utf-8')).decode('utf-8'))))
         dialog.show()
         dialog.exec_()
 
@@ -525,10 +524,18 @@ class Ui_MainWindow(QtWidgets.QWidget):
         dialog.show()
         dialog.exec_()
 
-    def load_key(self,text):
+    def open_skey_manager(self):
+        dialog = QtWidgets.QDialog()
+        # 调自定义的界面（即刚转换的.py对象）
+        Ui = skey_manager.Ui_Dialog(self.signal.signal2,self.signal.signal3)
+        Ui.setupUi(dialog)
+        Ui.listWidget.doubleClicked.connect(lambda: self.load_key(Ui.listWidget.currentItem().data(QtCore.Qt.UserRole)))
+        # 显示窗口并释放资源
+        dialog.show()
+        dialog.exec_()
+
+    def load_key(self,data):
         try:
-            data = base64.b64decode(text.encode('utf-8')).decode('utf-8')
-            data = json.loads(data)
             self.skey = data['skey']
             self.pskey = data['pskey']
             self.login_url = data['login_url'] if data.get("login_url") != None else data['qzone_url']
@@ -620,6 +627,20 @@ class Ui_MainWindow(QtWidgets.QWidget):
         except Exception as e:
             QtWidgets.QMessageBox.critical(self.centralwidget, "提示", f"登录失败!")
 
+    def return_info(self, who):
+        data = {
+            "uin":self.uin,
+            "skey":self.skey,
+            "pskey":self.pskey,
+            "cookie":self.cookie,
+            "g_tk":self.g_tk,
+            "login_url":self.login_url
+        }
+        if who == 0:
+            self.signal.signal3.emit(data)
+        elif who == 1:
+            self.signal.signal4.emit(data)
+
     def make_fake_qr(self):
         if os.path.isfile(get_file_path("fake_qr.jpg")) and os.path.isfile("qr.jpg"):
             qr_image = Image.open('qr.jpg')
@@ -636,6 +657,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             os.startfile("new_qr.png")
         else:
             QtWidgets.QMessageBox.critical(self, "错误", "二维码文件/伪装码模板图片不存在!")
+
     def help(self,h):
         if h == 1:
             QtWidgets.QMessageBox.information(self, "使用帮助", """发布公告:
@@ -675,6 +697,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.thread1 = Thread(target=self.cookies,args=(self.ptqrtoken,self.qrsig))
         self.thread1.daemon = True
         self.thread1.start()
+
     def qr(self):
         print("获取二维码中...")
         if self.comboBox.currentIndex() == 0:
@@ -785,13 +808,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.critical(self,"错误","Key值已失效,请重新获取!")
                 self.label_2.setText(_translate("MainWindow",
                                                 "<html><head/><body><p><span style=\" font-size:11pt; color:#000000;\">当前状态:</span></p><p><span style=\" font-size:11pt;\">QQ号码:</span></p><p><span style=\" font-size:11pt;\">Skey:</span></p></body></html>"))
-                self.uin = ''
-                self.skey = ''
-                self.pskey = ''
-                self.cookie = ''
-                self.g_tk = ''
-                self.qzone_url = ''
-                self.cookie_thread_running = False
+
     def new_notice(self,text, q_bkn, pinned, qid, skey, pskey, uin):
         data = {
             "qid": qid,
@@ -978,8 +995,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
             "p_uin": str(uin)
         }
         headers = {
-            "Referer": f"https://user.qzone.qq.com/{str(uin)[1:]}",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
+            "Referer": f"https://user.qzone.qq.com/",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Edg/132.0.0.0",
             "Origin": "https://user.qzone.qq.com"
         }
         data = {
@@ -1003,50 +1020,38 @@ class Ui_MainWindow(QtWidgets.QWidget):
 }
         print(requests.post(f"https://user.qzone.qq.com/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_publish_v6?&g_tk={g_tk}", data=data,headers=headers,params=data,cookies=Cookies).text)
         QtWidgets.QMessageBox.about(self, "提示", "发布成功!")
+
     def change_name(self,g_tk,skey,pskey,newname,uin):
         Cookies = {
             "p_skey": pskey,
             "uin": str(uin),
             "skey": skey,
-            "p_uin": str(uin)
+            "p_uin": str(uin),
+            "o2_uin":str(uin)[1:],
+            "o_cookie":str(uin)[1:]
         }
         headers = {
             "Referer": f"https://user.qzone.qq.com/",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
             "Origin": "https://user.qzone.qq.com"
         }
-        data = {
-    "nickname":f"{newname}",
-    "emoji":"",
-    "sex":"1",
-    "birthday":"1900-1-1",
-    "province":"44",
-    "city":"0",
-    "country":"1",
-    "marriage":"0",
-    "bloodtype":"5",
-    "hp":"0",
-    "hc":"0",
-    "hco":"0",
-    "career":"",
-    "company":"",
-    "cp":"0",
-    "cc":"0",
-    "cb":"",
-    "cco":"0",
-    "lover":"",
-    "islunar":"0",
-    "mb":"1",
-    "uin":f"{str(uin)[1:]}",
+        res = requests.get(
+            f"https://h5.qzone.qq.com/proxy/domain/base.qzone.qq.com/cgi-bin/user/cgi_userinfo_get_all?uin={uin[1:]}&vuin={uin[1:]}&fupdate=1&rd=0.017501202984373077&g_tk={g_tk}",
+            headers=headers, cookies=Cookies).text
+        res = res[10:-2]
+        res = json.loads(res)['data']
+        QtWidgets.QMessageBox.information(self, "提示", "Key值依然有效,可继续使用!")
+        data = res + {
     "pageindex":"1",
     "fupdate":"1",
-    "qzreferrer":"https://user.qzone.qq.com/proxy/domain/qzs.qq.com/qzone/v6/setting/profile/profile.html?tab=base",
+    "qzreferrer":"https://user.qzone.qq.com/proxy/domain/qzonestyle.gtimg.cn/qzone/v6/setting/profile/profile.html?tab=base&g_iframeUser=1",
     "g_iframeUser":"1"
 }
-        requests.post(
+        res = requests.post(
             f"https://h5.qzone.qq.com/proxy/domain/w.qzone.qq.com/cgi-bin/user/cgi_apply_updateuserinfo_new?&g_tk={g_tk}",
-            data=data, headers=headers, params=data, cookies=Cookies)
+            data=data, json=data, headers=headers, cookies=Cookies)
         QtWidgets.QMessageBox.about(self, "提示", "修改成功!")
+
     def get_friend_list(self, g_tk, uin, pskey, skey):
         Cookies = {
             "p_skey": pskey,
@@ -1083,6 +1088,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             QtWidgets.QMessageBox.critical(self, "错误", "请关闭正在打开friend_list.csv的文件!")
         except Exception as e:
             QtWidgets.QMessageBox.about(self, "错误", "未知错误!")
+
     def get_emotion_list(self,g_tk,uin,skey,pskey,num,return_content=False,pos=0,get_num=10):
         Cookies = {
             "p_skey": pskey,
