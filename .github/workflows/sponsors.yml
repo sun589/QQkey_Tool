@@ -1,0 +1,100 @@
+name: Sync Sponsors to README
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 每小时执行一次
+  workflow_dispatch:  # 也支持手动触发
+
+jobs:
+  sync-sponsors:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Fetch sponsors data
+        id: fetch-sponsors
+        env:
+          USER_ID: ${{ secrets.USER_ID }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+        run: |
+          import requests
+          import time
+          from hashlib import md5
+
+          def get_sign(user_id, token, params, ts):
+              return md5(f"{token}params{params}ts{ts}user_id{user_id}".encode("utf-8")).hexdigest()
+
+          user_id = env['USER_ID']
+          token = env['API_TOKEN']
+          ts = int(time.time())
+          data = {
+              "user_id": user_id,
+              "ts": ts
+          }
+          params = '{"page":1}'
+          data['sign'] = get_sign(user_id, token, params, ts)
+          data['params'] = params
+          res = requests.post("https://afdian.com/api/open/query-sponsor", json=data)
+          sponsors = res.json()['data']['list']
+          sponsors_info = []
+          for sponsor in sponsors:
+              user = sponsor['user']
+              amount = sponsor["all_sum_amount"]
+              avatar = user.get('avatar', '')
+              name = user.get('name', '')
+              sponsors_info.append(f"![{name}]({avatar} =100x100) {name} - {amount}元")
+          sponsors_text = '\n'.join(sponsors_info)
+          print(f"::set-output name=sponsors_text::{sponsors_text}")
+        shell: python
+
+      - name: Update README
+        run: |
+          README_FILE="README.md"
+          START_MARKER="<!-- START_SPONSORS -->"
+          END_MARKER="<!-- END_SPONSORS -->"
+          SPONSORS_TEXT="${{ steps.fetch-sponsors.outputs.sponsors_text }}"
+
+          # 备份原始 README
+          cp $README_FILE $README_FILE.bak
+
+          # 查找起始和结束标记的行号
+          START_LINE=$(grep -n "$START_MARKER" $README_FILE | cut -d: -f1)
+          END_LINE=$(grep -n "$END_MARKER" $README_FILE | cut -d: -f1)
+
+          if [ -n "$START_LINE" ] && [ -n "$END_LINE" ]; then
+              # 删除标记之间的内容
+              sed -i "${START_LINE},${END_LINE}d" $README_FILE
+              # 插入新的赞助者信息
+              sed -i "${START_LINE}a $START_MARKER\n$SPONSORS_TEXT\n$END_MARKER" $README_FILE
+          else
+              echo "Start or end marker not found in README.md"
+          fi
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if git diff --quiet README.md; then
+            echo "::set-output name=has_changes::false"
+          else
+            echo "::set-output name=has_changes::true"
+          fi
+
+      - name: Commit and push changes
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update sponsors list in README"
+          git push
