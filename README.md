@@ -13,6 +13,7 @@
 **最新项目:利用Clientkey即可登录所有qq登录的网站的工具! [QQLogin](https://github.com/sun589/QQLogin)!**  
 **项目破100stars庆祝！**[请点我查看详细](https://github.com/sun589/QQkey_Tool/discussions/25)[![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
 可能是你见过唯一还在持续更新的QQKey工具箱:)[![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
+
 <details><summary>免责声明【必读】</summary>
 
 ### **本工具仅供学习和技术研究使用，不得用于任何非法行为，否则后果自负。**
@@ -27,6 +28,7 @@
 
 </details>  
 
+## [如果觉得好用不妨赞助我](https://afdian.com/a/sun589)
 ***再次声明:本软件仅用于学习用途,请勿用于违法行为 后果自负!***  
 ****
 # 目录 [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)
@@ -127,7 +129,8 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ![Visitor count](https://profile-counter.glitch.me/sun589-QQkey_Tool/count.svg)  
 如果路过了不放给个star:))))))))))))))))))))))))))))))))))))))))))
 ****
-# 制作不易,如果喜欢,请给作者打个Star,谢谢:))))))))))) [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
+# 制作不易,如果喜欢,请给作者打个Star/赞助,谢谢:))))))))))) [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
+## [赞助我](https://afdian.com/a/sun589)
 [![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)  
 ****
 [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)
