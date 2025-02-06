@@ -68,21 +68,30 @@ jobs:
         run: |
           import os
           import base64
-          sponsors_info = base64.b64decode(os.getenv("ENCODED_TEXT")).decode('utf-8')
-          with open("README.md",'w+') as f:
+          sponsors_info = base64.b64decode(os.getenv("ENCODED_TEXT")).decode('utf-8').split("\n")
+          print(sponsors_info)
+          with open("README.md",encoding="utf-8") as f:
+              f.seek(0,0)
               content = f.readlines()
-              start_line = content.index("<!-- START_SPONSORS -->")
-              end_line = content.index("<!-- END_SPONSORS -->")
+          with open("README.md","w",encoding="utf-8") as f:
+              start_line = -1
+              end_line = -1
+              for i in range(len(content)):
+                  if "<!-- START_SPONSORS -->" in content[i]:
+                      start_line = i
+                  elif "<!-- END_SPONSORS -->" in content[i]:
+                      end_line = i
+                      break
               if start_line == -1 or end_line == -1:
-                  print("Index not found")
-                  exit(1)
+                  raise Exception("未找到标记")
               num = 0
-              for i in range(start_line+1,end_line):
-                  if num > len(sponsors_info) - 1:
-                      del content[i]
-                      continue
-                  content[i] = sponsors_info[num]
+              i = start_line + 1
+              while "<!-- END_SPONSORS -->" not in content[i]:
+                  del content[i]
+              while num < len(sponsors_info):
+                  content.insert(i,sponsors_info[num]+'\n')
                   num += 1
+                  i += 1
               f.writelines(content)
         shell: python
               
