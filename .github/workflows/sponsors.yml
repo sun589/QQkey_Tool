@@ -80,7 +80,7 @@ jobs:
               # 删除标记之间的内容
               sed -i "${START_LINE},${END_LINE}d" $README_FILE
               # 插入新的赞助者信息
-              sed -i "${START_LINE}a $START_MARKER\n$SPONSORS_TEXT\n$END_MARKER" $README_FILE
+              printf "%s\n%s\n%s\n" "$START_MARKER" "$SPONSORS_TEXT" "$END_MARKER" | sed -i "${START_LINE}r /dev/stdin" $README_FILE
           else
               echo "Start or end marker not found in README.md"
           fi
