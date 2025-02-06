@@ -47,7 +47,80 @@ jobs:
           data['sign'] = get_sign(user_id, token, params, ts)
           data['params'] = params
           res = requests.post("https://afdian.com/api/open/query-sponsor", json=data)
-          sponsors = res.json()['data']['list']
+          sponsors = [
+      {
+        "sponsor_plans": [],
+        "current_plan": {
+          "name": ""
+        },
+        "all_sum_amount": "0.00",
+        "create_time": 1581011280,
+        "last_pay_time": 1598852327,
+        "user": {
+          "user_id": "3524370d11e8ae8852540025c377",
+          "name": "Hee",
+          "avatar": "https://pic1.afdiancdn.com/user/27f7sss7/avatar/2d9659585fc4798068efbb652e56c08a.jpg"
+        }
+      },
+      {
+        "sponsor_plans": [
+          {
+            "plan_id": "sdfsf",
+            "rank": 0,
+            "user_id": "34343",
+            "status": 3,
+            "name": "独立永久方案",
+            "pic": "",
+            "desc": "啊1；",
+            "price": "1.00",
+            "update_time": 1621084278,
+            "pay_month": 1,
+            "show_price": "1.00",
+            "independent": 1,
+            "permanent": 1,
+            "can_buy_hide": 0,
+            "need_address": 0,
+            "product_type": 0,
+            "sale_limit_count": -1,
+            "need_invite_code": false,
+            "expire_time": 2114352000,
+            "sku_processed": [],
+            "rankType": 21
+          }
+        ],
+        "current_plan": {
+          "plan_id": "sdfsfsf",
+          "rank": 0,
+          "user_id": "3453535",
+          "status": 3,
+          "name": "独立永久方案",
+          "pic": "",
+          "desc": "啊1；",
+          "price": "1.00",
+          "update_time": 1621084278,
+          "pay_month": 1,
+          "show_price": "1.00",
+          "independent": 1,
+          "permanent": 1,
+          "can_buy_hide": 0,
+          "need_address": 0,
+          "product_type": 0,
+          "sale_limit_count": -1,
+          "need_invite_code": false,
+          "expire_time": 2114352000,
+          "sku_processed": [],
+          "rankType": 21
+        },
+        "all_sum_amount": "13.00",
+        "first_pay_time": 1576776221,
+        "last_pay_time": 1581083107,
+        "user": {
+          "user_id": "sfff",
+          "name": "sfsf：十五种幸福（新版）",
+          "avatar": "https://pic1.afdiancdn.com/user/sdfsfsf/avatar/c13b6125cbd9fbe7810c79256df1f5b2_w4032_h3024_s3215.jpeg"
+        }
+      }
+    ]
           sponsors_info = []
           for sponsor in sponsors:
               user = sponsor['user']
