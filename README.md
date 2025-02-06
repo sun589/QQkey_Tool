@@ -125,6 +125,10 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 # 程序截图
 ![程序截图](https://github.com/user-attachments/assets/ae4742ab-3c7e-40c5-b9d1-5ee44e15cf5d)  
 ****
+# 赞助者列表
+<!-- START_SPONSORS -->
+<!-- END_SPONSORS -->
+****
 # 仓库访问数量(从2024-10-14计起)
 ![Visitor count](https://profile-counter.glitch.me/sun589-QQkey_Tool/count.svg)  
 如果路过了不放给个star:))))))))))))))))))))))))))))))))))))))))))
@@ -133,4 +137,3 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ## [赞助我](https://afdian.com/a/sun589)
 [![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)  
 ****
-# 赞助者列表
