@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -31,14 +33,13 @@ jobs:
           import requests
           import time
           from hashlib import md5
-          import os
           import base64
 
           def get_sign(user_id, token, params, ts):
               return md5(f"{token}params{params}ts{ts}user_id{user_id}".encode("utf-8")).hexdigest()
 
-          user_id = os.getenv('USER_ID')
-          token = os.getenv('API_TOKEN')
+          user_id = env['USER_ID']
+          token = env['API_TOKEN']
           ts = int(time.time())
           data = {
               "user_id": user_id,
@@ -55,8 +56,11 @@ jobs:
               amount = sponsor["all_sum_amount"]
               avatar = user.get('avatar', '')
               name = user.get('name', '')
-              sponsors_info.append(f"<img src=\"{avatar}\" alt=\"{name}\" width=\"50\" height=\"50\"> {name} - {amount}元")
+              # 使用 HTML 的 <img> 标签指定图片大小
+              img_tag = f'<img src="{avatar}" alt="{name}" width="50" height="50">'
+              sponsors_info.append(f"{img_tag} {name} - {amount}元")
           sponsors_text = '\n'.join(sponsors_info)
+          # 对 sponsors_text 进行 Base64 编码
           encoded_text = base64.b64encode(sponsors_text.encode('utf-8')).decode('utf-8')
           print(f"::set-output name=sponsors_text::{encoded_text}")
         shell: python
@@ -66,7 +70,9 @@ jobs:
           README_FILE="README.md"
           START_MARKER="<!-- START_SPONSORS -->"
           END_MARKER="<!-- END_SPONSORS -->"
+          # 获取 Base64 编码的 sponsors_text
           ENCODED_SPONSORS_TEXT="${{ steps.fetch-sponsors.outputs.sponsors_text }}"
+          # 对 Base64 编码的文本进行解码
           SPONSORS_TEXT=$(echo "$ENCODED_SPONSORS_TEXT" | base64 -d)
 
           # 备份原始 README
@@ -101,4 +107,4 @@ jobs:
           git config --local user.name "GitHub Action"
           git add README.md
           git commit -m "Update sponsors list in README"
-          git push
+          git push https://${{ secrets.PAT }}@github.com/sun589/QQkey_Tool.git
