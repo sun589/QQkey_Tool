@@ -127,6 +127,8 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/user/27f7sss7/avatar/2d9659585fc4798068efbb652e56c08a.jpg" alt="Hee" width="35" height="35"> Hee - 0.00元  
+<img src="https://pic1.afdiancdn.com/user/sdfsfsf/avatar/c13b6125cbd9fbe7810c79256df1f5b2_w4032_h3024_s3215.jpeg" alt="sfsf：十五种幸福（新版）" width="35" height="35"> sfsf：十五种幸福（新版） - 13.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
