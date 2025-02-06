@@ -130,10 +130,10 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 如果路过了不放给个star:))))))))))))))))))))))))))))))))))))))))))
 ****
 # 赞助者列表
-<!-- START_SPONSORS -->
-<!-- 赞助者信息将自动更新到这里 -->
-<!-- END_SPONSORS -->
 ****
+<!-- START_SPONSORS -->
+
+<!-- END_SPONSORS -->
 # 制作不易,如果喜欢,请给作者打个Star/赞助,谢谢:))))))))))) [![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
 ## [赞助我](https://afdian.com/a/sun589)
 [![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)  
