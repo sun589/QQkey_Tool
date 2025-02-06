@@ -32,6 +32,7 @@ jobs:
           import time
           from hashlib import md5
           import os
+          import base64
 
           def get_sign(user_id, token, params, ts):
               return md5(f"{token}params{params}ts{ts}user_id{user_id}".encode("utf-8")).hexdigest()
