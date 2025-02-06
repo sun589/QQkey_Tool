@@ -84,6 +84,8 @@ jobs:
                   content[i] = sponsors_info[num]
                   num += 1
               f.writelines(content)
+        shell: python
+              
 
       - name: Check for changes
         id: check-changes
