@@ -36,8 +36,8 @@ jobs:
           def get_sign(user_id, token, params, ts):
               return md5(f"{token}params{params}ts{ts}user_id{user_id}".encode("utf-8")).hexdigest()
 
-          user_id = os.getenv['USER_ID']
-          token = os.getenv['API_TOKEN']
+          user_id = os.getenv('USER_ID')
+          token = os.getenv('API_TOKEN')
           ts = int(time.time())
           data = {
               "user_id": user_id,
