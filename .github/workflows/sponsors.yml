@@ -62,28 +62,28 @@ jobs:
         shell: python
 
       - name: Update README
+        id: update_readme
+        env:
+          ENCODED_TEXT: ${{ steps.fetch-sponsors.outputs.sponsors_text }}
         run: |
-          README_FILE="README.md"
-          START_MARKER="<!-- START_SPONSORS -->"
-          END_MARKER="<!-- END_SPONSORS -->"
-          ENCODED_SPONSORS_TEXT="${{ steps.fetch-sponsors.outputs.sponsors_text }}"
-          SPONSORS_TEXT=$(echo "$ENCODED_SPONSORS_TEXT" | base64 -d)
-
-          # 备份原始 README
-          cp $README_FILE $README_FILE.bak
-
-          # 查找起始和结束标记的行号
-          START_LINE=$(grep -n "$START_MARKER" $README_FILE | cut -d: -f1)
-          END_LINE=$(grep -n "$END_MARKER" $README_FILE | cut -d: -f1)
-
-          if [ -n "$START_LINE" ] && [ -n "$END_LINE" ]; then
-              # 删除标记之间的内容
-              sed -i "${START_LINE},${END_LINE}d" $README_FILE
-              # 插入新的赞助者信息
-              printf "%s\n%s\n%s\n" "$START_MARKER" "$SPONSORS_TEXT" "$END_MARKER" | sed -i "${START_LINE}r /dev/stdin" $README_FILE
-          else
-              echo "Start or end marker not found in README.md"
-          fi
+          import os
+          import base64
+          sponsors_info = base64.b64decode(os.getenv("ENCODED_TEXT")).decode('utf-8')
+          with open("README.md",'w+') as f:
+              content = f.readlines()
+              start_line = content.index("<!-- START_SPONSORS -->")
+              end_line = content.index("<!-- END_SPONSORS -->")
+              if start_line == -1 or end_line == -1:
+                  print("Index not found")
+                  exit(1)
+              num = 0
+              for i in range(start_line+1,end_line):
+                  if num > len(sponsors_info) - 1:
+                      del content[i]
+                      continue
+                  content[i] = sponsors_info[num]
+                  num += 1
+              f.writelines(content)
 
       - name: Check for changes
         id: check-changes
