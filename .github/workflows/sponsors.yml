@@ -108,7 +108,7 @@ jobs:
             echo "::set-output name=has_changes::true"
           fi
 
-      - name: Commit and push changes
+      - name: Commit and push changes(github)
         if: steps.check-changes.outputs.has_changes == 'true'
         run: |
           git config --local user.email "action@github.com"
@@ -116,3 +116,32 @@ jobs:
           git add README.md
           git commit --allow-empty-message -m ""
           git push
+      
+      - name: Commit and push changes(gitee)
+        env:
+          HAS_CHANGES: ${{ steps.check-changes.outputs.has_changes }}
+          API_TOKEN: ${{ secrets.API_TOKEN2 }}
+          ENCODED_TEXT: ${{ steps.fetch-sponsors.outputs.sponsors_text }}
+        run: |
+          import os
+          import base64
+          import requests
+          import re
+          
+          if os.getenv("HAS_CHANGES") == 'true':
+              api_token = os.getenv("API_TOKEN")
+              content = base64.b64decode(os.getenv("ENCODED_TEXT").encode('utf-8')).decode('utf-8').split("\n")
+              text = ""
+              for i in content:
+                  sponsor = re.findall("<img src=\"(.*)\" alt=\"(.*)\" width=\"35\" height=\"35\"> .* - (.*)元",i)[0]
+                  text += f"{sponsor[1]} {sponsor[2]} {sponsor[0]}\n"
+              final_text = base64.b64encode(text.encode('utf-8')).decode('utf-8')
+              print(final_text)
+              r1 = requests.get(f"https://gitee.com/api/v5/repos/sun589/sponsors/contents/sponsors?access_token={api_token}").json()
+              sha = r1['sha']
+              data = {"access_token":api_token,
+                      "content":final_text,
+                      "sha":sha,
+                      "message":"update sponsors list"}
+              r2 = requests.put(f"https://gitee.com/api/v5/repos/sun589/sponsors/contents/sponsors",data=data)
+        shell: python
