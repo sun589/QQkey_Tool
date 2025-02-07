@@ -132,11 +132,13 @@ jobs:
               api_token = os.getenv("API_TOKEN")
               content = base64.b64decode(os.getenv("ENCODED_TEXT").encode('utf-8')).decode('utf-8').split("\n")
               text = ""
-              for i in content:
-                  sponsor = re.findall("<img src=\"(.*)\" alt=\"(.*)\" width=\"35\" height=\"35\"> .* - (.*)元",i)[0]
-                  text += f"{sponsor[1]} {sponsor[2]} {sponsor[0]}\n"
-              final_text = base64.b64encode(text.encode('utf-8')).decode('utf-8')
-              print(final_text)
+              try:
+                  for i in content:
+                      sponsor = re.findall("<img src=\"(.*)\" alt=\"(.*)\" width=\"35\" height=\"35\"> .* - (.*)元",i)[0]
+                      text += f"{sponsor[1]} {sponsor[2]} {sponsor[0]}\n"
+                  final_text = base64.b64encode(text.encode('utf-8')).decode('utf-8')
+              except:
+                  final_text = ""
               r1 = requests.get(f"https://gitee.com/api/v5/repos/sun589/sponsors/contents/sponsors?access_token={api_token}").json()
               sha = r1['sha']
               data = {"access_token":api_token,
