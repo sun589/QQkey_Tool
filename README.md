@@ -11,8 +11,8 @@
 > QQ远程控号&盗号/生成木马/突破空间&邮箱&QQ群/扫码控号/QQkey直取/Clientkey直取/发说说……
 
 **最新项目:利用Clientkey即可登录所有qq登录的网站的工具! [QQLogin](https://github.com/sun589/QQLogin)!**  
-**项目破100stars庆祝！**[请点我查看详细](https://github.com/sun589/QQkey_Tool/discussions/25)[![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
-可能是你见过唯一还在持续更新的QQKey工具箱:)[![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
+**项目破100stars庆祝！**[请点我查看详细](https://github.com/sun589/QQkey_Tool/discussions/25)  
+可能是你见过唯一还在持续更新的QQKey工具箱:)  
 
 <details><summary>免责声明【必读】</summary>
 
@@ -52,7 +52,7 @@
   - [制作不易,如果喜欢,请给作者打个Star,谢谢:)))))))))))](#制作不易如果喜欢请给作者打个star谢谢)
 ****
 #  使用说明
-  下载[Release](https://github.com/sun589/QQkey_Tool/releases)/[蓝奏云(密码52yb)](https://wwap.lanzouv.com/b0xvu2ogh)(睁大眼睛看准版本号再下！！！！)里最新的版本打开QQKey_Tool.exe食用[![](https://sun589.serv00.net/image)](https://github.com/sun589/QQkey_Tool)  
+  下载[Release](https://github.com/sun589/QQkey_Tool/releases)/[蓝奏云(密码52yb)](https://wwap.lanzouv.com/b0xvu2ogh)(睁大眼睛看准版本号再下！！！！)里最新的版本打开QQKey_Tool.exe食用  
   or  
   下载[源代码](https://github.com/sun589/QQkey_Tool/)运行
 ****
