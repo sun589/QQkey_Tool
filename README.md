@@ -126,7 +126,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 # 程序截图
 ![程序截图](https://github.com/user-attachments/assets/ae4742ab-3c7e-40c5-b9d1-5ee44e15cf5d)  
 ****
-# 赞助者列表
+# 赞助者列表(每小时自动由bot更新)
 <!-- START_SPONSORS -->
 <img src="https://pic1.afdiancdn.com/user/736c790696c611ecba1d52540025c377/avatar/ed5c19785838cc61b0297a11ecfcfb3f_w460_h460_s167.png" alt="sun589" width="35" height="35"> sun589 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="李跃进" width="35" height="35"> 李跃进 - 15.00元
