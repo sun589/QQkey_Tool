@@ -148,16 +148,3 @@ jobs:
                       "message":"update sponsors list"}
               r2 = requests.put(f"https://gitee.com/api/v5/repos/sun589/sponsors/contents/sponsors",data=data)
         shell: python
-
-      - name: Delete logs on success
-        if: steps.sample-command.outcome == 'success'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RUN_ID: ${{ github.run_id }}
-          REPO: ${{ github.repository }}
-        run: |
-          OWNER=$(echo "$REPO" | cut -d'/' -f1)
-          REPO_NAME=$(echo "$REPO" | cut -d'/' -f2)
-          curl -X DELETE \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$OWNER/$REPO_NAME/actions/runs/$RUN_ID"
