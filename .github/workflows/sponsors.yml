@@ -48,8 +48,11 @@ jobs:
           data['sign'] = get_sign(user_id, token, params, ts)
           data['params'] = params
           res = requests.post("https://afdian.com/api/open/query-sponsor", json=data)
-          print(res.text)
-          sponsors = res.json()['data']['list']
+          try:
+              sponsors = res.json()['data']['list']
+          except:
+              print(res.text)
+              exit(1)
           sponsors_info = []
           for sponsor in sponsors:
               user = sponsor['user']
