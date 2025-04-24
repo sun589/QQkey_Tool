@@ -27,9 +27,10 @@ import get_qq_info_ui
 import QQKey_bug_fixer
 import key_parser
 import skey_manager
+import zanzhu
 import hashlib
 
-version = "4.8"
+version = "4.9"
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
@@ -86,7 +87,7 @@ class Ui_Dialog(object):
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(569, 130)
+        Dialog.resize(569, 307)
         font = QFont()
         font.setFamily("微软雅黑")
         Dialog.setFont(font)
@@ -102,6 +103,9 @@ class Ui_Dialog(object):
         self.label_4 = QtWidgets.QLabel(Dialog)
         self.label_4.setGeometry(QtCore.QRect(30, 10, 111, 31))
         self.label_4.setObjectName("label_4")
+        self.label_2 = QtWidgets.QLabel(Dialog)
+        self.label_2.setGeometry(QtCore.QRect(0, 110, 571, 21))
+        self.label_2.setObjectName("label_2")
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(70, 50, 111, 21))
         self.label.setObjectName("label")
@@ -115,6 +119,36 @@ class Ui_Dialog(object):
         self.pushButton.setGeometry(QtCore.QRect(440, 80, 75, 23))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.get_data)
+        self.lineEdit_3 = QtWidgets.QLineEdit(Dialog)
+        self.lineEdit_3.setGeometry(QtCore.QRect(130, 170, 311, 20))
+        self.lineEdit_3.setObjectName("lineEdit_3")
+        self.label_5 = QtWidgets.QLabel(Dialog)
+        self.label_5.setGeometry(QtCore.QRect(30, 130, 131, 31))
+        self.label_5.setObjectName("label_5")
+        self.label_6 = QtWidgets.QLabel(Dialog)
+        self.label_6.setGeometry(QtCore.QRect(70, 170, 61, 16))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(11)
+        self.label_6.setFont(font)
+        self.label_6.setObjectName("label_6")
+        self.label_7 = QtWidgets.QLabel(Dialog)
+        self.label_7.setGeometry(QtCore.QRect(70, 200, 61, 21))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(11)
+        self.label_7.setFont(font)
+        self.label_7.setObjectName("label_7")
+        self.textEdit = QtWidgets.QTextEdit(Dialog)
+        self.textEdit.setGeometry(QtCore.QRect(110, 200, 411, 91))
+        self.textEdit.setObjectName("textEdit")
+        self.textEdit.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+        self.textEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.textEdit.setReadOnly(True)
+        self.pushButton_3 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_3.setGeometry(QtCore.QRect(450, 170, 71, 23))
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_3.clicked.connect(self.decrypt_code)
         self.signal2.connect(self.generate)
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -127,6 +161,12 @@ class Ui_Dialog(object):
         self.label_4.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:12pt; color:#ff0000;\">Key配置区:</span></p></body></html>"))
         self.label.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:11pt;\">待导入Key码:</span></p></body></html>"))
         self.pushButton.setText(_translate("Dialog", "生成+复制"))
+        self.label_2.setText(_translate("Dialog", "------------------------------------------------------------------------------------------------------------------"))
+
+        self.label_5.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:12pt; color:#ff0000;\">Key配置码分析:</span></p></body></html>"))
+        self.label_6.setText(_translate("Dialog", "配置码:"))
+        self.label_7.setText(_translate("Dialog", "结果:"))
+        self.pushButton_3.setText(_translate("Dialog", "解析"))
 
     def get_data(self):
         self.signal1.emit(1)
@@ -135,6 +175,21 @@ class Ui_Dialog(object):
         text = base64.b64encode(str(data).replace("'",'"').encode('utf-8')).decode('utf-8')
         self.lineEdit_2.setText(text)
         pyperclip.copy(text)
+
+    def decrypt_code(self):
+        try:
+            self.textEdit.clear()
+            data = json.loads(base64.b64decode(self.lineEdit_3.text().encode()).decode())
+            print(data.get("login_url"))
+            print(data['login_url'])
+            self.textEdit.append(f"""当前配置码:{self.lineEdit_3.text()}
+QQ号:{data['uin']}
+skey:{data['skey']}
+p_skey:{data['pskey']}
+登录网址:{data['login_url'] if data.get("login_url") is not None else data['qzone_url']}""")
+        except Exception as e:
+            print(repr(e))
+            self.textEdit.append("不是有效的配置码!")
 
 class error_handler(QDialog):
     def __init__(self,error):
@@ -480,19 +535,19 @@ class Ui_MainWindow(QtWidgets.QWidget):
         if not os.path.isfile("Tools.zip"):
             QtWidgets.QMessageBox.critical(self,"错误","请先下载搭建包,然后将搭建包移动至程序目录下!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzouv.com/i0Nz62dokgmd")
+            webopen("https://wwap.lanzoum.com/iVwUr2ti4gsd")
             return
-        if encrypt('Tools.zip', 'md5') == '6081a2b32ba7f94b8d1316dce70edf24':
+        if encrypt('Tools.zip', 'md5') == '563a84f871e7387d49e59ac79350037e':
             pass
-        elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2']:
+        elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2','6081a2b32ba7f94b8d1316dce70edf24']:
             QtWidgets.QMessageBox.critical(self,"错误", "验证搭建包失败,检测到您正在使用旧版搭建包!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzouv.com/i0Nz62dokgmd")
+            webopen("https://wwap.lanzoum.com/iVwUr2ti4gsd")
             return
         else:
             QtWidgets.QMessageBox.critical(self,"错误","验证搭建包失败,检测到文件不完整!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzouv.com/i0Nz62dokgmd")
+            webopen("https://wwap.lanzoum.com/iVwUr2ti4gsd")
             return
         class Dialog(QDialog):
             def closeEvent(self, a0) -> None:
@@ -716,6 +771,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pixmap = QPixmap('qr.jpg')
         self.label.setPixmap(self.pixmap)
         print("二维码获取成功!")
+
     def cookies(self,ptqtoken, qrsig):
         _translate = QtCore.QCoreApplication.translate
         while True:
@@ -1260,6 +1316,10 @@ if __name__ == '__main__':
     # 调自定义的界面
     Ui = Ui_MainWindow()
     Ui.setupUi(MainWindow)
+    dialog = QDialog()
+    zz = zanzhu.Ui_Dialog()
+    zz.setupUi(dialog)
     # 显示窗口并释放资源
     MainWindow.show()
+    dialog.show()
     sys.exit(app.exec_())
