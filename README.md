@@ -132,7 +132,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="Conla_1337" width="35" height="35"> Conla_1337 - 50.00元  
 <img src="https://pic1.afdiancdn.com/user/f3b0967009ca11ed8cf452540025c377/avatar/4a07313523bf523ddf5591e4b044d5ed_w240_h240_s3.png" alt="匿名用户" width="35" height="35"> 匿名用户 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="爱发电用户_gYub" width="35" height="35"> 爱发电用户_gYub - 7.00元  
-<img src="https://pic1.afdiancdn.com/user/fc5dc87a0c7d11f0a5c052540025c377/avatar/75aec13406aaadd816b467f6c06a5ea3_w640_h640_s48.jpeg" alt="冷小白" width="35" height="35"> 冷小白 - 14.00元  
+<img src="https://pic1.afdiancdn.com/user/fc5dc87a0c7d11f0a5c052540025c377/avatar/75aec13406aaadd816b467f6c06a5ea3_w640_h640_s48.jpeg" alt="冷小白" width="35" height="35"> 冷小白 - 44.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_c30ab" width="35" height="35"> 爱发电用户_c30ab - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_62189" width="35" height="35"> 爱发电用户_62189 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_3d9ec" width="35" height="35"> 爱发电用户_3d9ec - 6.00元  
