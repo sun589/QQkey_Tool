@@ -128,6 +128,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每小时自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="HalfDay_" width="35" height="35"> HalfDay_ - 15.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="爱发电用户_ykMC" width="35" height="35"> 爱发电用户_ykMC - 7.00元  
 <img src="https://pic1.afdiancdn.com/user/0eb3cabe178311f0a70a52540025c377/avatar/0a9425d6856fb9fbc7e6000f3939d78a_w1080_h1066_s365.jpeg" alt="Roxyqwq" width="35" height="35"> Roxyqwq - 15.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="Conla_1337" width="35" height="35"> Conla_1337 - 50.00元  
