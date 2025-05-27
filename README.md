@@ -28,7 +28,33 @@
 
 </details>  
 
-## [如果觉得好用不妨赞助我,送专属远控木马一套(支持摄像头监控/获取浏览器保存密码/微信消息/获取Todesk手机号等功能)+挂上致谢名单](https://afdian.com/a/sun589)
+## [如果觉得好用不妨赞助我,送专属远控木马一套(支持摄像头监控/获取浏览器保存密码&Cookies/微信消息/获取Todesk手机号等功能)+挂上致谢名单](https://afdian.com/a/sun589)
+<details>
+<summary>远控木马展示(主控):</summary>  
+  
+主界面:  
+  
+![d330622f14b946c65801efce8e4d0d8a](https://github.com/user-attachments/assets/5d53caaa-da18-4d8a-b84a-d911cd7d2d12)  
+  
+文件管理:  
+
+![7c938dead15127c19278824e080e21cd](https://github.com/user-attachments/assets/a8eae8b5-2082-4764-99f6-803b3211f565)  
+  
+浏览器密码/Cookies获取:  
+  
+![cacaedcf75853634062fc3d5f32f62df](https://github.com/user-attachments/assets/42a80c77-3d49-4624-9224-34780e0dba41)  
+
+![image](https://github.com/user-attachments/assets/9b8d3014-96fe-455e-8893-1ff2246952c3)
+
+Todesk手机号获取:  
+
+![fb1ca84b8410fb38f76d4f21ab6de9e0](https://github.com/user-attachments/assets/96931623-8989-425b-b91c-dfec48f25c27)  
+
+  
+**获取链接:[爱发电](https://afdian.com/a/sun589)**  
+
+</details>  
+  
 ***再次声明:本软件仅用于学习用途,请勿用于违法行为 后果自负!***  
 ****
 # 目录
