@@ -28,7 +28,7 @@
 
 </details>  
 
-## [如果觉得好用不妨赞助我,送专属远控木马一套(支持摄像头监控/获取浏览器保存密码&Cookies/微信消息/获取Todesk手机号等功能)+挂上致谢名单](https://afdian.com/a/sun589)
+## [如果觉得好用不妨赞助我,送独家远控木马一套(支持摄像头监控/获取浏览器保存密码&Cookies/微信消息/获取Todesk手机号等功能)+挂上致谢名单](https://afdian.com/a/sun589)
 <details>
 <summary>远控木马展示(主控):</summary>  
   
