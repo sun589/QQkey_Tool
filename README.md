@@ -154,6 +154,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每小时自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="热开水Rekisa" width="35" height="35"> 热开水Rekisa - 15.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="一乐" width="35" height="35"> 一乐 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_9dfc3" width="35" height="35"> 爱发电用户_9dfc3 - 5.00元  
 <img src="https://pic1.afdiancdn.com/user/3c16993a1b6d11f085ff52540025c377/avatar/da9591bebf0ebfe63117cbf8c3711da6_w1080_h1080_s283.jpeg" alt="sfllld" width="35" height="35"> sfllld - 30.00元  
@@ -172,8 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_d8b18" width="35" height="35"> 爱发电用户_d8b18 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="TexNova" width="35" height="35"> TexNova - 15.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="HalfDay_" width="35" height="35"> HalfDay_ - 15.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="爱发电用户_ykMC" width="35" height="35"> 爱发电用户_ykMC - 7.00元  
-<img src="https://pic1.afdiancdn.com/user/0eb3cabe178311f0a70a52540025c377/avatar/0a9425d6856fb9fbc7e6000f3939d78a_w1080_h1066_s365.jpeg" alt="Roxyqwq" width="35" height="35"> Roxyqwq - 15.00元
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="爱发电用户_ykMC" width="35" height="35"> 爱发电用户_ykMC - 7.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
