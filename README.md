@@ -163,7 +163,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="热开水Rekisa" width="35" height="35"> 热开水Rekisa - 15.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="一乐" width="35" height="35"> 一乐 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_9dfc3" width="35" height="35"> 爱发电用户_9dfc3 - 5.00元  
-<img src="https://pic1.afdiancdn.com/user/3c16993a1b6d11f085ff52540025c377/avatar/cbc781b11d68f500c093de1f594b0b2a_w726_h687_s294.png" alt="XXXXFH" width="35" height="35"> XXXXFH - 30.00元  
+<img src="https://pic1.afdiancdn.com/user/3c16993a1b6d11f085ff52540025c377/avatar/deafe0ef5403e2a51a4b7213edb0510c_w858_h880_s416.jpeg" alt="XXXXFH" width="35" height="35"> XXXXFH - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_19994" width="35" height="35"> 爱发电用户_19994 - 7.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_febf6" width="35" height="35"> 爱发电用户_febf6 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_3b17e" width="35" height="35"> 爱发电用户_3b17e - 30.00元  
