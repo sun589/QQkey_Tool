@@ -30,7 +30,7 @@ import skey_manager
 import zanzhu
 import hashlib
 
-version = "4.9"
+version = "5.0"
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")
@@ -252,7 +252,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.label_4.setGeometry(QtCore.QRect(20, 10, 111, 31))
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(380, 10, 61, 31))
+        self.label_5.setGeometry(QtCore.QRect(380, 10, 300, 31))
         self.label_5.setObjectName("label_5")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_2.setGeometry(QtCore.QRect(520, 90, 281, 21))
@@ -481,7 +481,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.pushButton.setText(_translate("MainWindow", "获取二维码"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/>|<br/></p></body></html>"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; color:#ff0000;\">Skey获取区:</span></p></body></html>"))
-        self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; color:#ff0000;\">功能区:</span></p></body></html>"))
+        self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; color:#ff0000;\">功能区(在登录完成后使用):</span></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow", "发布公告(qun)"))
         self.pushButton_3.setText(_translate("MainWindow", "群列表(qun)"))
         self.lineEdit_2.setPlaceholderText(_translate("MainWindow", "QQ号/说说内容/群公告内容/说说获取个数"))
@@ -535,19 +535,19 @@ class Ui_MainWindow(QtWidgets.QWidget):
         if not os.path.isfile("Tools.zip"):
             QtWidgets.QMessageBox.critical(self,"错误","请先下载搭建包,然后将搭建包移动至程序目录下!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzoum.com/iVwUr2ti4gsd")
+            webopen("https://wwap.lanzoum.com/iXSGa32rlbuf")
             return
-        if encrypt('Tools.zip', 'md5') == '563a84f871e7387d49e59ac79350037e':
+        if encrypt('Tools.zip', 'md5') == '5efc89053e5ac94b49281855498ee966':
             pass
-        elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2','6081a2b32ba7f94b8d1316dce70edf24']:
+        elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2','6081a2b32ba7f94b8d1316dce70edf24','563a84f871e7387d49e59ac79350037e']:
             QtWidgets.QMessageBox.critical(self,"错误", "验证搭建包失败,检测到您正在使用旧版搭建包!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzoum.com/iVwUr2ti4gsd")
+            webopen("https://wwap.lanzoum.com/iXSGa32rlbuf")
             return
         else:
             QtWidgets.QMessageBox.critical(self,"错误","验证搭建包失败,检测到文件不完整!")
             QtWidgets.QMessageBox.information(self,"提示","点确定后将打开搭建包下载界面...")
-            webopen("https://wwap.lanzoum.com/iVwUr2ti4gsd")
+            webopen("https://wwap.lanzoum.com/iXSGa32rlbuf")
             return
         class Dialog(QDialog):
             def closeEvent(self, a0) -> None:
@@ -640,7 +640,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     "u1": login_data['s_url'],
                     "clientuin": uin,
                     "pt_aid": login_data['appid'],
-                    "keyindex": "19",
+                    "keyindex": "19" if len(clientkey) == 96 else "9",
                     "pt_local_tk": pt_local_token,
                     "pt_3rd_aid": "0",
                     "ptopt": "1",
@@ -654,7 +654,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 }
                 login_res = session.get("https://ssl.ptlogin2.qq.com/jump",params=params,cookies=cookies,headers=headers)
             else:
-                login_res = session.get(f"https://ssl.ptlogin2.qq.com/jump?ptlang=1033&clientuin={uin}&clientkey={clientkey}&u1={login_data['u1']}&keyindex=19",allow_redirects=False)
+                login_res = session.get(f"https://ssl.ptlogin2.qq.com/jump?ptlang={1033 if len(clientkey) == 96 else 2052}&clientuin={uin}&clientkey={clientkey}&u1={login_data['u1']}&keyindex=19",allow_redirects=False)
             if login_data['s_url']:
                 extracter = URLExtract()
                 url = extracter.find_urls(login_res.text)[0]
@@ -740,7 +740,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
 作用:将群内成员移除(需有管理/群主权限)
     """)
         else:
-            QtWidgets.QMessageBox.about(self, "使用帮助", "作者:sun589\n本软件仅供于学习用途 禁止用于违法行为 后果自负")
+            QtWidgets.QMessageBox.about(self, "使用帮助", f"作者:sun589\n版本{version}\n本软件仅供于学习用途 禁止用于违法行为 后果自负")
 
     def get_qq(self):
         self.qr()
@@ -975,9 +975,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
             QtWidgets.QMessageBox.about(self, "错误", "未知错误!")
 
     def qun_members_list(self,bkn,qid,pskey,skey,uin):
+        reply = QtWidgets.QMessageBox.question(self, '提示', '仅支持获取当前登录管理或作为群主的群,要继续吗?',
+                                     QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+        if reply != QtWidgets.QMessageBox.Yes:
+            return
         data = {
             "st":"0",
-            "start":"0",
             "end":"9",
             "sort":"1",
             "group_id":str(qid),
@@ -998,24 +1001,25 @@ class Ui_MainWindow(QtWidgets.QWidget):
         l = []
         start = 0
         end = 9
+        role = ['群主', "管理员", "成员"]
         while True:
-            res = requests.post(f"https://qun.qq.com/cgi-bin/qun_mgr/search_group_members?bkn={bkn}&ts=1702901784527",cookies=Cookies,data=data,headers=headers).json()
+            res = requests.post(f"https://qun.qq.com/cgi-bin/qun_mgr/search_group_members?bkn={bkn}&ts={int(time.time())}",cookies=Cookies,data=data,headers=headers).json()
             try:
                 for i in res['mems']:
-                    print(l,[str(i['nick'])+'\t',str(i['uin'])+'\t'])
-                    if [str(i['nick'])+'\t',str(i['uin'])+'\t'] in l:
+                    add_l = [str(i['nick'])+'\t',str(i['uin'])+'\t', role[i['role']], i['card'] if i['card'] else '无', time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(i['last_speak_time'])), time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(i['join_time']))]
+                    if add_l in l:
                         break
-                    l.append([str(i['nick'])+'\t',str(i['uin'])+'\t'])
+                    l.append(add_l)
                 start += 10
                 end += 10
-                data['start'],data['end'] = str(start),str(end)
+                data['st'],data['end'] = str(start),str(end)
             except:
                 break
         try:
             with open("mem_list.csv",'w',encoding='utf-8-sig',newline='') as f:
                 csv_f = csv.writer(f)
                 csv_f.writerow([f'群号:{self.lineEdit.text()}\t'])
-                csv_f.writerow(['名称','QQ号'])
+                csv_f.writerow(['名称','QQ号', "身份", "群昵称", "最后发言时间", "加入时间"])
                 csv_f.writerows(l)
             QtWidgets.QMessageBox.about(self, "提示", "已保存至mem_list.csv!")
         except PermissionError:
@@ -1082,30 +1086,26 @@ class Ui_MainWindow(QtWidgets.QWidget):
             "p_skey": pskey,
             "uin": str(uin),
             "skey": skey,
-            "p_uin": str(uin),
-            "o2_uin":str(uin)[1:],
-            "o_cookie":str(uin)[1:]
+            "p_uin": str(uin)
         }
         headers = {
             "Referer": f"https://user.qzone.qq.com/",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Edg/132.0.0.0",
             "Origin": "https://user.qzone.qq.com"
         }
-        res = requests.get(
-            f"https://h5.qzone.qq.com/proxy/domain/base.qzone.qq.com/cgi-bin/user/cgi_userinfo_get_all?uin={uin[1:]}&vuin={uin[1:]}&fupdate=1&rd=0.017501202984373077&g_tk={g_tk}",
-            headers=headers, cookies=Cookies).text
-        res = res[10:-2]
-        res = json.loads(res)['data']
-        QtWidgets.QMessageBox.information(self, "提示", "Key值依然有效,可继续使用!")
-        data = res + {
+        data = {
+    "nickname":newname,
+    "mb":"1",
+    "uin":str(uin)[1:],
     "pageindex":"1",
     "fupdate":"1",
-    "qzreferrer":"https://user.qzone.qq.com/proxy/domain/qzonestyle.gtimg.cn/qzone/v6/setting/profile/profile.html?tab=base&g_iframeUser=1",
+    "qzreferrer":"https://user.qzone.qq.com/proxy/domain/qzonestyle.gtimg.cn/qzone/v6/setting/profile/profile.html?tab=base",
     "g_iframeUser":"1"
 }
         res = requests.post(
             f"https://h5.qzone.qq.com/proxy/domain/w.qzone.qq.com/cgi-bin/user/cgi_apply_updateuserinfo_new?&g_tk={g_tk}",
             data=data, json=data, headers=headers, cookies=Cookies)
+        print(res.text)
         QtWidgets.QMessageBox.about(self, "提示", "修改成功!")
 
     def get_friend_list(self, g_tk, uin, pskey, skey):
@@ -1128,11 +1128,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
     "clean":"1",
     "g_tk":g_tk
 }
-        try:
-            res = requests.get("https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_ship_manager.cgi",params=data,cookies=Cookies,headers=headers,json=data,data=data).text[10:-2]
-            friend_list = json.loads(res).get("data").get("items_list")
-        except:
-            QtWidgets.QMessageBox.critical(self, "错误", "请关闭正在打开friend_list.csv的文件!")
+        res = requests.get("https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_ship_manager.cgi",params=data,cookies=Cookies,headers=headers,json=data,data=data).text[10:-2]
+        friend_list = json.loads(res).get("data").get("items_list")
         try:
             with open("friend_list.csv",'w',encoding='utf-8-sig',newline='') as f:
                 csv_f = csv.writer(f)

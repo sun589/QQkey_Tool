@@ -81,9 +81,13 @@ class Ui_Dialog(object):
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
         Dialog.setWindowIcon(QtGui.QIcon(get_file_path("./icon.ico")))
         self.dialog = Dialog
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(25)
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(20, -10, 741, 111))
         self.label.setObjectName("label")
+        self.label.setFont(font)
         # 创建滚动区域
         self.scroll_area = QtWidgets.QScrollArea(Dialog)
         self.scroll_area.setWidgetResizable(True)
@@ -106,14 +110,14 @@ class Ui_Dialog(object):
         self.label_2.setOpenExternalLinks(True)
         self.label_2.setObjectName("label_2")
         QtCore.QTimer.singleShot(0,self.load_sponsors_list)
-        QtCore.QTimer.singleShot(3500, self.allow_close)
+        QtCore.QTimer.singleShot(3000, self.allow_close)
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "赞助者列表 三秒后允许关闭"))
-        self.label.setText(_translate("Dialog", "如果觉得好用欢迎赞助我,有神秘大礼:))*n"))
+        self.label.setText(_translate("Dialog", "如果觉得好用不妨赞助我,抢先内测+独家远控:))*n"))
         self.label_3.setText(_translate("Dialog", "感谢以下老板的赞助:"))
 
     def allow_close(self):
@@ -123,7 +127,7 @@ class Ui_Dialog(object):
 
     def load_sponsors_list(self):
         try:
-            r1 = requests.get("https://gitee.com/sun589/sponsors/raw/master/sponsors",timeout=15).text.split('\n')
+            r1 = requests.get("https://gitee.com/sun589/sponsors/raw/master/sponsors",timeout=3).text.split('\n')
             sponsors = {i.split(" ")[0]:(i.split(" ")[2],float(i.split(" ")[1])) for i in r1 if i}
             content_widget = QtWidgets.QWidget()
             content_layout = QtWidgets.QVBoxLayout(content_widget)

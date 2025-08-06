@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
-
+import re
 import time
 import os
+from urllib.parse import urlparse, parse_qs
+
 import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+
+from requests import Session
 from urlextract import URLExtract
 from webbrowser import open as web_open
 from PyQt5.QtCore import pyqtSignal
@@ -18,6 +22,12 @@ def get_file_path(name):
         basedir = os.path.dirname(__file__)
     file_path = os.path.join(basedir, name)
     return file_path
+
+def get_g_tk(p_skey):
+    t = 5381
+    for i in p_skey:
+        t += (t << 5) + ord(i)
+    return t & 2147483647
 
 class none_siganl(QtCore.QObject):
     signal = pyqtSignal(tuple)
@@ -204,13 +214,55 @@ class Ui_Dialog(object):
         try:
             global hint_flag
             session = requests.session()
-            uin = self.lineEdit.text()
-            clientkey = self.lineEdit_2.text()
+            uin = self.lineEdit.text().strip()
+            clientkey = self.lineEdit_2.text().strip()
             login_data = self.login_data[self.comboBox.currentIndex()]
             if not hint_flag:
                 QtWidgets.QMessageBox.information(self.centralwidget, "提示", "部分网站在打开后可能出现白屏的情况,这时请手动打开对应官网才可正常使用")
                 hint_flag = True
-            if login_data['s_url']:
+            if self.comboBox.currentIndex() == 2 and len(clientkey) == 96:
+                session = Session()
+                login_html = session.get(
+                    "https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&daid=383&style=33&login_text=%E7%99%BB%E5%BD%95&hide_title_bar=1&hide_border=1&target=self&s_url=https%3A%2F%2Fgraph.qq.com%2Foauth2.0%2Flogin_jump&pt_3rd_aid=102013353&pt_feedback_link=https%3A%2F%2Fsupport.qq.com%2Fproducts%2F77942%3FcustomInfo%3D.appid102013353&theme=10&verify_theme=")
+                x_cookies = login_html.cookies.get_dict()
+                pt_local_token = x_cookies.get("pt_local_token")
+                session.cookies.update({"clientuin": uin, "clientkey": clientkey})
+                jump_req = session.get("https://ssl.ptlogin2.qq.com/jump", params={
+                    "clientuin": uin,
+                    "keyindex": "19",
+                    "pt_aid": "716027609",
+                    "daid": "383",
+                    "u1": "https://graph.qq.com/oauth2.0/login_jump",
+                    "pt_local_tk": pt_local_token,
+                    "pt_3rd_aid": "102013353",
+                    "ptopt": "1",
+                    "style": "40",
+                    "has_onekey": "1"
+                })
+                sigx_jump_url = re.findall("'(.*?)'", jump_req.text)[1]
+                session.get(sigx_jump_url)
+                auth_data = {
+                    "response_type": "code",
+                    "client_id": "102013353",
+                    "redirect_uri": "https://wx.mail.qq.com/list/readtemplate?name=login_jump.html",
+                    "scene": "1",
+                    "login_type": "qq",
+                    "scope": "get_user_info,get_app_friends",
+                    "state": "",
+                    "switch": "",
+                    "from_ptlogin": "1",
+                    "src": "1",
+                    "update_auth": "1",
+                    "openapi": "1010",
+                    "g_tk": get_g_tk(session.cookies.get("p_skey")),
+                    "auth_time": int(time.time() * 1000),
+                }
+                auth_req = session.post("https://graph.qq.com/oauth2.0/authorize", data=auth_data, json=auth_data,
+                                        allow_redirects=False)
+                redirect_url = urlparse(auth_req.headers['Location'])
+                code = parse_qs(redirect_url.query)['code'][0]
+                web_open(f"https://wx.mail.qq.com/list/readtemplate?name=login_jump.html&scene=1&login_type=qq&from=qq_panel&code={code}")
+            elif login_data['s_url']:
                 login_htm = session.get(
                     "https://xui.ptlogin2.qq.com/cgi-bin/xlogin",params=login_data)
                 q_cookies = requests.utils.dict_from_cookiejar(login_htm.cookies)
@@ -222,7 +274,7 @@ class Ui_Dialog(object):
                     "u1": login_data['s_url'],
                     "clientuin": uin,
                     "pt_aid": login_data['appid'],
-                    "keyindex": "19",
+                    "keyindex": "19" if len(clientkey) == 96 else "9",
                     "pt_local_tk": pt_local_token,
                     "pt_3rd_aid": "0",
                     "ptopt": "1",
@@ -237,9 +289,10 @@ class Ui_Dialog(object):
                 login_res = session.get("https://ssl.ptlogin2.qq.com/jump",params=params,cookies=cookies,headers=headers)
                 extractor = URLExtract()
                 login_url = extractor.find_urls(login_res.text)[0]
-                web_open(login_url)
+                print(login_url)
+                #web_open(login_url)
             else:
-                web_open(f"https://ssl.ptlogin2.qq.com/jump?ptlang=1033&clientuin={uin}&clientkey={clientkey}&u1={login_data['u1']}&keyindex=19")
+                web_open(f"https://ssl.ptlogin2.qq.com/jump?ptlang={1033 if len(clientkey) == 96 else 2052}&clientuin={uin}&clientkey={clientkey}&u1={login_data['u1']}&keyindex={19 if len(clientkey) == 96 else 9}")
         except Exception as e:
             QtWidgets.QMessageBox.critical(self.centralwidget, "提示", f"登录失败!")
 if __name__ == '__main__':

