@@ -10,7 +10,6 @@
 [![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/sun589/QQkey_Tool/latest/total?style=flat&label=%E6%9C%80%E6%96%B0%E4%B8%8B%E8%BD%BD%E9%87%8F&color=orange&logo=github)](https://github.com/sun589/QQkey_Tool/releases)  
 > QQ远程控号&盗号/生成木马/突破空间&邮箱&QQ群/扫码控号/QQkey直取/Clientkey直取/发说说……
 
-### [我不知道5.0更新什么了(点我进讨论反馈！！！！！)](https://github.com/sun589/QQkey_Tool/discussions/38)
 **最新项目:利用Clientkey即可登录所有qq登录的网站的工具! [QQLogin](https://github.com/sun589/QQLogin)!**  
 **项目破100stars庆祝！**[请点我查看详细](https://github.com/sun589/QQkey_Tool/discussions/25)  
 可能是你见过唯一还在持续更新的QQKey工具箱:)  
