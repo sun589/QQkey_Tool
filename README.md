@@ -78,7 +78,7 @@ Todesk手机号获取:
   - [制作不易,如果喜欢,请给作者打个Star,谢谢:)))))))))))](#制作不易如果喜欢请给作者打个star谢谢)
 ****
 #  使用说明
-  下载[Release](https://github.com/sun589/QQkey_Tool/releases)/[蓝奏云(密码52yb)](https://wwap.lanzouv.com/b0xvu2ogh)(睁大眼睛看准版本号再下！！！！)里最新的版本打开QQKey_Tool.exe食用  
+  下载[Release](https://github.com/sun589/QQkey_Tool/releases)/[蓝奏云(密码52yb)](https://wwap.lanzouv.com/b0xvu2ogh)里最新的版本打开QQKey_Tool.exe食用  
   or  
   下载[源代码](https://github.com/sun589/QQkey_Tool/)运行
 ****
