@@ -154,6 +154,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每小时自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="Null锁🔒" width="35" height="35"> Null锁🔒 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_43337" width="35" height="35"> 爱发电用户_43337 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="668588" width="35" height="35"> 668588 - 5.00元  
 <img src="https://pic1.afdiancdn.com/user/user_upload_osl/cd9dbdffb3caf2ab319750ce5e0d84a3_w132_h132_s4.jpeg" alt="h.智" width="35" height="35"> h.智 - 30.00元  
@@ -172,8 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="QingYan" width="35" height="35"> QingYan - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_1ccb3" width="35" height="35"> 爱发电用户_1ccb3 - 15.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="66" width="35" height="35"> 66 - 5.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="爱发电用户_BFns" width="35" height="35"> 爱发电用户_BFns - 7.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="祺雪" width="35" height="35"> 祺雪 - 30.00元
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="爱发电用户_BFns" width="35" height="35"> 爱发电用户_BFns - 7.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
