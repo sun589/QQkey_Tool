@@ -30,7 +30,7 @@ import skey_manager
 import zanzhu
 import hashlib
 
-version = "5.0"
+version = "5.1"
 
 os.environ['NO_PROXY'] = 'https://github.com/sun589/QQkey_Tool' # 仅屏蔽代理,文字并无作用
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("QQkey_Tool")

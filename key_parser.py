@@ -2,8 +2,9 @@
 import re
 import time
 import os
+import traceback
 from urllib.parse import urlparse, parse_qs
-
+from pyperclip import copy
 import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
@@ -261,7 +262,17 @@ class Ui_Dialog(object):
                                         allow_redirects=False)
                 redirect_url = urlparse(auth_req.headers['Location'])
                 code = parse_qs(redirect_url.query)['code'][0]
-                web_open(f"https://wx.mail.qq.com/list/readtemplate?name=login_jump.html&scene=1&login_type=qq&from=qq_panel&code={code}")
+                login_url = f"https://wx.mail.qq.com/list/readtemplate?name=login_jump.html&scene=1&login_type=qq&from=qq_panel&code={code}"
+                reply = QtWidgets.QMessageBox.question(self.centralwidget,
+                                                       '解析完毕',
+                                                       "是否一键打开登录链接?\n否则将把登录链接复制至剪贴板",
+                                                       QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                                                       QtWidgets.QMessageBox.No)
+                if reply == QtWidgets.QMessageBox.Yes:
+                    web_open(login_url)
+                else:
+                    copy(login_url)
+                    QtWidgets.QMessageBox.information(self.centralwidget, "提示", f"登录链接已复制至剪贴板: {login_url}")
             elif login_data['s_url']:
                 login_htm = session.get(
                     "https://xui.ptlogin2.qq.com/cgi-bin/xlogin",params=login_data)
@@ -289,11 +300,21 @@ class Ui_Dialog(object):
                 login_res = session.get("https://ssl.ptlogin2.qq.com/jump",params=params,cookies=cookies,headers=headers)
                 extractor = URLExtract()
                 login_url = extractor.find_urls(login_res.text)[0]
-                print(login_url)
-                #web_open(login_url)
+
+                reply = QtWidgets.QMessageBox.question(self.centralwidget,
+                                                       '解析完毕',
+                                                       "是否一键打开登录链接?\n否则将把登录链接复制至剪贴板",
+                                                       QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                                                       QtWidgets.QMessageBox.No)
+                if reply == QtWidgets.QMessageBox.Yes:
+                    web_open(login_url)
+                else:
+                    copy(login_url)
+                    QtWidgets.QMessageBox.information(self.centralwidget, "提示", f"登录链接已复制至剪贴板: {login_url}")
             else:
                 web_open(f"https://ssl.ptlogin2.qq.com/jump?ptlang={1033 if len(clientkey) == 96 else 2052}&clientuin={uin}&clientkey={clientkey}&u1={login_data['u1']}&keyindex={19 if len(clientkey) == 96 else 9}")
         except Exception as e:
+            print(traceback.format_exc())
             QtWidgets.QMessageBox.critical(self.centralwidget, "提示", f"登录失败!")
 if __name__ == '__main__':
     QtGui.QGuiApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
