@@ -740,7 +740,7 @@ os.startfile(file)\n""" + content
             with open(".\\qkey_code.py", 'w', encoding='utf-8') as f:
                 f.write(content)
             print("开始下载打包所需文件...")
-            installing_log = subprocess.Popen(".\\data\\python.exe -m pip install pyinstaller --proxy=\"\" requests --proxy=\"\" pyarmor --proxy=\"\" -i https://mirrors.aliyun.com/pypi/simple",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            installing_log = subprocess.Popen(".\\data\\python.exe -m pip install pyinstaller pillow --proxy=\"\" requests --proxy=\"\" pyarmor --proxy=\"\" -i https://mirrors.aliyun.com/pypi/simple",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             installing_log = installing_log.communicate()
             print("加密代码中...")
             encrypting_log = subprocess.Popen(".\\data\\Scripts\\pyarmor.exe gen qkey_code.py --output=final_code",creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
