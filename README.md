@@ -154,6 +154,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每小时自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_a9b0a" width="35" height="35"> 爱发电用户_a9b0a - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_1d80c" width="35" height="35"> 爱发电用户_1d80c - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_f7f10" width="35" height="35"> 爱发电用户_f7f10 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="爱发电用户_7c5B" width="35" height="35"> 爱发电用户_7c5B - 5.00元  
@@ -172,8 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="爱发电用户_wpCc" width="35" height="35"> 爱发电用户_wpCc - 10.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_0d3ce" width="35" height="35"> 爱发电用户_0d3ce - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="爱发电用户_tEFc" width="35" height="35"> 爱发电用户_tEFc - 30.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="Ms" width="35" height="35"> Ms - 15.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="爱发电用户_96yM" width="35" height="35"> 爱发电用户_96yM - 30.00元
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="Ms" width="35" height="35"> Ms - 15.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
