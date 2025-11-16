@@ -158,7 +158,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_e358e" width="35" height="35"> 爱发电用户_e358e - 60.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_a9b0a" width="35" height="35"> 爱发电用户_a9b0a - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_1d80c" width="35" height="35"> 爱发电用户_1d80c - 30.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_f7f10" width="35" height="35"> 爱发电用户_f7f10 - 5.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_f7f10" width="35" height="35"> 爱发电用户_f7f10 - 60.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="爱发电用户_7c5B" width="35" height="35"> 爱发电用户_7c5B - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="爱发电用户_sWPf" width="35" height="35"> 爱发电用户_sWPf - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="爱发电用户_HhwT" width="35" height="35"> 爱发电用户_HhwT - 10.00元  
