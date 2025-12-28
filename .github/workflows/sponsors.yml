@@ -56,10 +56,9 @@ jobs:
           sponsors_info = []
           for sponsor in sponsors:
               user = sponsor['user']
-              amount = sponsor["all_sum_amount"]
               avatar = user.get('avatar', '')
               name = user.get('name', '')
-              sponsors_info.append(f"<img src=\"{avatar}\" alt=\"{name}\" width=\"35\" height=\"35\"> {name} - {amount}元")
+              sponsors_info.append(f"<img src=\"{avatar}\" alt=\"{name}\" width=\"35\" height=\"35\"> {name}")
           if sponsors_info == []:
               sponsors_text = "暂时没有人给我赞助:(  \n"
           else:
