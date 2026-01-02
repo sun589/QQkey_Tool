@@ -2,7 +2,7 @@ name: Sync Sponsors to README
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # 每小时执行一次
+    - cron: '0 0 * * 0'  # 每周日凌晨执行一次
   workflow_dispatch:  # 也支持手动触发
 
 jobs:
