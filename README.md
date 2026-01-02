@@ -152,7 +152,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 # 程序截图
 ![程序截图](https://github.com/user-attachments/assets/ae4742ab-3c7e-40c5-b9d1-5ee44e15cf5d)  
 ****
-# 赞助者列表(每小时自动由bot更新)
+# 赞助者列表(每周日凌晨自动由bot更新)
 <!-- START_SPONSORS -->
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_084a1" width="35" height="35"> 爱发电用户_084a1 - 80.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="東风寄千愁" width="35" height="35"> 東风寄千愁 - 60.00元  
