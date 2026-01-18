@@ -154,6 +154,9 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每周日凌晨自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_f7a99" width="35" height="35"> 爱发电用户_f7a99 - 10.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="DWI" width="35" height="35"> DWI - 30.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_2103e" width="35" height="35"> 爱发电用户_2103e - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="梧桐雨" width="35" height="35"> 梧桐雨 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="见异思迁的雀" width="35" height="35"> 见异思迁的雀 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_084a1" width="35" height="35"> 爱发电用户_084a1 - 80.00元  
@@ -170,10 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/user/17ccf8dcc39111efb9a252540025c377/avatar/a63b12c103044132924dec081f4428a5_w640_h640_s302.png" alt="椰灰狼嗷呜~" width="35" height="35"> 椰灰狼嗷呜~ - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_23d9e" width="35" height="35"> 爱发电用户_23d9e - 15.00元  
 <img src="https://pic1.afdiancdn.com/user/9dcf7f7ec99711f0814f52540025c377/avatar/3567e0b739277216b81d34e2d1740c3b_w750_h750_s48.jpeg" alt="爱发电用户_Ua8k" width="35" height="35"> 爱发电用户_Ua8k - 50.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_b691b" width="35" height="35"> 爱发电用户_b691b - 10.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="爱发电用户_HxFy" width="35" height="35"> 爱发电用户_HxFy - 30.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_c4f72" width="35" height="35"> 爱发电用户_c4f72 - 30.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="Ass Chern" width="35" height="35"> Ass Chern - 30.00元
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_b691b" width="35" height="35"> 爱发电用户_b691b - 10.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
