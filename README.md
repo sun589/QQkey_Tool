@@ -154,6 +154,10 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每周日凌晨自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_5a1fd" width="35" height="35"> 爱发电用户_5a1fd - 10.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="无375" width="35" height="35"> 无375 - 30.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_ce4f7" width="35" height="35"> 爱发电用户_ce4f7 - 30.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_0a8f7" width="35" height="35"> 爱发电用户_0a8f7 - 60.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_6c375" width="35" height="35"> 爱发电用户_6c375 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="爱发电用户_73YQ" width="35" height="35"> 爱发电用户_73YQ - 60.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_52ecd" width="35" height="35"> 爱发电用户_52ecd - 60.00元  
@@ -169,11 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="梧桐雨" width="35" height="35"> 梧桐雨 - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="见异思迁的雀" width="35" height="35"> 见异思迁的雀 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_084a1" width="35" height="35"> 爱发电用户_084a1 - 80.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="東风寄千愁" width="35" height="35"> 東风寄千愁 - 60.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_35772" width="35" height="35"> 爱发电用户_35772 - 30.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="pppaction" width="35" height="35"> pppaction - 30.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="爱发电用户_R5Ev" width="35" height="35"> 爱发电用户_R5Ev - 5.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_99f1f" width="35" height="35"> 爱发电用户_99f1f - 5.00元
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="東风寄千愁" width="35" height="35"> 東风寄千愁 - 60.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
