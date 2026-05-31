@@ -154,6 +154,11 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每周日凌晨自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_0daff" width="35" height="35"> 爱发电用户_0daff - 5.00元  
+<img src="https://pic1.afdiancdn.com/user/user_upload_osl/73da120ae0a5fb9f9d4d4dc8d6352ce8_w132_h132_s6.jpeg" alt="風吹淚落" width="35" height="35"> 風吹淚落 - 15.00元  
+<img src="https://pic1.afdiancdn.com/user/user_upload_osl/936da78048aae61073a7024a1d3f89a9_w132_h132_s2.jpeg" alt="A醉酒方知浓" width="35" height="35"> A醉酒方知浓 - 60.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="abs" width="35" height="35"> abs - 5.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_4bbc7" width="35" height="35"> 爱发电用户_4bbc7 - 30.00元  
 <img src="https://pic1.afdiancdn.com/user/c95e21fc52ab11f191d25254001e7c00/avatar/7d5b42b92cbf275dce4e997cb97d5680_w1080_h1080_s265.jpeg" alt="孙鲤" width="35" height="35"> 孙鲤 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="Loo" width="35" height="35"> Loo - 10.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="POOP" width="35" height="35"> POOP - 30.00元  
@@ -168,12 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="MARK周" width="35" height="35"> MARK周 - 60.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="Rc" width="35" height="35"> Rc - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_afbab" width="35" height="35"> 爱发电用户_afbab - 15.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="爱发电用户_aFTC" width="35" height="35"> 爱发电用户_aFTC - 15.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_ebad0" width="35" height="35"> 爱发电用户_ebad0 - 60.00元  
-<img src="https://pic1.afdiancdn.com/user/user_upload_osl/93491149ee9d397050c662886c435984_w132_h132_s4.jpeg" alt="永远" width="35" height="35"> 永远 - 30.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_b8c82" width="35" height="35"> 爱发电用户_b8c82 - 30.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_3de9b" width="35" height="35"> 爱发电用户_3de9b - 15.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="ghbv" width="35" height="35"> ghbv - 5.00元
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="爱发电用户_aFTC" width="35" height="35"> 爱发电用户_aFTC - 15.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
