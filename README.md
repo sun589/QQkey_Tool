@@ -154,6 +154,8 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每周日凌晨自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_85461" width="35" height="35"> 爱发电用户_85461 - 10.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="cheekibreeki" width="35" height="35"> cheekibreeki - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="爱发电用户_4Duv" width="35" height="35"> 爱发电用户_4Duv - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_1658a" width="35" height="35"> 爱发电用户_1658a - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_b40a9" width="35" height="35"> 爱发电用户_b40a9 - 15.00元  
@@ -171,9 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="111111" width="35" height="35"> 111111 - 30.00元  
 <img src="https://pic1.afdiancdn.com/user/user_upload_osl/09efc06d981490f00909bd8e42fb04cf_w132_h132_s10.jpeg" alt="ZSLG的滿月🌌" width="35" height="35"> ZSLG的滿月🌌 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="黑黑" width="35" height="35"> 黑黑 - 30.00元  
-<img src="https://pic1.afdiancdn.com/user/user_upload_osl/a19d8f671b8655f8731f038cc8fe28a4_w132_h132_s6.jpeg" alt="07天才少年小安" width="35" height="35"> 07天才少年小安 - 5.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="Xr7" width="35" height="35"> Xr7 - 5.00元  
-<img src="https://pic1.afdiancdn.com/user/aca991e89e5611edb52752540025c377/avatar/8f8c70b4b179ee47d4838a82612c6657_w2149_h1728_s3337.png" alt="蝶舞" width="35" height="35"> 蝶舞 - 10.00元
+<img src="https://pic1.afdiancdn.com/user/user_upload_osl/a19d8f671b8655f8731f038cc8fe28a4_w132_h132_s6.jpeg" alt="07天才少年小安" width="35" height="35"> 07天才少年小安 - 5.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
