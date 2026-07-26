@@ -154,6 +154,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每周日凌晨自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="redhandsome" width="35" height="35"> redhandsome - 15.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_85461" width="35" height="35"> 爱发电用户_85461 - 10.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="cheekibreeki" width="35" height="35"> cheekibreeki - 30.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="爱发电用户_4Duv" width="35" height="35"> 爱发电用户_4Duv - 30.00元  
@@ -172,8 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/user/bf5d8e22511111f1805b52540025c377/avatar/a819130e4346826eb151ff6da720c342_w1220_h1185_s485.jpeg" alt="过去" width="35" height="35"> 过去 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="111111" width="35" height="35"> 111111 - 30.00元  
 <img src="https://pic1.afdiancdn.com/user/user_upload_osl/09efc06d981490f00909bd8e42fb04cf_w132_h132_s10.jpeg" alt="ZSLG的滿月🌌" width="35" height="35"> ZSLG的滿月🌌 - 5.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="黑黑" width="35" height="35"> 黑黑 - 30.00元  
-<img src="https://pic1.afdiancdn.com/user/user_upload_osl/a19d8f671b8655f8731f038cc8fe28a4_w132_h132_s6.jpeg" alt="07天才少年小安" width="35" height="35"> 07天才少年小安 - 5.00元
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="黑黑" width="35" height="35"> 黑黑 - 30.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
