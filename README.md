@@ -182,5 +182,5 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 制作不易,如果喜欢,请给作者打个Star/赞助,谢谢:)))))))))))  
 ## [赞助我](https://afdian.com/a/sun589)
-[![Star History Chart](https://api.star-history.com/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.com/#sun589/QQkey_Tool&Date)  
+[![Star History Chart](https://star-history.dera.page/svg?repos=sun589/QQkey_Tool&type=Date)](https://star-history.dera.page/#sun589/QQkey_Tool&Date)  
 ****
