@@ -154,6 +154,9 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 ****
 # 赞助者列表(每周日凌晨自动由bot更新)
 <!-- START_SPONSORS -->
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_064f2" width="35" height="35"> 爱发电用户_064f2 - 10.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="爱发电用户_a6vF" width="35" height="35"> 爱发电用户_a6vF - 30.00元  
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="爱发电用户_jD6n" width="35" height="35"> 爱发电用户_jD6n - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_ee8f5" width="35" height="35"> 爱发电用户_ee8f5 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="爱发电用户_eWN6" width="35" height="35"> 爱发电用户_eWN6 - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="outerheaven11793" width="35" height="35"> outerheaven11793 - 15.00元  
@@ -170,10 +173,7 @@ A:检查你的系统是否为32位,本工具仅支持64位系统,如果你是32�
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-orange.png" alt="abs" width="35" height="35"> abs - 5.00元  
 <img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png?imageView2/1/" alt="爱发电用户_4bbc7" width="35" height="35"> 爱发电用户_4bbc7 - 30.00元  
 <img src="https://pic1.afdiancdn.com/user/c95e21fc52ab11f191d25254001e7c00/avatar/7d5b42b92cbf275dce4e997cb97d5680_w1080_h1080_s265.jpeg" alt="孙鲤" width="35" height="35"> 孙鲤 - 5.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="Loo" width="35" height="35"> Loo - 10.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-blue.png" alt="POOP" width="35" height="35"> POOP - 30.00元  
-<img src="https://pic1.afdiancdn.com/user/bf5d8e22511111f1805b52540025c377/avatar/a819130e4346826eb151ff6da720c342_w1220_h1185_s485.jpeg" alt="过去" width="35" height="35"> 过去 - 5.00元  
-<img src="https://pic1.afdiancdn.com/default/avatar/avatar-purple.png" alt="111111" width="35" height="35"> 111111 - 30.00元
+<img src="https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png" alt="Loo" width="35" height="35"> Loo - 10.00元
 <!-- END_SPONSORS -->
 ****
 # 仓库访问数量(从2024-10-14计起)
